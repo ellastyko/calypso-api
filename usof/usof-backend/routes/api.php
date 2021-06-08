@@ -42,14 +42,16 @@ Route::prefix('auth')->group( function() {
 // PATCH - /api/users/<user_id>- update user data–
 // DELETE - /api/users/<user_id>- delete user
 
+// Route(['middleware' => ['auth:sanctum']]::prefix('users')->group(  {
+// ['middleware' => ['auth:sanctum'],
 
-Route::prefix('users')->group( function() {
-
+Route::middleware('auth:sanctum')->group( ['prefix' => 'users'], function () {
+    
     Route::get('', 'App\Http\Controllers\UserController@index');
-    Route::get('/{id}', 'App\Http\Controllers\UserController@users_id');
-    Route::post('/avatar', 'App\Http\Controllers\UserController@users');
-    Route::patch('', 'App\Http\Controllers\UserController@create_user');
-    Route::patch('{id}', 'App\Http\Controllers\UserController@update_user_data');
-    Route::delete('/{id}', 'App\Http\Controllers\UserController@delete_user');
+    Route::get('/{id}', 'App\Http\Controllers\UserController@show');
+    Route::post('', 'App\Http\Controllers\UserController@store');
+    Route::patch('/avatar', 'App\Http\Controllers\UserController@avatar');
+    Route::patch('{id}', 'App\Http\Controllers\UserController@update');
+    Route::delete('/{id}', 'App\Http\Controllers\UserController@destroy');
 
 });
