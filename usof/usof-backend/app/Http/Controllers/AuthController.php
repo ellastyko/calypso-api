@@ -6,10 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
-use App\Mail\Email;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use App\Mail\SendMail;
 // Models
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+
 
 class AuthController extends Controller
 {
@@ -60,11 +62,13 @@ class AuthController extends Controller
     }
 
     public function logout() {
-        // auth()->user()->tokens()->delete();
 
-        // Auth::user()->tokens->each(function($token, $key) {
-        //     $token->delete();
-        // });
+
+        $user = User::where('remember_token', explode('.', explode(' ', request()->header('Authorization'))[1]))->first();
+        $user->update(['remember_token' => null]);
+        return response([
+            'message' => 'You have logged out'
+        ]);
     }
 
     public function register(Request $request) {
@@ -92,16 +96,56 @@ class AuthController extends Controller
         }
         
         return response([
-            'message' => 'User registered. Please log in',
+            'message' => 'User have registered. Please log in',
             'user' => $user
         ]);
     }
 
     public function password_reset(Request $request) {
-        
+
+        $fields = $request->validate(['email' => 'required|string']);
+
+        $user = User::where('email', $fields['email'])->first();
+
+        if (!$user) {
+            return [
+                'message' => 'This email does not exist in database!'
+            ];
+        }
+        $token = $user->createToken('mytoken')->plainTextToken;
+        $user->update(['remember_token' => $token]);
+        $details = [
+            'title' => 'Link for reset password',
+            'body' => URL::current().'/'.$token
+        ];
+        Mail::to($user)->send(new SendMail($details));
+        return [
+            'message' => 'Link was sent succeessfully!'
+        ];
+
+
     }
 
-    public function password_reset_confirm_token(Request $request) {
+    public function password_reset_confirm_token(Request $request, $token) {
         
+        try {
+            $fields = $request->validate(['password' => 'required|string']);
+            $user = User::where(['remember_token' => $token])->first();
+            if (!$user) {
+                return [
+                    'message' => 'Invalid link'
+                ];
+            }
+            $user->update(['password' => Hash::make($fields['password'])]);
+            $user->update(['remember_token' => null]);
+        } catch (\Exception $e) {
+            return [
+                'message' => $e->getMessage()
+            ];
+        }
+        
+        return [
+            'message' => 'Password successfully changed!'
+        ];
     }
 }

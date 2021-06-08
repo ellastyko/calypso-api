@@ -20,11 +20,36 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// POST - /api/auth/register- registration of a new user, required parameters are[login, password, password confirmation, email]–
+// POST - /api/auth/login- log in user, required parameters are [login, email,password]. Only users with a confirmed email can sign in–
+// POST - /api/auth/logout- log out authorized user–
+// POST - /api/auth/password-reset- send a reset link to user email, requiredparameter is [email]–POST - /api/auth/password-reset/<confirm_token>
+
 Route::prefix('auth')->group( function() {
 
     Route::post('/register', 'App\Http\Controllers\AuthController@register');
     Route::post('/login', 'App\Http\Controllers\AuthController@login'); 
-    Route::post('/logout', 'App\Http\Controllers\AuthController@logout');
+    Route::middleware('auth:sanctum')->post('/logout', 'App\Http\Controllers\AuthController@logout');
+
     Route::post('/password-reset', 'App\Http\Controllers\AuthController@password_reset');
+    Route::post('/password-reset/{token}', 'App\Http\Controllers\AuthController@password_reset_confirm_token');
+});
+
+// GET - /api/users - get all users–
+// GET - /api/users/<user_id>- get specified user data–
+// POST - /api/users- create a new user, required parameters are [login, password,password confirmation, email, role]. This feature must be accessible only foradmins–
+// PATCH - /api/users/avatar- upload user avatar–
+// PATCH - /api/users/<user_id>- update user data–
+// DELETE - /api/users/<user_id>- delete user
+
+
+Route::prefix('users')->group( function() {
+
+    Route::get('', 'App\Http\Controllers\UserController@index');
+    Route::get('/{id}', 'App\Http\Controllers\UserController@users_id');
+    Route::post('/avatar', 'App\Http\Controllers\UserController@users');
+    Route::patch('', 'App\Http\Controllers\UserController@create_user');
+    Route::patch('{id}', 'App\Http\Controllers\UserController@update_user_data');
+    Route::delete('/{id}', 'App\Http\Controllers\UserController@delete_user');
 
 });
