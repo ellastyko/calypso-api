@@ -15,6 +15,13 @@ class UserController extends Controller
      */
     public function index()
     {
+        // ?
+        if ($this->isAdmin() == false) {
+            return response([
+                'message' => 'You are not admin'
+            ]);
+        }
+
         return User::all();
     }
 
@@ -73,6 +80,12 @@ class UserController extends Controller
      */
     public function show($id)
     {
+        // ?
+        if ($this->isAdmin() == false) {
+            return response([
+                'message' => 'You are not admin'
+            ]);
+        }
         return User::where(['id' => $id])->first();
     }
 
@@ -103,9 +116,9 @@ class UserController extends Controller
                     'message' => 'There is no such user'
                 ], 400);
             }
+  
             foreach ($fields as $key => $value) 
-                $user->update([$key => $value]);
-            
+                $user->update([$key => $value]);         
         }
         else {
 
@@ -117,7 +130,7 @@ class UserController extends Controller
                 ], 400);
             }
             foreach ($fields as $key => $value) {
-                if ($key != 'role')
+                if ($key == 'password' || $key == 'name')
                     $user->update([$key => $value]);
             }               
         }

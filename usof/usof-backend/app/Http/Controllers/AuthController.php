@@ -78,9 +78,15 @@ class AuthController extends Controller
                 'login' => 'required|string|unique:users,login',
                 'name' => 'string',                   
                 'password' => 'required|string',
+                'repeat_password' => 'required|string',
                 'email' => 'required|string|unique:users,email',         
                 'image' => 'string'
             ]);
+            if ($fields['password'] != $fields['repeat_password']) {
+                return response([
+                    'message' => 'Passwords are different'
+                ]);
+            }
             $user = User::create([
                 'login' => $fields['login'],
                 'name' => $fields['name'],

@@ -45,13 +45,40 @@ Route::prefix('auth')->group( function() {
 // Route(['middleware' => ['auth:sanctum']]::prefix('users')->group(  {
 // ['middleware' => ['auth:sanctum'],
 
-Route::middleware('auth:sanctum')->group( ['prefix' => 'users'], function () {
+Route::group(['middleware' => ['auth:sanctum'], 'prefix' => 'users'], function () {
     
+
     Route::get('', 'App\Http\Controllers\UserController@index');
     Route::get('/{id}', 'App\Http\Controllers\UserController@show');
     Route::post('', 'App\Http\Controllers\UserController@store');
     Route::patch('/avatar', 'App\Http\Controllers\UserController@avatar');
     Route::patch('{id}', 'App\Http\Controllers\UserController@update');
     Route::delete('/{id}', 'App\Http\Controllers\UserController@destroy');
+
+});
+
+
+
+
+// GET - /api/categories- get all categories–
+// GET - /api/categories/<category_id>- get specified category data–
+// GET - /api/categories/<category_id>/posts- get all posts associated with thespecified category–
+// POST - /api/categories- create a new category, required parameter is [title]–
+// PATCH - /api/categories/<category_id>- update specified category data–
+// DELETE - /api/categories/<category_id>- delete a category
+
+
+Route::prefix('categories')->group( function () {
+    
+
+    Route::get('', 'App\Http\Controllers\CategoryController@index');
+    Route::get('/{category_id}', 'App\Http\Controllers\CategoryController@show');
+
+    Route::get('/{category_id}/posts', 'App\Http\Controllers\CategoryController@get_posts'); # TODO
+
+    Route::middleware('auth:sanctum')->post('', 'App\Http\Controllers\CategoryController@store'); 
+    Route::middleware('auth:sanctum')->patch('{id}', 'App\Http\Controllers\CategoryController@update');
+
+    Route::middleware('auth:sanctum')->delete('/{category_id}', 'App\Http\Controllers\CategoryController@destroy');
 
 });
