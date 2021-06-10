@@ -17,6 +17,7 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    // Get all posts
     public function index()
     {
         return Post::all();
@@ -28,29 +29,36 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    // Create new post
     public function store(Request $request)
     {
-        
-        $fields = $request->validate([
+        try {
 
-            'title' => 'required|string',   
-            'content' => 'required|string',        
-            'categories' => 'required|array'
-        ]);
-        
-        $fields['categories'] = json_encode($fields['categories']);
-        
-        
+            $fields = $request->validate([
 
-        $token = explode(' ', request()->header('Authorization'))[1];
-        $user = User::where(['remember_token' => $token])->first();
-        $fields['author'] = $user->id;
-        $post = Post::create([
-            'author' => $fields['author'],
-            'title' => $fields['title'],   
-            'content' => $fields['content'],        
-            'categories' => $fields['categories']
-        ]); 
+                'title' => 'required|string',   
+                'content' => 'required|string',        
+                'categories' => 'required|array'
+            ]);
+            
+            $fields['categories'] = json_encode($fields['categories']); 
+    
+            $user = $this->user();
+            $fields['author'] = $user->id;
+    
+            $post = Post::create([
+                'author' => $fields['author'],
+                'title' => $fields['title'],   
+                'content' => $fields['content'],        
+                'categories' => $fields['categories']
+            ]); 
+
+        } catch (\Exception $e) {
+            return response([
+                'message' => $e->getMessage()
+            ]);
+        }
+        
         
         return response([
             'message' => 'You have created post',
@@ -76,28 +84,40 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    // Update post
     public function update(Request $request, $id)
     {
-        $fields = $request->validate([
+        try {
 
-            'title' => 'string',   
-            'content' => 'string',        
-            'categories' => 'string'
-        ]);
-        $fields['categories'] = json_encode(explode('|', $fields['categories']));
+            $fields = $request->validate([
 
-        $token = explode(' ', request()->header('Authorization'))[1];
-        $user = User::where(['remember_token' => $token])->first();
-              
-        $post = Post::find($id);
+                'title' => 'string',   
+                'content' => 'string',        
+                'categories' => 'array'
+            ]);
+            $fields['categories'] = json_encode($fields['categories']);
+    
+            $user = $this->user();
+                  
+            $post = Post::find($id);
+    
+            if ($user->id == $post->author || $user->role == 'admin') {
+                foreach ($fields as $key => $value) 
+                    $post->update([$key => $value]);
+            }
+            else {
+                return response([
+                    'message' => 'You can`t edit post'
+                ], 400);
+            }
+            
 
-        if ($user->id != $post->author) {
+        } catch (\Exception $e) {
             return response([
-                'message' => 'You can`t edit post'
+                'message' => $e->getMessage()
             ], 400);
-        }
-        foreach ($fields as $key => $value) 
-            $post->update([$key => $value]);
+        } 
+        
         
         return response([
             'message' => 'Edited'
@@ -114,7 +134,7 @@ class PostController extends Controller
     {
         if (!Post::find($id)) {
             return response([
-                'message' => 'Post isn`t exists'
+                'message' => 'Post isn`t exist'
             ], 400);
         }
 
@@ -122,11 +142,10 @@ class PostController extends Controller
             Post::destroy($id);         
             return response([
                 'message' => 'Post deleted'
-            ]);        
+            ], 400);        
         } 
         
-        $token = explode(' ', request()->header('Authorization'))[1];
-        $user = User::where(['remember_token' => $token])->first();
+        $user = $this->user();
               
         $post = Post::find($id);
 
@@ -175,8 +194,7 @@ class PostController extends Controller
         try {
             $fields = $request->validate(['content' => 'required|string']);
 
-            $token = explode(' ', request()->header('Authorization'))[1];
-            $user = User::where(['remember_token' => $token])->first();
+            $user = $this->user();
 
             $fields['author'] = $user->id;
             

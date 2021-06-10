@@ -3,7 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,8 +41,6 @@ Route::prefix('auth')->group( function() {
 // PATCH - /api/users/<user_id>- update user data–
 // DELETE - /api/users/<user_id>- delete user
 
-// Route(['middleware' => ['auth:sanctum']]::prefix('users')->group(  {
-// ['middleware' => ['auth:sanctum'],
 
 Route::group(['middleware' => ['auth:sanctum'], 'prefix' => 'users'], function () {
     
@@ -51,7 +48,7 @@ Route::group(['middleware' => ['auth:sanctum'], 'prefix' => 'users'], function (
     Route::get('', 'App\Http\Controllers\UserController@index');
     Route::get('/{id}', 'App\Http\Controllers\UserController@show');
     Route::post('', 'App\Http\Controllers\UserController@store');
-    Route::patch('/avatar', 'App\Http\Controllers\UserController@avatar'); # TODO
+    Route::patch('/avatar', 'App\Http\Controllers\UserController@avatar'); 
     Route::patch('{id}', 'App\Http\Controllers\UserController@update');
     Route::delete('/{id}', 'App\Http\Controllers\UserController@destroy');
 

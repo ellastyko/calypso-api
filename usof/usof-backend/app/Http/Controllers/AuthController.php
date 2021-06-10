@@ -81,20 +81,18 @@ class AuthController extends Controller
                 'name' => 'string',                   
                 'password' => 'required|string',
                 'repeat_password' => 'required|string',
-                'email' => 'required|string|unique:users,email',         
-                'image' => 'string'
+                'email' => 'required|string|unique:users,email'       
             ]);
             if ($fields['password'] != $fields['repeat_password']) {
                 return response([
                     'message' => 'Passwords are different'
-                ]);
+                ], 400);
             }
             $user = User::create([
                 'login' => $fields['login'],
                 'name' => $fields['name'],
                 'password' => Hash::make($fields['password']),           
-                'email' => $fields['email'],
-                'image' => $fields['image']
+                'email' => $fields['email']
             ]);
 
         } catch (\Exception $e) {
@@ -116,12 +114,14 @@ class AuthController extends Controller
         $user = User::where('email', $fields['email'])->first();
 
         if (!$user) {
-            return [
+            return response ([
                 'message' => 'This email does not exist in database!'
-            ];
+            ], 400);
         }
+        
         $token = $user->createToken('mytoken')->plainTextToken;
         $user->update(['remember_token' => $token]);
+
         $details = [
             'title' => 'Link for reset password',
             'body' => URL::current().'/'.$token

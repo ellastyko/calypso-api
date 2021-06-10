@@ -20,10 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('email')->unique();
             $table->string('image')->nullable();
-            $table->float('rating')->default(0);
-
-            $table->json('faves')->nullable();
-            $table->json('subs')->nullable();
+            $table->integer('rating')->default(0);
 
             $table->enum('role', ['user', 'admin'])->default('user');
 

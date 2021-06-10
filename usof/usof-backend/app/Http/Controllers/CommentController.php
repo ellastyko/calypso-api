@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
 use App\Models\Comment;
 use App\Models\Like;
 
@@ -64,6 +63,13 @@ class CommentController extends Controller
                     'message' => 'Comment isn`t exist'
                 ], 400);
             }
+
+            $user = $this->user();
+            if ($user->id != $comment->author && $user->role != 'admin') {
+                return response([
+                    'message' => 'You can`t edit this comment'
+                ], 400);
+            }
             $fields = $request->validate(['content' => 'required|string']);
             $comment->update(['content' => $fields['content']]);
 
@@ -108,8 +114,8 @@ class CommentController extends Controller
     }
 
 
-    #################################
-    // Просмотр лайков для комментриев
+    ###############  Лайки и комментарии  ##################
+    
     public function show_likes($id) {
 
         if(!Comment::find($id)) {
@@ -163,7 +169,7 @@ class CommentController extends Controller
 
         if(!Comment::find($id)) {
             return response([
-                'message' => 'Post isn`t exist'
+                'message' => 'Comment isn`t exist'
             ], 400);
         }
         

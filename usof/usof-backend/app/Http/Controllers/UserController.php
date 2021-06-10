@@ -84,7 +84,7 @@ class UserController extends Controller
         if ($this->isAdmin() == false) {
             return response([
                 'message' => 'You are not admin'
-            ]);
+            ], 400);
         }
         return User::where(['id' => $id])->first();
     }
@@ -107,28 +107,32 @@ class UserController extends Controller
             'email' => 'string',
             'role' => 'string'
         ]);
-        
-        if ($this->isAdmin() == true) {
 
-            $user = User::where(['id' => $id])->first();
-            if (!$user) {
-                return response([
-                    'message' => 'There is no such user'
-                ], 400);
-            }
-  
+        $u = User::where(['id' => $id])->first();
+        if (!$u) {
+            return response([
+                'message' => 'There is no such user'
+            ], 400);
+        }
+
+        if ($this->isAdmin() == true) {
             foreach ($fields as $key => $value) 
-                $user->update([$key => $value]);         
+                $u->update([$key => $value]);         
         }
         else {
 
-            $token = explode(' ', request()->header('Authorization'))[1];      
-            $user = User::where(['remember_token' => $token, 'id' => $id])->first();
+            $user = $this->user();
+            if ($user->id != $id) {
+                return response([
+                    'message' => 'You have no rights to edit this account'
+                ], 400);
+            }
             if (!$user) {
                 return response([
                     'message' => 'Something wrong'
                 ], 400);
             }
+            
             foreach ($fields as $key => $value) {
                 if ($key == 'password' || $key == 'name')
                     $user->update([$key => $value]);
@@ -147,23 +151,40 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
+        try {
+            
+            if ($this->isAdmin() != true) {
 
-        if ($this->isAdmin() != true) {
-            $token = explode(' ', request()->header('Authorization'))[1];      
-            $user = User::where(['remember_token' => $token, 'id' => $id])->first();
-            if (!$user) {
+                $user = $this->user();
+    
+                if (!$user) {
+                    return response([
+                        'message' => 'Something wrong'
+                    ], 400);
+                }
+                if ($id != $user->id) {
+                    return response([
+                        'message' => "You can`t delete someone else's account"
+                    ], 400);
+                }
+                
+            } 
+            
+    
+            if (!User::find($id)) {
                 return response([
-                    'message' => 'Something wrong'
+                    'message' => 'User isn`t exists'
                 ], 400);
             }
-        } 
-        
-
-        if (!User::find($id)) {
+            User::destroy($id);
+        } catch (\Exception $e) {
             return response([
-                'message' => 'User isn`t exists'
+                'message' => $e->getMessage()
             ], 400);
         }
-        User::destroy($id);
+        
+        return response([
+            'message' => 'User deleted successfully'
+        ]);
     }
 }

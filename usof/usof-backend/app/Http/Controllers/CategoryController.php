@@ -54,7 +54,7 @@ class CategoryController extends Controller
         if ($this->isAdmin() != true) { 
             return response([
                 'message' => 'You are not admin'
-            ]);
+            ], 400);
         }
 
         $fields = $request->validate([
@@ -95,7 +95,7 @@ class CategoryController extends Controller
         if ($this->isAdmin() != true) { 
             return response([
                 'message' => 'You are not admin'
-            ]);
+            ], 400);
         }
         $fields = $request->validate([
             'title' => 'string|nullable',
