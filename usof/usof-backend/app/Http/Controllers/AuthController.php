@@ -43,8 +43,10 @@ class AuthController extends Controller
                     'message' => 'Password isn`t correct'
                 ]);
             }
+
             $token = $user->createToken('token')->plainTextToken;
             $user->update(['remember_token' => $token]);
+
             return response([
                 'message' => 'You have logged in',
                 'user' => $user,
@@ -64,7 +66,7 @@ class AuthController extends Controller
     public function logout() {
 
 
-        $user = User::where('remember_token', explode('.', explode(' ', request()->header('Authorization'))[1]))->first();
+        $user = $this->user();
         $user->update(['remember_token' => null]);
         return response([
             'message' => 'You have logged out'

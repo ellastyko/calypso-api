@@ -14,11 +14,15 @@ class Controller extends BaseController
 
 
     public function isAdmin() {
-        $token = explode(' ', request()->header('Authorization'))[1];
 
-        $user = User::where(['remember_token' => $token])->first();
+        $user = $this->user();
         if (!$user) 
             return false;
         return ($user->role == 'admin') ?  true : false;
+    }
+
+    public function user() {
+        $token = explode(' ', request()->header('Authorization'))[1];
+        return User::where(['remember_token' => $token])->first();
     }
 }

@@ -4,6 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\Post;
+use App\Models\Category;
+use App\Models\Comment;
+use App\Models\Like;
+use App\Models\User;
+
 class PostController extends Controller
 {
     /**
@@ -13,7 +19,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        return Post::all();
     }
 
     /**
@@ -24,7 +30,32 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        $fields = $request->validate([
+
+            'title' => 'required|string',   
+            'content' => 'required|string',        
+            'categories' => 'required|array'
+        ]);
+        
+        $fields['categories'] = json_encode($fields['categories']);
+        
+        
+
+        $token = explode(' ', request()->header('Authorization'))[1];
+        $user = User::where(['remember_token' => $token])->first();
+        $fields['author'] = $user->id;
+        $post = Post::create([
+            'author' => $fields['author'],
+            'title' => $fields['title'],   
+            'content' => $fields['content'],        
+            'categories' => $fields['categories']
+        ]); 
+        
+        return response([
+            'message' => 'You have created post',
+            'post' => $post
+        ]);
     }
 
     /**
@@ -35,7 +66,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        //
+        return Post::find($id);
     }
 
     /**
@@ -47,7 +78,30 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $fields = $request->validate([
+
+            'title' => 'string',   
+            'content' => 'string',        
+            'categories' => 'string'
+        ]);
+        $fields['categories'] = json_encode(explode('|', $fields['categories']));
+
+        $token = explode(' ', request()->header('Authorization'))[1];
+        $user = User::where(['remember_token' => $token])->first();
+              
+        $post = Post::find($id);
+
+        if ($user->id != $post->author) {
+            return response([
+                'message' => 'You can`t edit post'
+            ], 400);
+        }
+        foreach ($fields as $key => $value) 
+            $post->update([$key => $value]);
+        
+        return response([
+            'message' => 'Edited'
+        ]);
     }
 
     /**
@@ -58,6 +112,161 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (!Post::find($id)) {
+            return response([
+                'message' => 'Post isn`t exists'
+            ], 400);
+        }
+
+        if ($this->isAdmin() == true) {
+            Post::destroy($id);         
+            return response([
+                'message' => 'Post deleted'
+            ]);        
+        } 
+        
+        $token = explode(' ', request()->header('Authorization'))[1];
+        $user = User::where(['remember_token' => $token])->first();
+              
+        $post = Post::find($id);
+
+        if ($user->id != $post->author) {
+            return response([
+                'message' => 'You can`t delete this post'
+            ], 400);
+        }
+        Post::destroy($id);  
+        return response([
+            'message' => 'You have deleted post'
+        ]);         
+    }
+
+
+
+    public function show_categories($id) {
+
+        $post = Post::find($id);
+        if (!$post) {
+            return response([
+                'message' => 'Post isn`t exist'
+            ], 400);
+        }
+        $categories = json_decode($post->categories);
+
+        $result = [];
+        foreach ($categories as $value) {
+            $ctg = Category::where(['title' => $value])->first();
+            if ($ctg) {
+                $result[] = $ctg;
+            }           
+        }
+        return $result;
+    }
+
+
+    // Comments
+    public function store_comment(Request $request, $id) {
+
+        if(!Post::find($id)) {
+            return response([
+                'message' => 'Post isn`t exist'
+            ], 400);
+        }
+        try {
+            $fields = $request->validate(['content' => 'required|string']);
+
+            $token = explode(' ', request()->header('Authorization'))[1];
+            $user = User::where(['remember_token' => $token])->first();
+
+            $fields['author'] = $user->id;
+            
+            Comment::create([
+                'author' => $fields['author'],
+                'post-id' => $id,
+                'content' => $fields['content']   
+            ]);
+
+        } catch (\Exception $e) {
+            return response([
+                'message' => $e->getMessage()
+            ], 400);
+        }
+        return response([
+            'message' => 'You have created comment'
+        ]);
+    }
+
+
+    public function show_comments($id) {
+
+        if (!Comment::where(['post-id' => $id])) {
+            return response([
+                'message' => 'Post isn`t exists'
+            ], 400);
+        }
+        return Comment::where(['post-id' => $id])->get();
+    }
+
+
+    // Likes
+    public function show_likes($id) {
+        if(!Post::find($id)) {
+            return response([
+                'message' => 'Post isn`t exist'
+            ], 400);
+        }
+        return Like::where(['post-id' => $id])->get();
+    }
+
+    public function store_like(Request $request, $id) {
+
+        try {
+            if(!Post::find($id)) {
+                return response([
+                    'message' => 'Post isn`t exist'
+                ], 400);
+            }
+            $fields = $request->validate([
+                'type' => 'string'
+            ]);
+            
+            $user = $this->user();
+            
+            $like = Like::where(['post-id' => $id, 'author' => $user->id])->first();
+            if ($like) {
+                $like->update(['type' => $fields['type']]);
+            }
+            else {
+                Like::create([
+                    'author' => $user->id,
+                    'post-id' => $id,
+                    'type' => $fields['type']
+                ]);
+            }    
+        } catch (\Exception $e) {
+            return response([
+                'message' => $e->getMessage()
+            ], 400);
+        }
+        
+        return response([
+            'message' => 'You have rated post'
+        ]);
+    }   
+
+
+    public function destroy_like($id)
+    {
+        if(!Post::find($id)) {
+            return response([
+                'message' => 'Post isn`t exist'
+            ], 400);
+        }
+        $user = $this->user();
+        
+
+        return (Like::where(['post-id' => $id, 'author' => $user->id])->delete() == true) 
+            ? response(['message' => 'You have deleted your rate']) 
+            : response(['message' => 'Something wrong'], 400);     
     }
 }

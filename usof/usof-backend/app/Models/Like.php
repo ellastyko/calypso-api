@@ -5,11 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model
+class Like extends Model
 {
     use HasFactory;
-    protected $table = 'posts';
-
     /**
      * The attributes that are mass assignable.
      *
@@ -17,10 +15,9 @@ class Post extends Model
      */
     protected $fillable = [
         'author',
-        'title',
-        'status',
-        'content',
-        'categories'
+        'post-id',
+        'comment-id',
+        'type'
     ];
 
     /**

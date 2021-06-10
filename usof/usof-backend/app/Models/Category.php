@@ -27,7 +27,10 @@ class Category extends Model
      *
      * @var array
      */
-    protected $hidden = [];
+    protected $hidden = [
+        'updated_at',
+        'created_at'
+    ];
 
     /**
      * The attributes that should be cast to native types.

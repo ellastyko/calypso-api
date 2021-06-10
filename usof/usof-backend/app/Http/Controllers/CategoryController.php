@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Category;
-// use App\Models\Post;
+use App\Models\Post;
 
 
 
@@ -22,11 +22,24 @@ class CategoryController extends Controller
     }
 
 
-    // TODO
-    public function get_posts($id) {
+    public function show_posts($id) {
         
-        
+        if (!Category::find($id)) {
+            return response([
+                'message' => 'Category isn`t exist'
+            ]);
+        }
+        $posts = Post::all();     
+        $result = [];
+        foreach ($posts as $post) {
 
+            $categories = json_decode($post->categories);
+            foreach ($categories as $value) {
+                if ($value == $id) 
+                    $result[] = $post;            
+            }
+        }
+        return $result;
     }
 
     /**
@@ -37,13 +50,15 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+
         if ($this->isAdmin() != true) { 
             return response([
                 'message' => 'You are not admin'
             ]);
         }
+
         $fields = $request->validate([
-            'title' => 'required|string',
+            'title' => 'required|string|unique:categories,title',
             'description' => 'string|nullable'                  
         ]);
         $category = Category::create([
