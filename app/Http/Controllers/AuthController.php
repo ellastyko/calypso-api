@@ -1,0 +1,157 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use App\Mail\SendMail;
+// Models
+use App\Models\User;
+
+
+class AuthController extends Controller
+{
+    
+    public function login(Request $request) {
+        try {
+            $fields = $request->validate([
+
+                'login' => 'required|string',   
+                'email' => 'required|string',        
+                'password' => 'required|string'
+            ]);
+
+            $user = User::where('login', $fields['login'])->first();
+            
+            if ($user == null) {
+                return response([
+                    'message' => 'User isn`t exists'
+                ], 400);
+            }
+
+            if ($user['email'] != $fields['email']) {
+                return response([
+                    'message' => 'E-mail isn`t correct'
+                ], 400);
+            }
+            if (!Hash::check($fields['password'], $user['password'])) {
+                return response([
+                    'message' => 'Password isn`t correct'
+                ], 400);
+            }
+
+            $token = $user->createToken('token')->plainTextToken;
+            $user->update(['remember_token' => $token]);
+
+            return response([
+                'message' => 'You have logged in',
+                'user' => $user,
+                'token' => $token
+                
+            ]);
+
+        } catch (\Exception $e) {
+            return response([
+                'message' => $e->getMessage()
+            ], 400);
+        }
+        
+
+    }
+
+    public function logout() {
+
+
+        $user = $this->user();
+        $user->update(['remember_token' => null]);
+        return response([
+            'message' => 'You have logged out'
+        ]);
+    }
+
+    public function register(Request $request) {
+        
+        try {
+            $fields = $request->validate([
+                'login' => 'required|string|unique:users,login',
+                'name' => 'string',                   
+                'password' => 'required|string',
+                'repeat_password' => 'required|string',
+                'email' => 'required|string|unique:users,email'       
+            ]);
+            if ($fields['password'] != $fields['repeat_password']) {
+                return response([
+                    'message' => 'Passwords are different'
+                ], 400);
+            }
+            $user = User::create([
+                'login' => $fields['login'],
+                'name' => $fields['name'],
+                'password' => Hash::make($fields['password']),           
+                'email' => $fields['email']
+            ]);
+
+        } catch (\Exception $e) {
+            return response([
+                'message' => $e->getMessage()
+            ], 400);
+        }
+        
+        return response([
+            'message' => 'You have registered!',
+            'user' => $user
+        ]);
+    }
+
+    public function password_reset(Request $request) {
+
+        $fields = $request->validate(['email' => 'required|string']);
+
+        $user = User::where('email', $fields['email'])->first();
+
+        if (!$user) {
+            return response ([
+                'message' => 'This email isn`t exist!'
+            ], 400);
+        }
+        
+        $token = $user->createToken('mytoken')->plainTextToken;
+        $user->update(['remember_token' => $token]);
+
+        $details = [
+            'title' => 'Link for reset password',
+            'body' => 'http://localhost:3000/new-password/'.$token
+        ];
+        Mail::to($user)->send(new SendMail($details));
+        return response([
+            'message' => 'Link was sent!'
+        ]);
+    }
+
+    public function password_reset_confirm_token(Request $request, $token) {
+        
+        try {
+            $fields = $request->validate(['password' => 'required|string']);
+            $user = User::where(['remember_token' => $token])->first();
+            if (!$user) {
+                return response([
+                    'message' => 'Invalid link'
+                ], 400);
+            }
+            $user->update(['password' => Hash::make($fields['password'])]);
+            $user->update(['remember_token' => null]);
+        } catch (\Exception $e) {
+            return response([
+                'message' => $e->getMessage()
+            ], 400);
+        }
+        
+        return response([
+            'message' => 'Password changed!'
+        ]);
+    }
+}
