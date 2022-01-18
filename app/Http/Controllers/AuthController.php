@@ -2,20 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Str;
-use App\Http\Requests\{
-    LoginRequest,
-    RegisterRequest,
-    ForgotRequest
-};
-
+use App\Http\Requests\{Auth\ForgotPasswordRequest, Auth\LoginRequest, Auth\RegisterRequest};
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
-
 
 
 class AuthController extends Controller
@@ -73,7 +67,7 @@ class AuthController extends Controller
     }
 
 
-    public function forgotPassword(ForgotRequest $request) {
+    public function forgotPassword(ForgotPasswordRequest $request) {
 
         $user = User::where('email', $request['email'])->first();
 

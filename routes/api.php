@@ -2,13 +2,12 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{
-    AuthController,
+use App\Http\Controllers\{AuthController,
+    LikeController,
     UserController,
     PostController,
     CategoryController,
-    CommentController
-};
+    CommentController};
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -54,14 +53,14 @@ Route::prefix('posts')->group(function () {
     });
 
     // Categories
-    Route::get('/{post_id}/categories', [PostController::class, 'showCategories']);
+    Route::get('/{post_id}/categories', [PostController::class, 'showPostCategories']);
 
     // Comments
     Route::get('/{post_id}/comments', [PostController::class, 'showComments']);
     Route::middleware('auth:sanctum')->post('/{post_id}/comments', [PostController::class, 'storeComment']);
 
     // Likes
-    Route::get('/{post_id}/like', [PostController::class, 'show_likes']);
+    Route::get('/{post_id}/likes', [PostController::class, 'showLikes']);
     Route::middleware('auth:sanctum')->post('{post_id}/like', [PostController::class, 'storeLike']);
     Route::middleware('auth:sanctum')->delete('{post_id}/like', [PostController::class, 'destroyLike']);
 });
@@ -78,8 +77,8 @@ Route::prefix('categories')->group( function () {
     Route::middleware(['auth:sanctum', 'can:store,update'])->group(function () {
 
         Route::post('', [CategoryController::class, 'store']);
-        Route::patch('{id}', [CategoryController::class, 'update']);
-        Route::delete('/{category_id}', [CategoryController::class, 'destroy']);
+        Route::patch('/{id}', [CategoryController::class, 'update']);
+        Route::delete('/{id}', [CategoryController::class, 'destroy']);
     });
 });
 
@@ -89,11 +88,19 @@ Route::group([
     'middleware' => 'auth:sanctum'
 ], function () {
 
-    Route::get('{comment_id}', [CommentController::class, 'show'])->withoutMiddleware('auth:sanctum');
-    Route::patch('{comment_id}', [CommentController::class, 'update']);
-    Route::delete('{comment_id}', [CommentController::class, 'destroy']);
+    Route::get('/{comment_id}', [CommentController::class, 'show'])->withoutMiddleware('auth:sanctum');
+    Route::patch('/{comment_id}', [CommentController::class, 'update']);
+    Route::delete('/{comment_id}', [CommentController::class, 'destroy']);
 
-    Route::get('{comment_id}/like', [CommentController::class, 'show_likes'])->withoutMiddleware('auth:sanctum');
-    Route::post('{comment_id}/like', [CommentController::class, 'store_like']);
-    Route::delete('{comment_id}/like', [CommentController::class, 'destroy_like']);
+
+});
+
+Route::group([
+    'prefix' => 'likes',
+    'middleware' => 'auth:sanctum'
+], function () {
+
+    Route::get('/{id}', [LikeController::class, 'show'])->withoutMiddleware('auth:sanctum');
+    Route::post('/{id}', [LikeController::class, 'store']);
+    Route::delete('/{id}', [LikeController::class, 'destroy']);
 });

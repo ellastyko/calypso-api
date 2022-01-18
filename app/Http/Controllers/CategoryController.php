@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CategoryStoreRequest;
-use App\Http\Requests\CategoryUpdateRequest;
+use App\Http\Requests\Category\CategoryStoreRequest;
+use App\Http\Requests\Category\CategoryUpdateRequest;
 use App\Models\Category;
-use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class CategoryController extends Controller
 {
     /**
-    * Display a listing of the resource.
-    *
-    * @return \Illuminate\Http\Response
+    * @return Response
     */
-    public function index()
+    public function index(): Response
     {
         return response([
             'categories' => Category::paginate(12)
@@ -22,83 +20,62 @@ class CategoryController extends Controller
     }
 
 
-    public function showPostsByCategory($id) {
-
-        if (!Category::find($id)) {
-            return response([
-                'message' => 'Category isn`t exist'
-            ]);
-        }
-        $posts = Post::all();
-        $result = [];
-        foreach ($posts as $post) {
-
-            $categories = json_decode($post->categories);
-            foreach ($categories as $value) {
-                if ($value == $id)
-                    $result[] = $post;
-            }
-        }
-        return $result;
-    }
-
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param CategoryStoreRequest $request
+     * @return Response
      */
-    public function store(CategoryStoreRequest $request)
+    public function store(CategoryStoreRequest $request): Response
     {
-
-        $category = Category::create([
-            'title' => $request['title'],
-            'description' => $request['description']
-        ]);
-
         return response([
-            'message' => 'Category successfully created',
-            'category' => $category
+            'message' => trans('messages.category.created'),
+            'category' => Category::create([
+                'title' => $request['title'],
+                'description' => $request['description']
+            ])
         ]);
     }
 
+
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return Response
      */
-    public function show($id)
+    public function show(int $id): Response
     {
         return response([
             'category' => Category::find($id)
         ]);
     }
 
+
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param CategoryUpdateRequest $request
+     * @param int $id
+     * @return Response
      */
-    public function update(CategoryUpdateRequest $request, $id)
+    public function update(CategoryUpdateRequest $request, int $id): Response
     {
 
         $category = Category::find($id);
         foreach ($request->all() as $key => $value)
             $category->update([$key => $value]);
 
-        return $category;
+        return response([
+            'message' => trans('category.updated'),
+            'category' => $category
+        ]);
     }
+
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return Response
      */
-    public function destroy($id)
+    public function destroy(int $id): Response
     {
 
         if (!Category::find($id)) {
@@ -107,5 +84,9 @@ class CategoryController extends Controller
             ], 404);
         }
         Category::destroy($id);
+        return response([
+            'message' => trans('category.destroyed')
+        ]);
     }
+
 }

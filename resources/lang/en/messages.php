@@ -1,0 +1,12 @@
+<?php
+
+return [
+
+    'category' => [
+        //
+    ],
+    'post' => [
+
+    ],
+
+];
