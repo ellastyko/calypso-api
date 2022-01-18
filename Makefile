@@ -32,8 +32,12 @@ seeds:
 	$(ARTISAN) db:seed
 
 clear:
+	$(ARTISAN) route:clear
 	$(ARTISAN) cache:clear
 	$(ARTISAN) config:clear
+
+optimize:
+	$(ARTISAN) optimize:clear
 
 chmod:
 	sudo chmod -R 777 storage
