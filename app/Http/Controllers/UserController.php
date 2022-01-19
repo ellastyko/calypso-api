@@ -7,14 +7,28 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
     public function avatar(Request $request)
     {
-       /**
-        * TODO
-        */
+        $request->avatar->storeAs('/avatars', ['disk' => 'public']);
+        /*
+         *  *** Store file with random name ***
+         * Storage::put('app/avatars', $request->avatar);
+         * Storage::disk('public')->put('avatars', $request->avatar);
+         */
+
+        /*
+         * Store image by specific name
+         *  ** disk - namespace folder in storage
+         */
+        $avatar = $request->file('avatar');
+        $path = Storage::disk('public')->putFileAs(
+            'avatars', $avatar, 'orig-name-for-photo.'.$avatar->extension()
+        );
+        return $path;
     }
 
 
@@ -74,12 +88,7 @@ class UserController extends Controller
     public function destroy($id)
     {
 
-        if (!User::find($id)) {
-            return response([
-                'message' => "User doesn't exist"
-            ], 404);
-        }
-        User::destroy($id);
+        User::findOrFail()->destroy();
 
         return response([
             'message' => 'User deleted successfully'

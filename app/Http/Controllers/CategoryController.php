@@ -70,7 +70,7 @@ class CategoryController extends Controller
 
 
     /**
-     * Remove the specified resource from storage.
+     * Remove category
      *
      * @param int $id
      * @return Response
@@ -78,14 +78,9 @@ class CategoryController extends Controller
     public function destroy(int $id): Response
     {
 
-        if (!Category::find($id)) {
-            return response([
-                'message' => "Category doesn't exist"
-            ], 404);
-        }
-        Category::destroy($id);
+        Category::find($id)->delete();
         return response([
-            'message' => trans('category.destroyed')
+            'message' => trans('messages.category.deleted')
         ]);
     }
 

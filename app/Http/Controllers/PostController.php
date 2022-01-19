@@ -8,6 +8,7 @@ use App\Models\Like;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
@@ -18,7 +19,7 @@ class PostController extends Controller
      */
     public function index(): Response
     {
-        return Post::paginate(4);
+        return Post::limit(5);
     }
 
     /**
@@ -29,20 +30,21 @@ class PostController extends Controller
      */
     public function store(PostStoreRequest $request): Response
     {
-//        TODO
-        $fields['categories'] = json_encode($fields['categories']);
-
-        $user = $this->user();
-        $fields['author'] = $user->id;
 
         $post = Post::create([
-            'author' => $fields['author'],
-            'title' => $fields['title'],
-            'content' => $fields['content'],
-            'categories' => $fields['categories']
+            'author' => auth()->user()->id,
+            'title' => $request['title'],
+            'content' => $request['content']
         ]);
+
+        foreach ($request['categoriesID'] as $categoryID) {
+            DB::table('posts_categories')->create([
+                'post_id' => $post->id,
+                'category_id' => $categoryID
+            ]);
+        }
         return response([
-            'message' => 'You have created post',
+            'message' => trans('messages.post.created'),
             'post' => $post
         ]);
     }
@@ -53,15 +55,9 @@ class PostController extends Controller
      */
     public function show(int $id): Response
     {
-        $post = Post::find($id);
-        if (!$post) {
-            return response([
-                'message' => trans('messages.post.404')
-            ], 404);
-        }
         return response([
             'message' => trans('messages.post.show'),
-            'post' => $post
+            'post' => Post::find($id)
         ]);
     }
 
@@ -72,9 +68,9 @@ class PostController extends Controller
      */
     public function update(Request $request, int $id): Response
     {
-
+        Post::update([]);
         return response([
-            'message' => 'Edited'
+            'message' =>  trans('messages.post.updated')
         ]);
     }
 
@@ -84,24 +80,9 @@ class PostController extends Controller
      */
     public function destroy(int $id): Response
     {
-        if (!Post::find($id)) {
-            return response([
-                'message' => 'Post isn`t exist'
-            ], 400);
-        }
-
-        $user = $this->user();
-
-        $post = Post::find($id);
-
-        if ($user->id != $post->author) {
-            return response([
-                'message' => 'You can`t delete this post'
-            ], 400);
-        }
         Post::destroy($id);
         return response([
-            'message' => 'You have deleted post'
+            'message' => trans('messages.post.deleted')
         ]);
     }
 
@@ -138,26 +119,13 @@ class PostController extends Controller
     // Comments
     public function storeComment(Request $request, $id) {
 
-
-        $user = $this->user();
-        if(!Post::find($id)) {
-            return response([
-                'message' => 'Post isn`t exist'
-            ], 400);
-        }
-
-            $fields = $request->validate(['content' => 'required|string']);
-
-            $fields['author'] = $user->id;
-
-            $comment = Comment::create([
-                'author' => $fields['author'],
-                'post-id' => $id,
-                'content' => $fields['content']
-            ]);
+        $comment = Comment::create([
+            'author' => $request['author'],
+            'content' => $request['content']
+        ]);
 
         return response([
-            'message' => 'You have created comment',
+            'message' => trans('messages.comment.created'),
             'comment' => $comment
         ]);
     }

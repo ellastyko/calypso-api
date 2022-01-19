@@ -9,24 +9,37 @@ use Symfony\Component\HttpFoundation\Response;
 class CommentController extends Controller
 {
     /**
-     * Display comments.
+     * Display comment
      *
      * @param  int  $id
      * @return Response
      */
     public function show(int $id): Response
     {
-        $comment = Comment::find($id);
-        if (!$comment) {
-            return response([
-                'message' => 'Comment isn`t exist'
-            ], 404);
-        }
-        return $comment;
+        return Comment::find($id);
     }
 
+
     /**
-     * Update comments
+     * Update comment
+     *
+     * @param  Request  $request
+     * @return Response
+     */
+    public function store(Request $request): Response
+    {
+        return response([
+            'message' => trans('messages.comment.created'),
+            'comment' => Comment::create([
+                'content' => $request['content'],
+                'author' => auth()->user()->id
+            ])
+        ]);
+    }
+
+
+    /**
+     * Update comment
      *
      * @param  Request  $request
      * @param  int  $id
@@ -34,31 +47,15 @@ class CommentController extends Controller
      */
     public function update(Request $request, int $id): Response
     {
-
-        $comment = Comment::find($id);
-        if (!$comment) {
-            return response([
-                'message' => 'Comment isn`t exist'
-            ], 400);
-        }
-
-        $user = $this->user();
-        if ($user->id != $comment->author && $user->role != 'admin') {
-            return response([
-                'message' => 'You can`t edit this comment'
-            ], 400);
-        }
-        $fields = $request->validate(['content' => 'required|string']);
-        $comment->update(['content' => $fields['content']]);
-
+        Comment::find($id)->update(['content' => $request['content']]);
 
         return response([
-            'message' => 'Comment updated'
+            'message' => trans('messages.comment.updated')
         ]);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Destroy comment
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -66,16 +63,10 @@ class CommentController extends Controller
     public function destroy(int $id): \Illuminate\Http\Response
     {
 
-        $comment = Comment::find($id);
-        if (!$comment) {
-            return response([
-                'message' => 'Comment isn`t exist'
-            ], 404);
-        }
-        $comment->delete();
+        Comment::find($id)->delete();
 
         return response([
-            'message' => 'Comment deleted'
+            'message' => trans('messages.comment.deleted')
         ]);
     }
 }
