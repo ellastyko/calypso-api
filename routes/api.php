@@ -2,12 +2,14 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{AuthController,
+use App\Http\Controllers\{
+    AuthController,
     LikeController,
     UserController,
     PostController,
     CategoryController,
-    CommentController};
+    CommentController
+};
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -21,10 +23,9 @@ use App\Http\Controllers\{AuthController,
 
 Route::prefix('auth')->group(function() {
 
-    Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register']);
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
-
     Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
     Route::post('/password-reset/{token}', [AuthController::class, 'passwordReset']);
 });
@@ -32,12 +33,13 @@ Route::prefix('auth')->group(function() {
 
 Route::group(['middleware' => ['auth:sanctum'], 'prefix' => 'users'], function () {
 
-    Route::get('/', [UserController::class, 'index']);
-    Route::get('/{id}', [UserController::class,'show']);
-    Route::post('', [UserController::class, 'store']);
+    //    Route::get('/', [UserController::class, 'index']);
+    //    Route::get('/{id}', [UserController::class,'show']);
+    //    Route::post('', [UserController::class, 'store']);
+    //    Route::patch('{id}', [UserController::class, 'update']);
+    //    Route::delete('/{id}', [UserController::class, 'destroy']);
+    Route::apiResource('/', UserController::class);
     Route::post('/avatar', [UserController::class, 'avatar']);
-    Route::patch('{id}', [UserController::class, 'update']);
-    Route::delete('/{id}', [UserController::class, 'destroy']);
 });
 
 
@@ -91,8 +93,6 @@ Route::group([
     Route::get('/{comment_id}', [CommentController::class, 'show'])->withoutMiddleware('auth:sanctum');
     Route::patch('/{comment_id}', [CommentController::class, 'update']);
     Route::delete('/{comment_id}', [CommentController::class, 'destroy']);
-
-
 });
 
 Route::group([

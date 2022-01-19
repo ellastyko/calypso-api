@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\{Auth\ForgotPasswordRequest, Auth\LoginRequest, Auth\RegisterRequest};
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -55,11 +56,12 @@ class AuthController extends Controller
     {
         $user = User::create([
             'name' => $request['name'],
+            'surname' => $request['surname'],
             'email' => $request['email'],
             'password' => Hash::make($request['password'])
         ]);
-
-        // TODO --- Send letter to confirm password
+        event(new Registered($user));
+        // TODO --- Send letter to confirm email
         return response([
             'message' => trans('auth.registered'),
             'user' => $user
@@ -88,11 +90,6 @@ class AuthController extends Controller
     public function passwordReset(Request $request, $token) {
 
 
-            $fields = $request->validate(['password' => 'required|string']);
-            $user = User::where(['remember_token' => $token])->first();
-
-            $user->update(['password' => Hash::make($fields['password'])]);
-            $user->update(['remember_token' => null]);
 
         return response([
             'message' => 'Password changed!'
