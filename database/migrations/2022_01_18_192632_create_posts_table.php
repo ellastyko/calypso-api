@@ -15,6 +15,11 @@ class CreatePostsTable extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->text('content');
+            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->integer('rating')->default(0);
+            $table->foreignId('author')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
         });
     }
