@@ -2,26 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\{Auth\ForgotPasswordRequest, Auth\LoginRequest, Auth\RegisterRequest};
-use App\Models\User;
-use Illuminate\Auth\Events\Registered;
+
+use App\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Requests\Auth\{ForgotPasswordRequest, LoginRequest, RegisterRequest};
+use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 
 
 class AuthController extends Controller
 {
     /**
      * @param LoginRequest $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function login(Request $request)
+    public function login(LoginRequest $request) : Response
     {
-
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response([
                 'message' => trans('auth.failed')
@@ -30,7 +31,7 @@ class AuthController extends Controller
 
         $user = User::find(Auth::user()->id);
 
-        $token = $user->setRememberToken(Str::random(60));
+        $user->setRememberToken($token = Str::random(60));
 
         return response([
             'message' => 'You have logged in',
@@ -38,11 +39,12 @@ class AuthController extends Controller
         ])->withCookie('token', $token);
     }
 
-
-    public function logout()
+    /**
+     * @return Response
+     */
+    public function logout() : Response
     {
         Auth::logout();
-
         return response([
             'message' => trans('auth.logout')
         ]);
@@ -50,9 +52,9 @@ class AuthController extends Controller
 
     /**
      * @param RegisterRequest $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function register(RegisterRequest $request)
+    public function register(RegisterRequest $request) : Response
     {
         $user = User::create([
             'name' => $request['name'],
@@ -60,7 +62,8 @@ class AuthController extends Controller
             'email' => $request['email'],
             'password' => Hash::make($request['password'])
         ]);
-        event(new Registered($user));
+        event(new PasswordReset($user));
+//        event(new Registered($user));
         // TODO --- Send letter to confirm email
         return response([
             'message' => trans('auth.registered'),

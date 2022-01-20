@@ -38,7 +38,7 @@ Route::group(['middleware' => ['auth:sanctum'], 'prefix' => 'users'], function (
     //    Route::post('', [UserController::class, 'store']);
     //    Route::patch('{id}', [UserController::class, 'update']);
     //    Route::delete('/{id}', [UserController::class, 'destroy']);
-    Route::apiResource('/', UserController::class);
+    Route::apiResource('', UserController::class);
     Route::post('/avatar', [UserController::class, 'avatar']);
 });
 
