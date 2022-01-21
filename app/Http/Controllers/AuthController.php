@@ -29,12 +29,12 @@ class AuthController extends Controller
             ], Response::HTTP_UNAUTHORIZED);
         }
 
-        $user = User::find(Auth::user()->id);
-
+        $user = User::find(Auth::id());
         $user->setRememberToken($token = Str::random(60));
+        $user->save();
 
         return response([
-            'message' => 'You have logged in',
+            'message' => trans('auth.login'),
             'user' => $user
         ])->withCookie('token', $token);
     }
@@ -56,15 +56,16 @@ class AuthController extends Controller
      */
     public function register(RegisterRequest $request) : Response
     {
+        $data = $request->validated();
         $user = User::create([
-            'name' => $request['name'],
-            'surname' => $request['surname'],
-            'email' => $request['email'],
-            'password' => Hash::make($request['password'])
+            'name' => $data['name'],
+//            'surname' => $data['surname'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password'])
         ]);
         event(new PasswordReset($user));
 //        event(new Registered($user));
-        // TODO --- Send letter to confirm email
+
         return response([
             'message' => trans('auth.registered'),
             'user' => $user
@@ -73,6 +74,11 @@ class AuthController extends Controller
 
 
     public function forgotPassword(ForgotPasswordRequest $request) {
+
+
+    }
+
+    public function passwordReset(Request $request) {
 
         $user = User::where('email', $request['email'])->first();
 
@@ -88,11 +94,6 @@ class AuthController extends Controller
                 event(new PasswordReset($user));
             }
         );
-    }
-
-    public function passwordReset(Request $request, $token) {
-
-
 
         return response([
             'message' => 'Password changed!'

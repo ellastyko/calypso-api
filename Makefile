@@ -1,9 +1,9 @@
 OS := $(shell uname)
 ARTISAN := php artisan
 
-setup: env deps docker migrate seeds watch
-start: env deps docker watch
-build: env deps docker npm-build
+setup: env deps up migrate seeds watch
+start: up watch
+build: env deps up npm-build
 
 env:
 	cp .env.example .env
@@ -13,7 +13,7 @@ deps:
 	npm install
 
 
-docker: down up
+restart: down up
 
 up:
 	./vendor/bin/sail up -d --build

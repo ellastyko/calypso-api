@@ -17,6 +17,7 @@ return [
     'password' => 'The provided password is incorrect.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
 
-    'logout' => 'You have logged out.',
+    'login' => 'You have logged in',
+    'logout' => 'You have logged out',
     'registered' =>  'You have registered',
 ];
