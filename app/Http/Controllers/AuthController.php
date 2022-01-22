@@ -3,16 +3,14 @@
 namespace App\Http\Controllers;
 
 
-use App\Events\PasswordReset;
+use App\Actions\ForgotPasswordAction;
+use App\Actions\UserRegisterAction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
-use App\Http\Requests\Auth\{ForgotPasswordRequest, LoginRequest, RegisterRequest};
+use App\Http\Requests\Auth\{ForgotPasswordRequest, LoginRequest, PasswordResetRequest, RegisterRequest};
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 
 
 class AuthController extends Controller
@@ -52,19 +50,12 @@ class AuthController extends Controller
 
     /**
      * @param RegisterRequest $request
+     * @param UserRegisterAction $action
      * @return Response
      */
-    public function register(RegisterRequest $request) : Response
+    public function register(RegisterRequest $request, UserRegisterAction $action) : Response
     {
-        $data = $request->validated();
-        $user = User::create([
-            'name' => $data['name'],
-//            'surname' => $data['surname'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password'])
-        ]);
-        event(new PasswordReset($user));
-//        event(new Registered($user));
+        $user = $action->handle($request->validated());
 
         return response([
             'message' => trans('auth.registered'),
@@ -73,27 +64,26 @@ class AuthController extends Controller
     }
 
 
-    public function forgotPassword(ForgotPasswordRequest $request) {
+    public function forgotPassword(ForgotPasswordRequest $request, ForgotPasswordAction $action) {
 
-
+        return $action->handle($request->only('email'));
     }
 
-    public function passwordReset(Request $request) {
+
+
+    public function passwordReset(PasswordResetRequest $request, ) {
 
         $user = User::where('email', $request['email'])->first();
 
-        $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user, $password) {
-                $user->forceFill([
-                    'password' => Hash::make($password)
-                ])->setRememberToken(Str::random(60));
 
-                $user->save();
+        $user->forceFill([
+            'password' => Hash::make($password)
+        ])->setRememberToken(Str::random(60));
 
-                event(new PasswordReset($user));
-            }
-        );
+        $user->save();
+
+        event(new PasswordReset($user));
+
 
         return response([
             'message' => 'Password changed!'

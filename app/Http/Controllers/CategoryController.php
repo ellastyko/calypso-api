@@ -26,15 +26,16 @@ class CategoryController extends Controller
      * @param CategoryStoreRequest $request
      * @return Response
      */
-    public function store(CategoryStoreRequest $request): Response
+    public function store(CategoryStoreRequest $request, ): Response
     {
-        return response([
-            'message' => trans('messages.category.created'),
-            'category' => Category::create([
-                'title' => $request['title'],
-                'description' => $request['description']
-            ])
-        ]);
+//        Category::create([
+//            'title' => $request['title'],
+//            'description' => $request['description']
+//        ]);
+//        return response([
+//            'message' => trans('messages.category.created'),
+//            'category' =>
+//        ]);
     }
 
 
@@ -44,8 +45,9 @@ class CategoryController extends Controller
      */
     public function show(int $id): Response
     {
+        $category = Category::findOrFail($id);
         return response([
-            'category' => Category::find($id)
+            'category' => $category
         ]);
     }
 

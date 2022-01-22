@@ -12,7 +12,9 @@ return [
     | has failed, such as for an invalid token or invalid new password.
     |
     */
-
+    'forgot' => [
+        'subject' => 'Reset password'
+    ],
     'reset' => 'Your password has been reset!',
     'sent' => 'We have emailed your password reset link!',
     'throttled' => 'Please wait before retrying.',

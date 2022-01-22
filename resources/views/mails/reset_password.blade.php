@@ -1,3 +1,6 @@
+
+@extends('mails.email')
 @section('content')
-    {{ $user->name }}
+    <p>Hello {{ $user->name }}</p>
+    <p></p>
 @endsection
