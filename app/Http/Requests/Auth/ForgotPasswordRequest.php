@@ -25,7 +25,7 @@ class ForgotPasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => ['required','email', 'exists:mysql.users,email']
+            'email' => ['required','email'] // TODO ERROR , 'exists:mysql.users,email'
         ];
     }
 }

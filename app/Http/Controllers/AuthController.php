@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Actions\ForgotPasswordAction;
+use App\Actions\PasswordResetAction;
 use App\Actions\UserRegisterAction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,7 +35,7 @@ class AuthController extends Controller
         return response([
             'message' => trans('auth.login'),
             'user' => $user
-        ])->withCookie('token', $token);
+        ])->withCookie('link', $token);
     }
 
     /**
@@ -63,30 +64,32 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * @param ForgotPasswordRequest $request
+     * @param ForgotPasswordAction $action
+     * @return Response
+     */
+    public function forgotPassword(ForgotPasswordRequest $request, ForgotPasswordAction $action): Response
+    {
+        $action->handle($request->only('email'));
 
-    public function forgotPassword(ForgotPasswordRequest $request, ForgotPasswordAction $action) {
-
-        return $action->handle($request->only('email'));
+        return response([
+            'message' => trans('passwords.sent')
+        ]);
     }
 
 
+    /**
+     * @param PasswordResetRequest $request
+     * @param PasswordResetAction $action
+     * @return Response
+     */
+    public function passwordReset(PasswordResetRequest $request, PasswordResetAction $action) {
 
-    public function passwordReset(PasswordResetRequest $request, ) {
-
-        $user = User::where('email', $request['email'])->first();
-
-
-        $user->forceFill([
-            'password' => Hash::make($password)
-        ])->setRememberToken(Str::random(60));
-
-        $user->save();
-
-        event(new PasswordReset($user));
-
+        $action->handle($request->validated());
 
         return response([
-            'message' => 'Password changed!'
+            'message' => trans('passwords.reset')
         ]);
     }
 

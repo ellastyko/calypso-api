@@ -14,10 +14,10 @@ class LikeFactory extends Factory
     public function definition()
     {
         return [
-            'type' => 1,
-            'post_id' => rand(1, 10),
-            'comment_id' => rand(1, 10),
-            'author' => rand(1, 10)
+            'reaction' => $this->faker->boolean,
+            'post_id' => rand(1, 50),
+            'comment_id' => null,
+            'user_id' => rand(1, 10)
         ];
     }
 }

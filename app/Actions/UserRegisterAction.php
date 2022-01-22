@@ -2,11 +2,10 @@
 
 namespace App\Actions;
 
-use App\Events\PasswordReset;
+use App\Events\ForgotPassword;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\Hash;
 
 class UserRegisterAction
 {
