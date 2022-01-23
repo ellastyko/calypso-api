@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Comment\CommentRequest;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,19 +24,16 @@ class CommentController extends Controller
     /**
      * Update comment
      *
-     * @param  Request  $request
+     * @param  CommentRequest  $request
      * @return Response
      */
-    public function store(Request $request): Response
-    {
-        return response([
-            'message' => trans('messages.comment.created'),
-            'comment' => Comment::create([
-                'content' => $request['content'],
-                'author' => auth()->user()->id
-            ])
-        ]);
-    }
+//    public function store(CommentRequest $request, CommentService): Response
+//    {
+//        return response([
+//            'message' => trans('messages.comment.created'),
+//            'comment' =>
+//        ]);
+//    }
 
 
     /**

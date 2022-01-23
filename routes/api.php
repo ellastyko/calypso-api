@@ -43,6 +43,20 @@ Route::group(['middleware' => ['auth:sanctum'], 'prefix' => 'users'], function (
 });
 
 
+Route::prefix('categories')->group( function () {
+
+    Route::get('', [CategoryController::class, 'index']);
+    Route::get('/{category_id}', [CategoryController::class, 'show']);
+
+    Route::middleware(['auth:sanctum', 'can:store,update'])->group(function () {
+
+        Route::post('', [CategoryController::class, 'store']);
+        Route::patch('/{id}', [CategoryController::class, 'update']);
+        Route::delete('/{id}', [CategoryController::class, 'destroy']);
+    });
+});
+
+
 Route::prefix('posts')->group(function () {
 
     Route::get('', [PostController::class, 'index']);
@@ -65,23 +79,6 @@ Route::prefix('posts')->group(function () {
     Route::get('/{post_id}/likes', [PostController::class, 'showLikes']);
     Route::middleware('auth:sanctum')->post('{post_id}/like', [PostController::class, 'storeLike']);
     Route::middleware('auth:sanctum')->delete('{post_id}/like', [PostController::class, 'destroyLike']);
-});
-
-
-
-Route::prefix('categories')->group( function () {
-
-
-    Route::get('', [CategoryController::class, 'index']);
-    Route::get('/{category_id}', [CategoryController::class, 'show']);
-    Route::get('/posts', [CategoryController::class, 'showPostsByCategories']);
-
-    Route::middleware(['auth:sanctum', 'can:store,update'])->group(function () {
-
-        Route::post('', [CategoryController::class, 'store']);
-        Route::patch('/{id}', [CategoryController::class, 'update']);
-        Route::delete('/{id}', [CategoryController::class, 'destroy']);
-    });
 });
 
 

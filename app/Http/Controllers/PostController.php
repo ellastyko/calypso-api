@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Comment\CommentRequest;
 use App\Http\Requests\Post\PostStoreRequest;
-use App\Models\Comment;
-use App\Models\Like;
 use App\Models\Post;
+use App\Services\PostCommentsService;
+use App\Services\PostService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -19,33 +20,21 @@ class PostController extends Controller
      */
     public function index(): Response
     {
-        return Post::limit(5);
+        return Post::paginate(5);
     }
 
     /**
      * Store a new post.
      *
      * @param PostStoreRequest $request
+     * @param PostService $service
      * @return Response
      */
-    public function store(PostStoreRequest $request): Response
+    public function store(PostStoreRequest $request, PostService $service): Response
     {
-
-        $post = Post::create([
-            'author' => auth()->user()->id,
-            'title' => $request['title'],
-            'content' => $request['content']
-        ]);
-
-        foreach ($request['categoriesID'] as $categoryID) {
-            DB::table('posts_categories')->create([
-                'post_id' => $post->id,
-                'category_id' => $categoryID
-            ]);
-        }
         return response([
             'message' => trans('messages.post.created'),
-            'post' => $post
+            'post' => $service->store(Auth::id(), $request->validated())
         ]);
     }
 
@@ -66,9 +55,9 @@ class PostController extends Controller
      * @param int $id
      * @return Response
      */
-    public function update(Request $request, int $id): Response
+    public function update(Request $request, PostService $service, int $id): Response
     {
-        Post::update([]);
+
         return response([
             'message' =>  trans('messages.post.updated')
         ]);
@@ -103,16 +92,18 @@ class PostController extends Controller
 
 
     // Comments
-    public function storeComment(Request $request, $id) {
 
-        $comment = Comment::create([
-            'author' => $request['author'],
-            'content' => $request['content']
-        ]);
-
+    /**
+     * @param CommentRequest $request
+     * @param PostCommentsService $service
+     * @param int $id
+     * @return Response
+     */
+    public function storeComment(CommentRequest $request, PostCommentsService $service, int $id): Response
+    {
         return response([
             'message' => trans('messages.comment.created'),
-            'comment' => $comment
+            'comment' =>  $service->store(Auth::id(), $request->validated(), $id)
         ]);
     }
 

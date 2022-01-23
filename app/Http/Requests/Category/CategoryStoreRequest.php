@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests\Category;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class CategoryStoreRequest extends FormRequest
+class CategoryStoreRequest extends CategoryRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,9 +21,8 @@ class CategoryStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'title' => ['required', 'string', 'unique:categories,title'],
-            'description' => ['string', 'max:500']
-        ];
+        return array_merge(parent::rules(), [
+            'title' => ['required', 'unique:categories,title']
+        ]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Post;
+use Illuminate\Support\Facades\DB;
 
 class PostService
 {
@@ -13,11 +14,18 @@ class PostService
      */
     public function store(int $creator, array $data): mixed
     {
-        return Post::create([
+        $post = Post::create([
             'title' => $data['title'],
             'content' => $data['content'],
             'user_id' => $creator,
         ]);
+        foreach ($data['categoriesId'] as $categoryId) {
+            DB::table('posts_categories')->insert([
+                'post_id' => $post->id,
+                'category_id' => $categoryId
+            ]);
+        }
+        return $post;
     }
 
     /**

@@ -4,22 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Category\CategoryStoreRequest;
 use App\Http\Requests\Category\CategoryUpdateRequest;
+use App\Http\Requests\IndexRequest;
 use App\Models\Category;
 use App\Services\CategoryService;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
     /**
-    * @return Response
-    */
-    public function index(): Response
+     * @param IndexRequest $request
+     * @return Response
+     */
+    public function index(IndexRequest $request): Response
     {
-        return response([
-            'categories' => Category::paginate(10)
-        ]);
+        return response(Category::paginate($request->input('paginate')));
     }
 
 
@@ -78,18 +78,6 @@ class CategoryController extends Controller
         $service->destroy($id);
         return response([
             'message' => trans('messages.category.deleted')
-        ]);
-    }
-
-    /**
-     * @param Request $request
-     * @return Response
-     */
-    public function showPostsByCategories(Request $request) : Response {
-
-
-        return response([
-
         ]);
     }
 }
