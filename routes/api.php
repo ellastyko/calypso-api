@@ -27,7 +27,7 @@ Route::prefix('auth')->group(function() {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
     Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
-    Route::post('/password-reset/{token}', [AuthController::class, 'passwordReset']);
+    Route::post('/password-reset/{link}', [AuthController::class, 'passwordReset']);
 });
 
 
@@ -40,6 +40,20 @@ Route::group(['middleware' => ['auth:sanctum'], 'prefix' => 'users'], function (
     //    Route::delete('/{id}', [UserController::class, 'destroy']);
     Route::apiResource('', UserController::class);
     Route::post('/avatar', [UserController::class, 'avatar']);
+});
+
+
+Route::prefix('categories')->group( function () {
+
+    Route::get('', [CategoryController::class, 'index']);
+    Route::get('/{category_id}', [CategoryController::class, 'show']);
+
+    Route::middleware(['auth:sanctum', 'can:store,update'])->group(function () {
+
+        Route::post('', [CategoryController::class, 'store']);
+        Route::patch('/{id}', [CategoryController::class, 'update']);
+        Route::delete('/{id}', [CategoryController::class, 'destroy']);
+    });
 });
 
 
@@ -65,23 +79,6 @@ Route::prefix('posts')->group(function () {
     Route::get('/{post_id}/likes', [PostController::class, 'showLikes']);
     Route::middleware('auth:sanctum')->post('{post_id}/like', [PostController::class, 'storeLike']);
     Route::middleware('auth:sanctum')->delete('{post_id}/like', [PostController::class, 'destroyLike']);
-});
-
-
-
-Route::prefix('categories')->group( function () {
-
-
-    Route::get('', [CategoryController::class, 'index']);
-    Route::get('/{category_id}', [CategoryController::class, 'show']);
-    Route::get('/{category_id}/posts', [CategoryController::class, 'showPostsByCategory']);
-
-    Route::middleware(['auth:sanctum', 'can:store,update'])->group(function () {
-
-        Route::post('', [CategoryController::class, 'store']);
-        Route::patch('/{id}', [CategoryController::class, 'update']);
-        Route::delete('/{id}', [CategoryController::class, 'destroy']);
-    });
 });
 
 

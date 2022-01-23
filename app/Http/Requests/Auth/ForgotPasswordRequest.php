@@ -8,16 +8,6 @@ use Illuminate\Validation\Rule;
 class ForgotPasswordRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
-    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
@@ -25,7 +15,7 @@ class ForgotPasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => ['required','email', 'exists:mysql.users,email']
+            'email' => ['required', 'email', 'exists:users,email'] // TODO ERROR , 'exists:mysql.users,email'
         ];
     }
 }

@@ -16,8 +16,10 @@ class Like extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'type',
-        'author',
+        'reaction',
+        'post_id',
+        'comment_id',
+        'user_id',
     ];
 
     /**

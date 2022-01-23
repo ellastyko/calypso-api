@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests\Post;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class PostStoreRequest extends FormRequest
+class PostStoreRequest extends PostRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,9 +21,9 @@ class PostStoreRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'title' => 'required|string',
-            'content' => 'required|string',
-        ];
+        return array_merge(parent::rules(), [
+            'title' => 'required',
+            'content' => 'required',
+        ]);
     }
 }
