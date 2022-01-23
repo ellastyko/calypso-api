@@ -84,8 +84,8 @@ class AuthController extends Controller
      * @param PasswordResetAction $action
      * @return Response
      */
-    public function passwordReset(PasswordResetRequest $request, PasswordResetAction $action) {
-
+    public function passwordReset(PasswordResetRequest $request, PasswordResetAction $action): Response
+    {
         $action->handle($request->validated());
 
         return response([

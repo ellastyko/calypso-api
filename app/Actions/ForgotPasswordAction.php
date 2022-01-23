@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\DB;
 
 class ForgotPasswordAction
 {
-    public function handle($email) {
+    public function handle(array $data) {
 
-        $user = User::where('email', $email)->firstOrFail();
+        $user = User::where('email', $data['email'])->first();
 
         $token = Str::random(60);
 
@@ -22,7 +22,7 @@ class ForgotPasswordAction
             'created_at' => Carbon::now()
         ]);
 
-        $link = config('APP_URL').'?link='.$token;
+        $link = config('APP_URL').'?token='.$token;
 
         event(new ForgotPassword($user, $link));
     }

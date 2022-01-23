@@ -101,20 +101,6 @@ class PostController extends Controller
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @return Response
-     */
-    public function showPostsByCategories(Request $request) : Response {
-
-        /**
-         * TODO
-         */
-        return response([
-
-        ]);
-    }
-
 
     // Comments
     public function storeComment(Request $request, $id) {

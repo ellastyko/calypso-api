@@ -74,7 +74,7 @@ Route::prefix('categories')->group( function () {
 
     Route::get('', [CategoryController::class, 'index']);
     Route::get('/{category_id}', [CategoryController::class, 'show']);
-    Route::get('/{category_id}/posts', [CategoryController::class, 'showPostsByCategory']);
+    Route::get('/posts', [CategoryController::class, 'showPostsByCategories']);
 
     Route::middleware(['auth:sanctum', 'can:store,update'])->group(function () {
 

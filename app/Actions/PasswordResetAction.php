@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -11,7 +12,9 @@ class PasswordResetAction
 {
     public function handle($data) {
 
-        $user = User::where('email', $data['email'])->first();
+        $reset = DB::table('password_resets')->where('email', $data['token'])->first();
+
+        $user = User::where('email', $reset->email)->first();
 
         $user->forceFill([
             'password' => Hash::make($data['password'])
