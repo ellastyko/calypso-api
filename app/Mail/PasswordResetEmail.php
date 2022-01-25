@@ -11,8 +11,8 @@ class PasswordResetEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    private object $user;
-    private string $link;
+    private $user;
+    private $link;
     /**
      * Create a new message instance.
      *
@@ -29,7 +29,7 @@ class PasswordResetEmail extends Mailable
      *
      * @return $this
      */
-    public function build(): static
+    public function build(): PasswordResetEmail
     {
         return $this->view('mails.reset_password')
                         ->subject(trans('passwords.forgot.subject'))

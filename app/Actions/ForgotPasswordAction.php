@@ -22,7 +22,7 @@ class ForgotPasswordAction
             'created_at' => Carbon::now()
         ]);
 
-        $link = config('APP_URL').'?token='.$token;
+        $link = config('app.url').'/password-reset?token='.$token;
 
         event(new ForgotPassword($user, $link));
     }

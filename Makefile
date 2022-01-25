@@ -56,3 +56,6 @@ schedule:
 
 route:
 	$(ARTISAN) route:list
+
+test:
+	$(ARTISAN) test

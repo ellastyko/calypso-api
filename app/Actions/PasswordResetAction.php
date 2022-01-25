@@ -21,6 +21,7 @@ class PasswordResetAction
         ])->setRememberToken(Str::random(60));
 
         $user->save();
+        $reset->delete();
 
         event(new PasswordReset($user));
     }
