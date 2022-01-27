@@ -2,33 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\UserAvatarRequest;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
+
 
 class UserController extends Controller
 {
-    public function avatar(Request $request)
+    /**
+     * @param UserAvatarRequest $request
+     * @param UserService $service
+     * @return false|string
+     */
+    public function avatar(UserAvatarRequest $request, UserService $service): bool|string
     {
-        $request->avatar->storeAs('/avatars', ['disk' => 'public']);
-        /*
-         *  *** Store file with random name ***
-         * Storage::put('app/avatars', $request->avatar);
-         * Storage::disk('public')->put('avatars', $request->avatar);
-         */
-
-        /*
-         * Store image by specific name
-         *  ** disk - namespace folder in storage
-         */
-        $avatar = $request->file('avatar');
-        $path = Storage::disk('public')->putFileAs(
-            'avatars', $avatar, 'orig-name-for-photo.'.$avatar->extension()
-        );
-        return $path;
+        return $service->avatar($request->file('avatar'));
     }
 
 

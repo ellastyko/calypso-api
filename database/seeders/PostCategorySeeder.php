@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\PostCategory;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-class PostsCategoriesTableSeeder extends Seeder
+class PostCategorySeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,6 +14,6 @@ class PostsCategoriesTableSeeder extends Seeder
      */
     public function run()
     {
-//        DB::table('posts_categories')->factory(50);
+        PostCategory::factory(100)->create();
     }
 }

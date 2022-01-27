@@ -10,15 +10,17 @@ use Illuminate\Support\Facades\DB;
 
 class ForgotPasswordAction
 {
+    /**
+     * @param array $data
+     * @return void
+     */
     public function handle(array $data) {
 
         $user = User::where('email', $data['email'])->first();
 
-        $token = Str::random(60);
-
         DB::table('password_resets')->insert([
             'email' => $user->email,
-            'link' => $token,
+            'link' => $token = Str::random(60),
             'created_at' => Carbon::now()
         ]);
 

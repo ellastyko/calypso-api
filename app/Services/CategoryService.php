@@ -3,34 +3,52 @@
 namespace App\Services;
 
 use App\Models\Category;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class CategoryService
 {
-
     /**
-     * @param int $creator
      * @param array $data
      * @return mixed
      */
-    public function store(int $creator, array $data): mixed
+    public function index(array $data): mixed
+    {
+        if (isset($data['paginate']))
+            return Category::paginate($data['paginate']);
+        else
+            return Category::all();
+    }
+
+    /**
+     * @param $creator
+     * @param array $data
+     * @return mixed
+     */
+    public function store($creator, array $data): mixed
     {
         return Category::create([
             'title' => $data['title'],
             'description' => $data['description'],
-            'user_id' => $creator,
+            'user_id' => $creator->id,
         ]);
     }
 
     /**
-     * @param $data
-     * @param $id
+     * @param int $id
+     * @return mixed
+     */
+    public function show(int $id)
+    {
+        return Category::find($id);
+    }
+
+    /**
+     * @param array $data
+     * @param int $id
      * @return bool
      */
-    public function update($data, $id): bool
+    public function update(array $data, int $id): bool
     {
-        return Category::find($id)->update($data);
+        return Category::find($id)->fill($data);
     }
 
     /**

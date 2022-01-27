@@ -53,11 +53,11 @@ class Post extends Model
     }
 
     /**
-     * @return HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function categories(): HasMany
+    public function categories()
     {
-        return $this->hasMany(Category::class);
+        return $this->belongsToMany(Category::class)->using(PostCategory::class);
     }
 
     /**

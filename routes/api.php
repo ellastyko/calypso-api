@@ -33,12 +33,12 @@ Route::prefix('auth')->group(function() {
 
 Route::group(['middleware' => ['auth:sanctum'], 'prefix' => 'users'], function () {
 
-    //    Route::get('/', [UserController::class, 'index']);
-    //    Route::get('/{id}', [UserController::class,'show']);
-    //    Route::post('', [UserController::class, 'store']);
-    //    Route::patch('{id}', [UserController::class, 'update']);
-    //    Route::delete('/{id}', [UserController::class, 'destroy']);
-    Route::apiResource('', UserController::class);
+    Route::get('/', [UserController::class, 'index']);
+    Route::get('/{id}', [UserController::class,'show']);
+    Route::post('', [UserController::class, 'store']);
+    Route::patch('{id}', [UserController::class, 'update']);
+    Route::delete('/{id}', [UserController::class, 'destroy']);
+
     Route::post('/avatar', [UserController::class, 'avatar']);
 });
 
@@ -68,15 +68,9 @@ Route::prefix('posts')->group(function () {
         Route::delete('/{post_id}', [PostController::class, 'destroy']);
     });
 
-    // Categories
-    Route::get('/{post_id}/categories', [PostController::class, 'showPostCategories']);
-
-    // Comments
-    Route::get('/{post_id}/comments', [PostController::class, 'showComments']);
     Route::middleware('auth:sanctum')->post('/{post_id}/comments', [PostController::class, 'storeComment']);
 
     // Likes
-    Route::get('/{post_id}/likes', [PostController::class, 'showLikes']);
     Route::middleware('auth:sanctum')->post('{post_id}/like', [PostController::class, 'storeLike']);
     Route::middleware('auth:sanctum')->delete('{post_id}/like', [PostController::class, 'destroyLike']);
 });

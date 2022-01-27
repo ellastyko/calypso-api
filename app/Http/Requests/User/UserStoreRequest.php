@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Category;
+namespace App\Http\Requests\User;
 
-class CategoryUpdateRequest extends CategoryRequest
+use App\Http\Requests\Auth\RegisterRequest;
+
+class UserStoreRequest extends RegisterRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -11,7 +13,7 @@ class CategoryUpdateRequest extends CategoryRequest
      */
     public function authorize()
     {
-        return true; // false
+        return false;
     }
 
     /**
@@ -22,7 +24,7 @@ class CategoryUpdateRequest extends CategoryRequest
     public function rules()
     {
         return array_merge(parent::rules(), [
-            'title' => 'string' // exists:categories,title
+            //
         ]);
     }
 }

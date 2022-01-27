@@ -11,7 +11,7 @@ class CategoryStoreRequest extends CategoryRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true; // false
     }
 
     /**
@@ -22,7 +22,8 @@ class CategoryStoreRequest extends CategoryRequest
     public function rules(): array
     {
         return array_merge(parent::rules(), [
-            'title' => ['required', 'unique:categories,title']
+            'title' => ['required', 'unique:categories,title'],
+            'description' => ['required']
         ]);
     }
 }

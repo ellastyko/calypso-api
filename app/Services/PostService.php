@@ -8,16 +8,28 @@ use Illuminate\Support\Facades\DB;
 class PostService
 {
     /**
-     * @param int $creator
+     * @param array $data
+     * @return void
+     */
+    public function index(array $data)
+    {
+        if (isset($data['paginate']))
+            return Post::paginate($data['paginate']);
+        else
+            Post::all();
+    }
+
+    /**
+     * @param $creator
      * @param array $data
      * @return mixed
      */
-    public function store(int $creator, array $data): mixed
+    public function store($creator, array $data): mixed
     {
         $post = Post::create([
             'title' => $data['title'],
             'content' => $data['content'],
-            'user_id' => $creator,
+            'user_id' => $creator->id,
         ]);
         foreach ($data['categoriesId'] as $categoryId) {
             DB::table('posts_categories')->insert([
@@ -29,21 +41,32 @@ class PostService
     }
 
     /**
-     * @param $data
-     * @param $id
-     * @return bool
+     * @param int $id
+     * @return mixed
      */
-    public function update($data, $id): bool
+    public function show(int $id): mixed
     {
-        return Post::find($id)->update($data);
+        return Post::find($id);
     }
 
     /**
-     * @param $id
+     * @param array $data
+     * @param int $id
      * @return bool
      */
-    public function destroy($id): bool
+    public function update(array $data, int $id): bool
     {
+        // Add policy TODO
+        return Post::find($id)->fill($data);
+    }
+
+    /**
+     * @param int $id
+     * @return bool
+     */
+    public function destroy(int $id): bool
+    {
+        // Add policy TODO
         return Post::find($id)->delete();
     }
 }

@@ -10,6 +10,10 @@ use Illuminate\Support\Str;
 
 class PasswordResetAction
 {
+    /**
+     * @param $data
+     * @return void
+     */
     public function handle($data) {
 
         $reset = DB::table('password_resets')->where('email', $data['token'])->first();

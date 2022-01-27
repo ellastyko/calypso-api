@@ -2,23 +2,28 @@
 
 namespace App\Actions;
 
-use App\Events\ForgotPassword;
-use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Hash;
 
 class UserRegisterAction
 {
-    public function handle($data) {
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public function handle($data): mixed
+    {
 
         $user = User::create([
             'name' => $data['name'],
             'surname' => $data['surname'],
             'email' => $data['email'],
-            'password' => bcrypt($data['password'])
+            'password' => Hash::make($data['password'])
         ]);
 
         event(new Registered($user));
+
         return $user;
     }
 }

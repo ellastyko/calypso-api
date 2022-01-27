@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\PostCategory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,5 +19,6 @@ class DatabaseSeeder extends Seeder
         $this->call(PostSeeder::class);
         $this->call(CommentSeeder::class);
         $this->call(LikeSeeder::class);
+        $this->call(PostCategorySeeder::class);
     }
 }
