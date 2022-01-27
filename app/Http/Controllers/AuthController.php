@@ -2,40 +2,33 @@
 
 namespace App\Http\Controllers;
 
-
-use App\Actions\ForgotPasswordAction;
-use App\Actions\PasswordResetAction;
-use App\Actions\UserRegisterAction;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Auth\{ForgotPasswordRequest, LoginRequest, PasswordResetRequest, RegisterRequest};
-use App\Models\User;
+use App\Actions\{ForgotPasswordAction, LoginAction, PasswordResetAction, UserRegisterAction};
 
-
+/**
+ * Class Description
+ */
 class AuthController extends Controller
 {
     /**
+     * use SomeTrait;
+     *
+     * public const $temp = [];
+     */
+    /**
      * @param LoginRequest $request
+     * @param LoginAction $action
      * @return Response
      */
-    public function login(LoginRequest $request) : Response
+    public function login(LoginRequest $request, LoginAction $action): Response
     {
-        if (!Auth::attempt($request->only('email', 'password'))) {
-            return response([
-                'message' => trans('auth.failed')
-            ], Response::HTTP_UNAUTHORIZED);
-        }
-
-        $user = User::find(Auth::id());
-        $user->setRememberToken($token = Str::random(60));
-        $user->save();
-
         return response([
             'message' => trans('auth.login'),
-            'user' => $user
-        ])->withCookie('link', $token);
+            'user' => $action->handle($request)
+        ]);
     }
 
     /**
@@ -56,11 +49,9 @@ class AuthController extends Controller
      */
     public function register(RegisterRequest $request, UserRegisterAction $action) : Response
     {
-        $user = $action->handle($request->validated());
-
         return response([
             'message' => trans('auth.registered'),
-            'user' => $user
+            'user' => $action->handle($request->validated())
         ]);
     }
 
@@ -92,5 +83,4 @@ class AuthController extends Controller
             'message' => trans('passwords.reset')
         ]);
     }
-
 }
