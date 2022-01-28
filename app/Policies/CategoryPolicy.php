@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -17,5 +18,25 @@ class CategoryPolicy
     public function __construct()
     {
         //
+    }
+
+    public function view(User $user, Category $post)
+    {
+
+    }
+
+    public function create(User $user)
+    {
+
+    }
+
+    public function update(User $user, Category $post)
+    {
+
+    }
+
+    public function delete(User $user, Category $post)
+    {
+
     }
 }

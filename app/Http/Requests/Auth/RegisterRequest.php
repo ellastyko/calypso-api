@@ -9,7 +9,7 @@ class RegisterRequest extends FormRequest
 {
 
     /**
-     * Get the validation rules that apply to the request.
+     * Register validation rules
      *
      * @return array
      */
@@ -18,8 +18,14 @@ class RegisterRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:50'],
             'surname' => ['string','max:50'],
-            'email' => ['required','email','unique:users,email','max:64'],
-            'password' => Password::min(8)->letters()->mixedCase()->numbers()->symbols()->uncompromised()
+            'email' => ['required','email', 'max:64'],
+            'password' => [
+                'required',
+                'min:8',
+                'max:60',
+                'confirmed',
+                'regex:/^(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/'
+            ]
         ];
     }
 }

@@ -67,6 +67,6 @@ class PostService
     public function destroy(int $id): bool
     {
         // Add policy TODO
-        return Post::find($id)->delete();
+        return Post::findOrFail($id)->delete();
     }
 }

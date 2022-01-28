@@ -29,11 +29,11 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-
-        Gate::define('edit-category', function (User $user) {
-            return $user->isAdmin()
-                ? Response::allow()
-                : Response::deny('You must be an administrator.');
-        });
+//        Sanctum::usePersonalAccessClientModel(PersonalAccessClient::class);
+//        Gate::define('edit-category', function (User $user) {
+//            return $user->isAdmin()
+//                ? Response::allow()
+//                : Response::deny('You must be an administrator.');
+//        });
     }
 }

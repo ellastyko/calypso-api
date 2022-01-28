@@ -1,5 +1,6 @@
 # Setup
-    make start
+    make setup
+
 ---
 # Or make it step by step
 ### Copy .env.example to .env
@@ -7,7 +8,7 @@
 ### Download dependencies
     make deps
 ### Run docker
-    make docker
+    make up
 ### Make migrations
     make migrate
 ### Seeding

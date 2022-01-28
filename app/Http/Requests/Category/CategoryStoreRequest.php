@@ -21,9 +21,9 @@ class CategoryStoreRequest extends CategoryRequest
      */
     public function rules(): array
     {
-        return array_merge(parent::rules(), [
-            'title' => ['required', 'unique:categories,title'],
-            'description' => ['required']
-        ]);
+        return [
+            'title' => ['required', 'string', 'max:255',  'unique:categories,title'],
+            'description' => ['required', 'string', 'max:500']
+        ];
     }
 }
