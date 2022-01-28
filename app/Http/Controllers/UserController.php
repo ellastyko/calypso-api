@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\IndexRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Requests\User\UserAvatarRequest;
 use App\Models\User;
 use App\Services\UserService;
@@ -9,6 +11,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use LaravelLang\Publisher\Console\Update;
 
 
 class UserController extends Controller
@@ -27,9 +30,9 @@ class UserController extends Controller
     /**
      * @return Collection|User[]
      */
-    public function index()
+    public function index(IndexRequest $request, UserService $service)
     {
-        return User::all();
+        return $service->index($request->validated());
     }
 
     /**
@@ -61,15 +64,14 @@ class UserController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param  int  $id
+     * @param UpdateUserRequest $request
+     * @param UserService $service
+     * @param int $id
      * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request, UserService $service, int $id)
     {
-        /**
-         * Переписать функцию чтобы юзеров могли редактировать и владелец и админ
-         */
+        return $service->update($request->validated());
     }
 
     /**
@@ -77,7 +79,7 @@ class UserController extends Controller
      * @return Response
      * ONLY ADMINS
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
 
         User::findOrFail()->destroy();

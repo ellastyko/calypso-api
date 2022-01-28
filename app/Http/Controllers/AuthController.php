@@ -3,21 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Auth\{ForgotPasswordRequest, LoginRequest, PasswordResetRequest, RegisterRequest};
-use App\Actions\{ForgotPasswordAction, LoginAction, PasswordResetAction, UserRegisterAction};
+use App\Actions\{ForgotPasswordAction, LoginAction, PasswordResetAction, RegisterAction};
 
 /**
- * Class Description
+ * Authentication controller
  */
 class AuthController extends Controller
 {
-    /**
-     * use SomeTrait;
-     *
-     * public const $temp = [];
-     */
     /**
      * @param LoginRequest $request
      * @param LoginAction $action
@@ -25,10 +19,7 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request, LoginAction $action): Response
     {
-        return response([
-            'message' => trans('auth.login'),
-            'user' => $action->handle($request)
-        ]);
+        return $action->handle($request->only('email', 'password'));
     }
 
     /**
@@ -44,15 +35,12 @@ class AuthController extends Controller
 
     /**
      * @param RegisterRequest $request
-     * @param UserRegisterAction $action
+     * @param RegisterAction $action
      * @return Response
      */
-    public function register(RegisterRequest $request, UserRegisterAction $action) : Response
+    public function register(RegisterRequest $request, RegisterAction $action) : Response
     {
-        return response([
-            'message' => trans('auth.registered'),
-            'user' => $action->handle($request->validated())
-        ]);
+        return  $action->handle($request->validated());
     }
 
     /**
@@ -62,11 +50,7 @@ class AuthController extends Controller
      */
     public function forgotPassword(ForgotPasswordRequest $request, ForgotPasswordAction $action): Response
     {
-        $action->handle($request->only('email'));
-
-        return response([
-            'message' => trans('passwords.sent')
-        ]);
+        return $action->handle($request->only('email'));
     }
 
 

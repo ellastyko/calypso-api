@@ -4,7 +4,7 @@ namespace App\Actions;
 
 use App\Events\ForgotPassword;
 use App\Models\User;
-use Carbon\Carbon;
+use Illuminate\Http\Response;
 use DragonCode\Support\Facades\Helpers\Str;
 use Illuminate\Support\Facades\DB;
 
@@ -12,20 +12,23 @@ class ForgotPasswordAction
 {
     /**
      * @param array $data
-     * @return void
+     * @return Response
      */
-    public function handle(array $data) {
-
+    public function handle(array $data): Response
+    {
         $user = User::where('email', $data['email'])->first();
 
         DB::table('password_resets')->insert([
             'email' => $user->email,
-            'link' => $token = Str::random(60),
-            'created_at' => Carbon::now()
+            'link' => $token = Str::random(60)
         ]);
 
         $link = config('app.url').'/password-reset?token='.$token;
 
         event(new ForgotPassword($user, $link));
+
+        return response([
+            'message' => trans('passwords.sent')
+        ]);
     }
 }

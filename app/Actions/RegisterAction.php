@@ -4,15 +4,16 @@ namespace App\Actions;
 
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 
-class UserRegisterAction
+class RegisterAction
 {
     /**
-     * @param $data
-     * @return mixed
+     * @param array $data
+     * @return Response
      */
-    public function handle($data): mixed
+    public function handle(array $data): Response
     {
 
         $user = User::create([
@@ -24,6 +25,9 @@ class UserRegisterAction
 
         event(new Registered($user));
 
-        return $user;
+        return response([
+            'message' => trans('auth.registered'),
+            'user' => $user
+        ]);
     }
 }

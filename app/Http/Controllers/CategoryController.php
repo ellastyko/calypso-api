@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Category\CategoryShowRequest;
+
 use App\Http\Requests\Category\CategoryStoreRequest;
 use App\Http\Requests\Category\CategoryUpdateRequest;
 use App\Http\Requests\IndexRequest;
@@ -10,6 +10,9 @@ use App\Services\CategoryService;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Category controller
+ */
 class CategoryController extends Controller
 {
     /**
@@ -32,28 +35,26 @@ class CategoryController extends Controller
      */
     public function store(CategoryStoreRequest $request, CategoryService $service): Response
     {
-        return response([
-            'message' => trans('messages.category.created'),
-            'category' => $service->store(Auth::user(), $request->validated())
-        ]);
+        return $service->store(Auth::user(), $request->validated());
     }
 
 
     /**
-     * @param CategoryShowRequest $request
+     * Show category
+     *
      * @param CategoryService $service
      * @param int $id
      * @return Response
      */
-    public function show(CategoryShowRequest $request, CategoryService $service, int $id): Response
+    public function show(CategoryService $service, int $id): Response
     {
-        return response([
-            'category' => $service->show($id)
-        ]);
+        return $service->show($id);
     }
 
 
     /**
+     * Update category
+     *
      * @param CategoryUpdateRequest $request
      * @param CategoryService $service
      * @param int $id
@@ -61,10 +62,7 @@ class CategoryController extends Controller
      */
     public function update(CategoryUpdateRequest $request, CategoryService $service, int $id): Response
     {
-        return response([
-            'message' => trans('category.updated'),
-            'category' => $service->update($request->validated(), $id)
-        ]);
+        return $service->update($request->validated(), $id);
     }
 
 

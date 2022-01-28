@@ -9,7 +9,6 @@ use App\Http\Requests\Post\PostUpdateRequest;
 use App\Models\Post;
 use App\Services\CommentService;
 use App\Services\PostService;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 

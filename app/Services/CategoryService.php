@@ -4,6 +4,9 @@ namespace App\Services;
 
 use App\Models\Category;
 
+/**
+ * Category service
+ */
 class CategoryService
 {
     /**
@@ -36,9 +39,9 @@ class CategoryService
      * @param int $id
      * @return mixed
      */
-    public function show(int $id)
+    public function show(int $id): mixed
     {
-        return Category::find($id);
+        return Category::findOrFail($id);
     }
 
     /**

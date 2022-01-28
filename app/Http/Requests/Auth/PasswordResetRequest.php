@@ -14,7 +14,6 @@ class PasswordResetRequest extends FormRequest
     public function rules()
     {
         return [
-            'token' => ['string', 'min:50'],
             'password' => [
                 'required',
                 'min:8',

@@ -16,7 +16,7 @@ class CommentController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function show(int $id): Response
+    public function show(CommentService $service, int $id): Response
     {
         return Comment::find($id);
     }
