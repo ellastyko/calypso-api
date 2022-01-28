@@ -16,7 +16,7 @@ class PostService
         if (isset($data['paginate']))
             return Post::paginate($data['paginate']);
         else
-            Post::all();
+            return Post::all();
     }
 
     /**
