@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
     AuthController,
@@ -10,6 +9,7 @@ use App\Http\Controllers\{
     CategoryController,
     CommentController
 };
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -48,7 +48,7 @@ Route::prefix('categories')->group( function () {
     Route::get('', [CategoryController::class, 'index']);
     Route::get('/{category_id}', [CategoryController::class, 'show']);
 
-    Route::middleware(['auth:sanctum', 'can:store,update'])->group(function () {
+    Route::middleware(['auth:sanctum'])->group(function () {
 
         Route::post('', [CategoryController::class, 'store']);
         Route::patch('/{id}', [CategoryController::class, 'update']);

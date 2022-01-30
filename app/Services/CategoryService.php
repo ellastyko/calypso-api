@@ -3,12 +3,16 @@
 namespace App\Services;
 
 use App\Models\Category;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 /**
  * Category service
  */
 class CategoryService
 {
+
     /**
      * @param array $data
      * @return mixed
@@ -22,44 +26,60 @@ class CategoryService
     }
 
     /**
-     * @param $creator
      * @param array $data
-     * @return mixed
+     * @return Response
      */
-    public function store($creator, array $data): mixed
+    public function store(array $data): Response
     {
-        return Category::create([
+        $category = Category::create([
             'title' => $data['title'],
             'description' => $data['description'],
-            'user_id' => $creator->id,
+            'user_id' => Auth::id(),
+        ]);
+
+        return response([
+            'message' => trans('created'),
+            'category' => $category
+        ], ResponseAlias::HTTP_CREATED);
+    }
+
+    /**
+     * @param Category $category
+     * @return Response
+     */
+    public function show(Category $category): Response
+    {
+        return response([
+            'category' => $category
         ]);
     }
 
     /**
-     * @param int $id
-     * @return mixed
-     */
-    public function show(int $id): mixed
-    {
-        return Category::findOrFail($id);
-    }
-
-    /**
      * @param array $data
-     * @param int $id
-     * @return bool
+     * @param $category
+     * @return Response
      */
-    public function update(array $data, int $id): bool
+    public function update(array $data, $category): Response
     {
-        return Category::find($id)->fill($data);
+//        dd($category);
+//        $category = Category::findOrFail($id);
+
+        $category->update($data);
+        return response([
+            'message' => trans('messages.category.updated'),
+            'category' => $category
+        ]);
     }
 
     /**
-     * @param $id
-     * @return bool
+     * @param $category
+     * @return Response
      */
-    public function destroy($id): bool
+    public function destroy($category): Response
     {
-        return Category::find($id)->delete();
+        $category->delete();
+        return response([
+            'message' => trans('messages.category.deleted')
+        ], ResponseAlias::HTTP_NO_CONTENT);
     }
 }

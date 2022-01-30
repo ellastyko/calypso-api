@@ -4,33 +4,31 @@ namespace App\Actions;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 class LoginAction
 {
 
     /**
-     * @param array $data
+     * @param array $credentials
      * @return Response
      */
-    public function handle(array $data): Response
+    public function handle(array $credentials): Response
     {
-        if (!Auth::attempt($data)) {
+        if (!Auth::attempt($credentials)) {
             return response([
                 'message' => trans('auth.failed')
             ], Response::HTTP_UNAUTHORIZED);
         }
 
         $user = User::find(Auth::id());
-
-        $user->setRememberToken($token = Str::random(60));
-
-        $user->save();
+        Auth::user()->setRememberToken('llll');
+        $token = $user->createToken('token')->plainTextToken;
 
         return response([
             'message' => trans('auth.login'),
-            'user' => $user
-        ])->withCookie(['token' => $token]);
+            'user' => $user,
+            'token' => $token
+        ])->withCookie('token', $token);
     }
 }

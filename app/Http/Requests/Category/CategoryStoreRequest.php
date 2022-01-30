@@ -2,7 +2,11 @@
 
 namespace App\Http\Requests\Category;
 
-class CategoryStoreRequest extends CategoryRequest
+use App\Models\Post;
+use Illuminate\Auth\Access\Response;
+use Illuminate\Foundation\Http\FormRequest;
+
+class CategoryStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -11,7 +15,7 @@ class CategoryStoreRequest extends CategoryRequest
      */
     public function authorize(): bool
     {
-        return true; // false
+        return true;
     }
 
     /**

@@ -6,15 +6,26 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Category\CategoryStoreRequest;
 use App\Http\Requests\Category\CategoryUpdateRequest;
 use App\Http\Requests\IndexRequest;
+use App\Models\Category;
 use App\Services\CategoryService;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * Category controller
  */
 class CategoryController extends Controller
 {
+    /**
+     * TODO
+     * $this->authorizeResource(Category::class, 'category');
+     * doesn't work
+     */
+    public function __construct()
+    {
+        //
+    }
+
     /**
      * @param IndexRequest $request
      * @param CategoryService $service
@@ -32,10 +43,12 @@ class CategoryController extends Controller
      * @param CategoryStoreRequest $request
      * @param CategoryService $service
      * @return Response
+     * @throws AuthorizationException
      */
     public function store(CategoryStoreRequest $request, CategoryService $service): Response
     {
-        return $service->store(Auth::user(), $request->validated());
+        $this->authorize('store', Category::class);
+        return $service->store($request->validated());
     }
 
 
@@ -43,12 +56,12 @@ class CategoryController extends Controller
      * Show category
      *
      * @param CategoryService $service
-     * @param int $id
+     * @param Category $category
      * @return Response
      */
-    public function show(CategoryService $service, int $id): Response
+    public function show(CategoryService $service, Category $category): Response
     {
-        return $service->show($id);
+        return $service->show($category);
     }
 
 
@@ -57,12 +70,14 @@ class CategoryController extends Controller
      *
      * @param CategoryUpdateRequest $request
      * @param CategoryService $service
-     * @param int $id
+     * @param Category $category
      * @return Response
+     * @throws AuthorizationException
      */
-    public function update(CategoryUpdateRequest $request, CategoryService $service, int $id): Response
+    public function update(CategoryUpdateRequest $request, CategoryService $service, Category $category): Response
     {
-        return $service->update($request->validated(), $id);
+        $this->authorize('update', $category);
+        return $service->update($request->validated(), $category);
     }
 
 
@@ -70,14 +85,13 @@ class CategoryController extends Controller
      * Remove category
      *
      * @param CategoryService $service
-     * @param int $id
+     * @param Category $category
      * @return Response
+     * @throws AuthorizationException
      */
-    public function destroy(CategoryService $service, int $id): Response
+    public function destroy(CategoryService $service, Category $category): Response
     {
-        $service->destroy($id);
-        return response([
-            'message' => trans('messages.category.deleted')
-        ]);
+        $this->authorize('delete', $category);
+        return $service->destroy($category);
     }
 }

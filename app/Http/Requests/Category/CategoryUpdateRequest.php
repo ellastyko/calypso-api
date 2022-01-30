@@ -24,7 +24,7 @@ class CategoryUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => ['string'], // exists:categories,title,
+            'title' => ['string', 'max:255'],
             'description' => ['string', 'max:500']
         ];
     }

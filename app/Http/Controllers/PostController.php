@@ -14,7 +14,13 @@ use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
-
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Post::class);
+    }
     /**
      * @param IndexRequest $request
      * @param PostService $service
@@ -22,6 +28,7 @@ class PostController extends Controller
      */
     public function index(IndexRequest $request, PostService $service): Response
     {
+//        dd($request->all());
         return response([
             'message' => trans('messages.post.created'),
             'posts'   => $service->index($request->validated())
