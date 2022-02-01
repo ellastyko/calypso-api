@@ -22,7 +22,7 @@ class LoginAction
         }
 
         $user = User::find(Auth::id());
-        Auth::user()->setRememberToken('llll');
+
         $token = $user->createToken('token')->plainTextToken;
 
         return response([

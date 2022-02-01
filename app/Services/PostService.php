@@ -9,14 +9,14 @@ class PostService
 {
     /**
      * @param array $data
-     * @return void
+     * @return
      */
     public function index(array $data)
     {
-        if (isset($data['paginate']))
-            return Post::paginate($data['paginate']);
-        else
-            return Post::all();
+        return response()->json([
+            'message' => trans('messages.post.index'),
+            'posts'   => Post::all()
+        ]);
     }
 
     /**
@@ -24,10 +24,10 @@ class PostService
      * @param array $data
      * @return mixed
      */
-    public function store($creator, array $data): mixed
+    public function store($creator, array $data)
     {
         $post = Post::create([
-            'title' => $data['title'],
+            'title'   => $data['title'],
             'content' => $data['content'],
             'user_id' => $creator->id,
         ]);

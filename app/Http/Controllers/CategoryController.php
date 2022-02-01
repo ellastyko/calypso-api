@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Services\CategoryService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Category controller
@@ -21,17 +22,17 @@ class CategoryController extends Controller
      * $this->authorizeResource(Category::class, 'category');
      * doesn't work
      */
-    public function __construct()
-    {
-        //
-    }
+//    public function __construct()
+//    {
+//        //
+//    }
 
     /**
      * @param IndexRequest $request
      * @param CategoryService $service
      * @return mixed
      */
-    public function index(IndexRequest $request, CategoryService $service) : mixed
+    public function index(IndexRequest $request, CategoryService $service)
     {
         return $service->index($request->validated());
     }

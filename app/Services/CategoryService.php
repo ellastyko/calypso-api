@@ -2,8 +2,9 @@
 
 namespace App\Services;
 
+use App\Http\Resources\CategoryCollection;
 use App\Models\Category;
-use Illuminate\Http\Response;
+use Illuminate\Http\Response as response;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -17,12 +18,9 @@ class CategoryService
      * @param array $data
      * @return mixed
      */
-    public function index(array $data): mixed
+    public function index(array $data)
     {
-        if (isset($data['paginate']))
-            return Category::paginate($data['paginate']);
-        else
-            return Category::all();
+        return new CategoryCollection(Category::all());
     }
 
     /**
@@ -39,7 +37,7 @@ class CategoryService
 
         return response([
             'message' => trans('created'),
-            'category' => $category
+            'data' => $category
         ], ResponseAlias::HTTP_CREATED);
     }
 
@@ -50,7 +48,8 @@ class CategoryService
     public function show(Category $category): Response
     {
         return response([
-            'category' => $category
+            'message' => trans('show'),
+            'data' => $category
         ]);
     }
 
@@ -61,13 +60,10 @@ class CategoryService
      */
     public function update(array $data, $category): Response
     {
-//        dd($category);
-//        $category = Category::findOrFail($id);
-
         $category->update($data);
         return response([
             'message' => trans('messages.category.updated'),
-            'category' => $category
+            'data' => $category
         ]);
     }
 

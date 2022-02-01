@@ -14,7 +14,8 @@ class IndexRequest extends FormRequest
     public function rules()
     {
         return [
-            'paginate' => 'int'
+            'length' => ['int', 'in:5,10,20,50'],
+            'order' => ['string', 'in:created,votes']
         ];
     }
 }
