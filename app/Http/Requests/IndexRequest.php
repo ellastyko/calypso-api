@@ -15,7 +15,8 @@ class IndexRequest extends FormRequest
     {
         return [
             'length' => ['int', 'in:5,10,20,50'],
-            'order' => ['string', 'in:created,votes']
+            'order' => ['string', 'in:created,votes'],
+            'direction' => ['string', 'in:asc,desc']
         ];
     }
 }

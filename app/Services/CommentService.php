@@ -3,56 +3,67 @@
 namespace App\Services;
 
 use App\Models\Comment;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
+/**
+ * Comment service
+ */
 class CommentService
 {
     /**
-     * @param $user
      * @param array $data
-     * @return Response
+     * @return JsonResponse
      */
-    public function store($user, array $data): Response
+    public function store(array $data): JsonResponse
     {
-        return response([
+        return response()->json([
             'message' => trans('messages.comment.created'),
-            'comment' => Comment::create([
-                'user_id' => $user->id,
+            'data' => Comment::create([
+                'user_id' => Auth::id(),
                 'content' => $data['content'],
                 'post_id' => $data['post_id']
             ])
-        ]);
+        ], 200);
     }
 
     /**
      * @param int $id
-     * @param array $data
-     * @return Response
+     * @return JsonResponse
      */
-    public function update(int $id, array $data): Response
+    public function show(int $id): JsonResponse
     {
-        Comment::find($id)->fill($data);
+        return response()->json([
+            'message' => trans('messages.comment.updated'),
+            'data'    => Comment::findOrFail($id)
+        ]);
+    }
 
-        return response([
+    /**
+     * @param Comment $comment
+     * @param array $data
+     * @return JsonResponse
+     */
+    public function update(Comment $comment, array $data): JsonResponse
+    {
+        $comment->update($data);
+
+        return response()->json([
             'message' => trans('messages.comment.updated')
         ]);
     }
 
     /**
-     * @param int $id
-     * @return Response
+     * @param Comment $comment
+     * @return JsonResponse
      */
-    public function destroy(int $id): Response
+    public function destroy(Comment $comment): JsonResponse
     {
-        Comment::findOrFail($id)->delete();
+        $comment->delete();
 
-        return response([
+        return response()->json([
             'message' => trans('messages.comment.deleted')
         ]);
-    }
-
-    public function show(int $id)
-    {
-        return Comment::findOrFail($id);
     }
 }

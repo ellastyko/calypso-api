@@ -3,33 +3,35 @@
 namespace App\Services;
 
 use App\Models\Post;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\Response;
 
 class PostService
 {
     /**
      * @param array $data
-     * @return
+     * @return JsonResponse
      */
-    public function index(array $data)
+    public function index(array $data): JsonResponse
     {
         return response()->json([
             'message' => trans('messages.post.index'),
-            'posts'   => Post::all()
+            'data'    => Post::all()
         ]);
     }
 
     /**
-     * @param $creator
      * @param array $data
-     * @return mixed
+     * @return JsonResponse
      */
-    public function store($creator, array $data)
+    public function store(array $data): JsonResponse
     {
         $post = Post::create([
             'title'   => $data['title'],
             'content' => $data['content'],
-            'user_id' => $creator->id,
+            'user_id' => Auth::id(),
         ]);
         foreach ($data['categoriesId'] as $categoryId) {
             DB::table('posts_categories')->insert([
@@ -37,36 +39,47 @@ class PostService
                 'category_id' => $categoryId
             ]);
         }
-        return $post;
+        return response()->json([
+            'message' => trans('messages.post.store'),
+            'data'    => $post
+        ]);
     }
 
     /**
      * @param int $id
-     * @return mixed
+     * @return JsonResponse
      */
-    public function show(int $id): mixed
+    public function show(int $id): JsonResponse
     {
-        return Post::find($id);
+        return response()->json([
+            'message' => trans('messages.post.shows'),
+            'data'    => Post::findOrFail($id)
+        ]);
     }
 
     /**
+     * @param Post $post
      * @param array $data
-     * @param int $id
-     * @return bool
+     * @return JsonResponse
      */
-    public function update(array $data, int $id): bool
+    public function update(Post $post, array $data): JsonResponse
     {
-        // Add policy TODO
-        return Post::find($id)->fill($data);
+        $post->update($data);
+        return response()->json([
+            'message' => trans('messages.post.updated'),
+            'data'    => $post
+        ], Response::HTTP_OK);
     }
 
     /**
-     * @param int $id
-     * @return bool
+     * @param Post $post
+     * @return JsonResponse
      */
-    public function destroy(int $id): bool
+    public function destroy(Post $post): JsonResponse
     {
-        // Add policy TODO
-        return Post::findOrFail($id)->delete();
+        $post->delete();
+        return response()->json([
+            'message' => trans('messages.category.deleted')
+        ], Response::HTTP_NO_CONTENT);
     }
 }

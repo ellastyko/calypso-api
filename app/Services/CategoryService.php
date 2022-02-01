@@ -2,11 +2,10 @@
 
 namespace App\Services;
 
-use App\Http\Resources\CategoryCollection;
 use App\Models\Category;
-use Illuminate\Http\Response as response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpFoundation\Response as ResponseAlias;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Category service
@@ -16,18 +15,21 @@ class CategoryService
 
     /**
      * @param array $data
-     * @return mixed
+     * @return JsonResponse
      */
-    public function index(array $data)
+    public function index(array $data): JsonResponse
     {
-        return new CategoryCollection(Category::all());
+        return response()->json([
+            'message' => trans('messages.category.index'),
+            'data'   => Category::all()
+        ], Response::HTTP_OK);
     }
 
     /**
      * @param array $data
-     * @return Response
+     * @return JsonResponse
      */
-    public function store(array $data): Response
+    public function store(array $data): JsonResponse
     {
         $category = Category::create([
             'title' => $data['title'],
@@ -35,47 +37,47 @@ class CategoryService
             'user_id' => Auth::id(),
         ]);
 
-        return response([
+        return response()->json([
             'message' => trans('created'),
             'data' => $category
-        ], ResponseAlias::HTTP_CREATED);
+        ], Response::HTTP_CREATED);
     }
 
     /**
-     * @param Category $category
-     * @return Response
+     * @param int $id
+     * @return JsonResponse
      */
-    public function show(Category $category): Response
+    public function show(int $id): JsonResponse
     {
-        return response([
+        return response()->json([
             'message' => trans('show'),
-            'data' => $category
-        ]);
+            'data' => Category::findOrFail($id)
+        ], Response::HTTP_OK);
     }
 
     /**
      * @param array $data
      * @param $category
-     * @return Response
+     * @return JsonResponse
      */
-    public function update(array $data, $category): Response
+    public function update(array $data, $category): JsonResponse
     {
         $category->update($data);
-        return response([
+        return response()->json([
             'message' => trans('messages.category.updated'),
             'data' => $category
-        ]);
+        ], Response::HTTP_OK);
     }
 
     /**
      * @param $category
-     * @return Response
+     * @return JsonResponse
      */
-    public function destroy($category): Response
+    public function destroy($category): JsonResponse
     {
         $category->delete();
-        return response([
+        return response()->json([
             'message' => trans('messages.category.deleted')
-        ], ResponseAlias::HTTP_NO_CONTENT);
+        ], Response::HTTP_NO_CONTENT);
     }
 }

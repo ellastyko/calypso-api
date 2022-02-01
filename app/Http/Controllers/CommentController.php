@@ -6,6 +6,7 @@ use App\Http\Requests\Comment\CommentRequest;
 use App\Http\Requests\Comment\CommentUpdateRequest;
 use App\Models\Comment;
 use App\Services\CommentService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,9 +18,9 @@ class CommentController extends Controller
      *
      * @param CommentService $service
      * @param int $id
-     * @return Response
+     * @return JsonResponse
      */
-    public function show(CommentService $service, int $id): Response
+    public function show(CommentService $service, int $id): JsonResponse
     {
         return $service->show($id);
     }
@@ -30,11 +31,11 @@ class CommentController extends Controller
      *
      * @param CommentRequest $request
      * @param CommentService $service
-     * @return Response
+     * @return JsonResponse
      */
-    public function store(CommentRequest $request, CommentService $service): Response
+    public function store(CommentRequest $request, CommentService $service): JsonResponse
     {
-        return $service->store(Auth::user(), $request->validated());
+        return $service->store($request->validated());
     }
 
 
@@ -43,23 +44,23 @@ class CommentController extends Controller
      *
      * @param CommentUpdateRequest $request
      * @param CommentService $service
-     * @param int $id
-     * @return Response
+     * @param Comment $comment
+     * @return JsonResponse
      */
-    public function update(CommentUpdateRequest $request, CommentService $service, int $id): Response
+    public function update(CommentUpdateRequest $request, CommentService $service, Comment $comment): JsonResponse
     {
-        return $service->update($id, $request->validated());
+        return $service->update($comment, $request->validated());
     }
 
     /**
      * Destroy comment
      *
      * @param CommentService $service
-     * @param int $id
-     * @return Response
+     * @param Comment $comment
+     * @return JsonResponse
      */
-    public function destroy(CommentService $service, int $id): Response
+    public function destroy(CommentService $service, Comment $comment): JsonResponse
     {
-        return $service->destroy($id);
+        return $service->destroy($comment);
     }
 }

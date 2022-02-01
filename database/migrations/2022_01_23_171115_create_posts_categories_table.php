@@ -15,8 +15,15 @@ class CreatePostsCategoriesTable extends Migration
     {
         Schema::create('posts_categories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('post_id')->nullable()->constrained('posts')->onDelete('set null');
-            $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null');
+
+            $table->foreignId('post_id')
+                ->constrained('posts')
+                ->cascadeOnDelete();
+
+            $table->foreignId('category_id')
+                ->constrained('categories')
+                ->cascadeOnDelete();
+
             $table->timestamps();
         });
     }

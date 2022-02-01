@@ -15,9 +15,7 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @var array<class-string, class-string>
      */
-    protected $policies = [
-        //
-    ];
+    protected $policies = [];
 
     /**
      * Register any authentication / authorization services.
@@ -28,7 +26,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('category', function (User $user) {
+        Gate::define('admin', function (User $user) {
             return $user->isAdmin()
                 ? Response::allow()
                 : Response::deny('You must be an administrator.');

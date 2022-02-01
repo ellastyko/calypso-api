@@ -9,6 +9,7 @@ use App\Http\Requests\Post\PostUpdateRequest;
 use App\Models\Post;
 use App\Services\CommentService;
 use App\Services\PostService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,11 +17,13 @@ class PostController extends Controller
 {
 
     /**
+     * Get posts
+     *
      * @param IndexRequest $request
      * @param PostService $service
-     * @return Response
+     * @return JsonResponse
      */
-    public function index(IndexRequest $request, PostService $service)
+    public function index(IndexRequest $request, PostService $service): JsonResponse
     {
         return $service->index($request->validated());
     }
@@ -30,53 +33,47 @@ class PostController extends Controller
      *
      * @param PostStoreRequest $request
      * @param PostService $service
-     * @return Response
+     * @return JsonResponse
      */
-    public function store(PostStoreRequest $request, PostService $service): Response
+    public function store(PostStoreRequest $request, PostService $service): JsonResponse
     {
-        return response([
-            'message' => trans('messages.post.created'),
-            'post'    => $service->store(Auth::user(), $request->validated())
-        ]);
+        return $service->store($request->validated());
     }
 
     /**
+     * Show post
      * @param PostService $service
      * @param int $id
-     * @return Response
+     * @return JsonResponse
      */
-    public function show(PostService $service, int $id): Response
+    public function show(PostService $service, int $id): JsonResponse
     {
-        return response([
-            'message' => trans('messages.post.show'),
-            'post'    => $service->show($id)
-        ]);
+        return $service->show($id);
     }
 
     /**
+     * Update post
+     *
      * @param PostUpdateRequest $request
      * @param PostService $service
-     * @param int $id
-     * @return Response
+     * @param Post $post
+     * @return JsonResponse
      */
-    public function update(PostUpdateRequest $request, PostService $service, int $id): Response
+    public function update(PostUpdateRequest $request, PostService $service, Post $post): JsonResponse
     {
-        return response([
-            'message' =>  trans('messages.post.updated'),
-            'post'    => $service->update($request->validated(), $id)
-        ]);
+        return $service->update($post, $request->validated());
     }
 
     /**
-     * @param int $id
-     * @return Response
+     * Destroy post
+     *
+     * @param PostService $service
+     * @param Post $post
+     * @return JsonResponse
      */
-    public function destroy(int $id): Response
+    public function destroy(PostService $service, Post $post): JsonResponse
     {
-        Post::destroy($id);
-        return response([
-            'message' => trans('messages.post.deleted')
-        ]);
+        return $service->destroy($post);
     }
 
 

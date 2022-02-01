@@ -9,6 +9,7 @@ use App\Http\Requests\IndexRequest;
 use App\Models\Category;
 use App\Services\CategoryService;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,17 +23,13 @@ class CategoryController extends Controller
      * $this->authorizeResource(Category::class, 'category');
      * doesn't work
      */
-//    public function __construct()
-//    {
-//        //
-//    }
 
     /**
      * @param IndexRequest $request
      * @param CategoryService $service
-     * @return mixed
+     * @return JsonResponse
      */
-    public function index(IndexRequest $request, CategoryService $service)
+    public function index(IndexRequest $request, CategoryService $service): JsonResponse
     {
         return $service->index($request->validated());
     }
@@ -43,12 +40,10 @@ class CategoryController extends Controller
      *
      * @param CategoryStoreRequest $request
      * @param CategoryService $service
-     * @return Response
-     * @throws AuthorizationException
+     * @return JsonResponse
      */
-    public function store(CategoryStoreRequest $request, CategoryService $service): Response
+    public function store(CategoryStoreRequest $request, CategoryService $service): JsonResponse
     {
-        $this->authorize('store', Category::class);
         return $service->store($request->validated());
     }
 
@@ -57,12 +52,12 @@ class CategoryController extends Controller
      * Show category
      *
      * @param CategoryService $service
-     * @param Category $category
-     * @return Response
+     * @param int $id
+     * @return JsonResponse
      */
-    public function show(CategoryService $service, Category $category): Response
+    public function show(CategoryService $service, int $id): JsonResponse
     {
-        return $service->show($category);
+        return $service->show($id);
     }
 
 
@@ -72,12 +67,10 @@ class CategoryController extends Controller
      * @param CategoryUpdateRequest $request
      * @param CategoryService $service
      * @param Category $category
-     * @return Response
-     * @throws AuthorizationException
+     * @return JsonResponse
      */
-    public function update(CategoryUpdateRequest $request, CategoryService $service, Category $category): Response
+    public function update(CategoryUpdateRequest $request, CategoryService $service, Category $category): JsonResponse
     {
-        $this->authorize('update', $category);
         return $service->update($request->validated(), $category);
     }
 
@@ -87,12 +80,10 @@ class CategoryController extends Controller
      *
      * @param CategoryService $service
      * @param Category $category
-     * @return Response
-     * @throws AuthorizationException
+     * @return JsonResponse
      */
-    public function destroy(CategoryService $service, Category $category): Response
+    public function destroy(CategoryService $service, Category $category): JsonResponse
     {
-        $this->authorize('delete', $category);
         return $service->destroy($category);
     }
 }

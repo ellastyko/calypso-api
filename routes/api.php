@@ -31,7 +31,10 @@ Route::prefix('auth')->group(function() {
 });
 
 
-Route::group(['middleware' => ['auth:sanctum'], 'prefix' => 'users'], function () {
+Route::group([
+    'middleware' => ['auth:sanctum', 'can:'],
+    'prefix' => 'users'
+], function () {
 
     Route::get('/', [UserController::class, 'index']);
     Route::get('/{id}', [UserController::class,'show']);
@@ -48,7 +51,7 @@ Route::prefix('categories')->group( function () {
     Route::get('', [CategoryController::class, 'index']);
     Route::get('/{category_id}', [CategoryController::class, 'show']);
 
-    Route::middleware(['auth:sanctum'])->group(function () {
+    Route::middleware(['auth:sanctum', 'can:admin'])->group(function () {
 
         Route::post('', [CategoryController::class, 'store']);
         Route::patch('/{id}', [CategoryController::class, 'update']);
@@ -63,16 +66,23 @@ Route::prefix('posts')->group(function () {
     Route::get('/{post_id}', [PostController::class, 'show']);
 
     Route::middleware('auth:sanctum')->group(function () {
+
         Route::post('', [PostController::class, 'store']);
-        Route::patch('/{post_id}', [PostController::class, 'update']);
-        Route::delete('/{post_id}', [PostController::class, 'destroy']);
+
+        Route::patch('/{post_id}', [PostController::class, 'update'])
+                ->middleware('can:update,post');
+
+        Route::delete('/{post_id}', [PostController::class, 'destroy'])
+                ->middleware('can:delete,post');
+
+
+        // Post Comments
+        Route::post('/{post_id}/comments', [PostController::class, 'storeComment']);
+
+        // Post Likes
+        Route::post('{post_id}/like', [PostController::class, 'storeLike']);
+        Route::delete('{post_id}/like', [PostController::class, 'destroyLike']);
     });
-
-    Route::middleware('auth:sanctum')->post('/{post_id}/comments', [PostController::class, 'storeComment']);
-
-    // Likes
-    Route::middleware('auth:sanctum')->post('{post_id}/like', [PostController::class, 'storeLike']);
-    Route::middleware('auth:sanctum')->delete('{post_id}/like', [PostController::class, 'destroyLike']);
 });
 
 

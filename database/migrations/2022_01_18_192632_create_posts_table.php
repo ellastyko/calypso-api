@@ -18,7 +18,12 @@ class CreatePostsTable extends Migration
             $table->string('title');
             $table->text('content');
             $table->boolean('status')->default(true);    /*  Active/inactive status of post  */
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
+
+            $table->foreignId('user_id')
+                ->nullable()
+                ->constrained('users')
+                ->nullOnDelete();;
+
             $table->timestamps();
         });
     }

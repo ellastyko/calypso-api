@@ -16,7 +16,11 @@ class CreateUserImagesTable extends Migration
         Schema::create('user_images', function (Blueprint $table) {
             $table->id();
             $table->string('path');
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+
+            $table->foreignId('user_id')
+                ->constrained()
+                ->cascadeOnDelete();
+
             $table->timestamps();
         });
     }
