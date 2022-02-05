@@ -14,17 +14,14 @@ class UserService
      */
     public function index(array $data = []): mixed
     {
-        if (isset($data['paginate']))
-            return User::paginate($data['paginate']);
-        else
-            return User::all();
+        return User::all();
     }
 
     /**
      * @param array $data
      * @return mixed
      */
-    public function store(array $data): mixed
+    public function store(array $data)
     {
         return User::create([
             'name' => $data['name'],
@@ -47,13 +44,13 @@ class UserService
     }
 
     /**
-     * @param int $id
+     * @param User $user
      * @return bool
      */
-    public function destroy(int $id): bool
+    public function destroy(User $user): bool
     {
         // Add policy TODO
-        return User::find($id)->delete();
+        return $user->delete();
     }
 
     /**
