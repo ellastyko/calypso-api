@@ -2,12 +2,13 @@
 
 namespace App\Listeners;
 
+use App\Mail\VerificationEmail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Mail;
 
-class SendEmailVerificationNotification
+class SendEmailVerificationNotification implements ShouldQueue
 {
-    public object $user;
     /**
      * Handle the event.
      *
@@ -16,6 +17,6 @@ class SendEmailVerificationNotification
      */
     public function handle(object $event)
     {
-        $this->user = $event->user;
+        Mail::to($event->user)->send(new VerificationEmail($event->user, $event->link));
     }
 }

@@ -23,10 +23,12 @@ class CreateCommentsTable extends Migration
                 ->nullOnDelete();
 
             $table->foreignId('post_id')
+                ->nullable()
                 ->constrained('posts')
                 ->cascadeOnDelete();;
 
             $table->foreignId('comment_id')
+                ->nullable()
                 ->constrained('comments')
                 ->cascadeOnDelete();;
 

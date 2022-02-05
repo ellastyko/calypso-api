@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use App\Filters\QueryFilter;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\{
+    BelongsTo,
+    BelongsToMany,
+    HasMany,
+};
 
 class Post extends Model
 {
@@ -30,6 +34,15 @@ class Post extends Model
      */
     protected $casts = [];
 
+    /**
+     * @param Builder $builder
+     * @param QueryFilter $filter
+     * @return Builder
+     */
+    public function scopeFilter(Builder $builder, QueryFilter $filter): Builder
+    {
+        return $filter->apply($builder);
+    }
 
 
     /***   Relations   ***/
@@ -45,7 +58,7 @@ class Post extends Model
     /**
      * @return BelongsToMany
      */
-    public function categories()
+    public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class)->using(PostCategory::class);
     }

@@ -96,7 +96,7 @@ class PostController extends Controller
     {
         return response([
             'message' => trans('messages.comment.created'),
-            'comment' =>  $service->store(Auth::user(), $request->validated(), $id)
+            'comment' =>  $service->store($request->validated(), $id)
         ]);
     }
 }

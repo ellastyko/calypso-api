@@ -21,7 +21,7 @@ class UserController extends Controller
      * @param UserService $service
      * @return false|string
      */
-    public function avatar(UserAvatarRequest $request, UserService $service): bool|string
+    public function avatar(UserAvatarRequest $request, UserService $service)
     {
         return $service->avatar($request->file('avatar'));
     }
@@ -39,15 +39,9 @@ class UserController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function store(Request $request): Response
+    public function store(Request $request, UserService $service): Response
     {
-        $user = User::create([
-            'login' => $request['login'],
-            'name' => $request['name'],
-            'password' => Hash::make($request['password']),
-            'email' => $request['email'],
-            'role' => $request['role']
-        ]);
+        $user = $service->store($request->validated());
         return response([
             'message' => trans('auth.registered'),
             'user' => $user

@@ -6,12 +6,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Category\CategoryStoreRequest;
 use App\Http\Requests\Category\CategoryUpdateRequest;
 use App\Http\Requests\IndexRequest;
+use App\Http\Resources\CategoryCollection;
 use App\Models\Category;
 use App\Services\CategoryService;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Category controller
@@ -19,19 +18,13 @@ use Illuminate\Support\Facades\Auth;
 class CategoryController extends Controller
 {
     /**
-     * TODO
-     * $this->authorizeResource(Category::class, 'category');
-     * doesn't work
-     */
-
-    /**
      * @param IndexRequest $request
      * @param CategoryService $service
-     * @return JsonResponse
+     * @return CategoryCollection
      */
-    public function index(IndexRequest $request, CategoryService $service): JsonResponse
+    public function index(IndexRequest $request, CategoryService $service): CategoryCollection
     {
-        return $service->index($request->validated());
+        return new CategoryCollection( $service->index($request->validated()) );
     }
 
 
@@ -44,7 +37,10 @@ class CategoryController extends Controller
      */
     public function store(CategoryStoreRequest $request, CategoryService $service): JsonResponse
     {
-        return $service->store($request->validated());
+        return response()->json([
+            'message' => trans('created'),
+            'data' => $service->store( $request->validated() )
+        ], Response::HTTP_CREATED);
     }
 
 
@@ -57,7 +53,10 @@ class CategoryController extends Controller
      */
     public function show(CategoryService $service, int $id): JsonResponse
     {
-        return $service->show($id);
+        return response()->json([
+            'message' => trans('show'),
+            'data' => $service->show($id)
+        ], Response::HTTP_OK);
     }
 
 
@@ -66,12 +65,15 @@ class CategoryController extends Controller
      *
      * @param CategoryUpdateRequest $request
      * @param CategoryService $service
-     * @param Category $category
+     * @param int $id
      * @return JsonResponse
      */
-    public function update(CategoryUpdateRequest $request, CategoryService $service, Category $category): JsonResponse
+    public function update(CategoryUpdateRequest $request, CategoryService $service, int $id): JsonResponse
     {
-        return $service->update($request->validated(), $category);
+        return response()->json([
+            'message' => trans('messages.category.updated'),
+            'data' => $service->update($request->validated(), $id)
+        ], Response::HTTP_OK);
     }
 
 
@@ -79,11 +81,14 @@ class CategoryController extends Controller
      * Remove category
      *
      * @param CategoryService $service
-     * @param Category $category
+     * @param int $id
      * @return JsonResponse
      */
-    public function destroy(CategoryService $service, Category $category): JsonResponse
+    public function destroy(CategoryService $service, int $id): JsonResponse
     {
-        return $service->destroy($category);
+        $service->destroy($id);
+        return response()->json([
+            'message' => trans('messages.category.deleted')
+        ], Response::HTTP_NO_CONTENT);
     }
 }

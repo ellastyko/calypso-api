@@ -2,17 +2,10 @@
 
 namespace App\Http\Requests\User;
 
-class UserAvatarRequest extends UserRequest
+use Illuminate\Foundation\Http\FormRequest;
+
+class UserAvatarRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return false;
-    }
 
     /**
      * Get the validation rules that apply to the request.

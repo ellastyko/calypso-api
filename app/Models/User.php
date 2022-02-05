@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Filters\QueryFilter;
 use App\Models\traits\HasRoles;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -77,5 +78,11 @@ class User extends Authenticatable
     public function getFullName(): string
     {
         return "{$this->name} {$this->surname}";
+    }
+
+    public function scopeFilter($query, QueryFilter $filters)
+    {
+        dd($filters);
+        return $query->apply($filters);
     }
 }

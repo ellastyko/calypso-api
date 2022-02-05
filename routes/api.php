@@ -32,17 +32,19 @@ Route::prefix('auth')->group(function() {
 
 
 Route::group([
-    'middleware' => ['auth:sanctum', 'can:'],
-    'prefix' => 'users'
+    'prefix' => 'users',
 ], function () {
 
-    Route::get('/', [UserController::class, 'index']);
-    Route::get('/{id}', [UserController::class,'show']);
-    Route::post('', [UserController::class, 'store']);
-    Route::patch('{id}', [UserController::class, 'update']);
-    Route::delete('/{id}', [UserController::class, 'destroy']);
+    Route::get('', [UserController::class, 'index']);
+    Route::get('/{user_id}', [UserController::class, 'show']);
 
-    Route::post('/avatar', [UserController::class, 'avatar']);
+    Route::middleware(['middleware' => ['auth:sanctum']])->group(function () {
+
+        Route::post('', [UserController::class, 'store']);
+        Route::patch('{user_id}', [UserController::class, 'update']);
+        Route::delete('/{user_id}', [UserController::class, 'destroy']);
+        Route::post('/avatar', [UserController::class, 'avatar']);
+    });
 });
 
 
@@ -54,8 +56,8 @@ Route::prefix('categories')->group( function () {
     Route::middleware(['auth:sanctum', 'can:admin'])->group(function () {
 
         Route::post('', [CategoryController::class, 'store']);
-        Route::patch('/{id}', [CategoryController::class, 'update']);
-        Route::delete('/{id}', [CategoryController::class, 'destroy']);
+        Route::patch('/{category_id}', [CategoryController::class, 'update']);
+        Route::delete('/{category_id}', [CategoryController::class, 'destroy']);
     });
 });
 
@@ -80,8 +82,8 @@ Route::prefix('posts')->group(function () {
         Route::post('/{post_id}/comments', [PostController::class, 'storeComment']);
 
         // Post Likes
-        Route::post('{post_id}/like', [PostController::class, 'storeLike']);
-        Route::delete('{post_id}/like', [PostController::class, 'destroyLike']);
+        Route::post('/{post_id}/like', [PostController::class, 'storeLike']);
+        Route::delete('/{post_id}/like', [PostController::class, 'destroyLike']);
     });
 });
 
@@ -91,7 +93,9 @@ Route::group([
     'middleware' => 'auth:sanctum'
 ], function () {
 
-    Route::get('/{comment_id}', [CommentController::class, 'show'])->withoutMiddleware('auth:sanctum');
+    Route::get('/{comment_id}', [CommentController::class, 'show'])
+        ->withoutMiddleware('auth:sanctum');
+
     Route::patch('/{comment_id}', [CommentController::class, 'update']);
     Route::delete('/{comment_id}', [CommentController::class, 'destroy']);
 });
@@ -101,7 +105,9 @@ Route::group([
     'middleware' => 'auth:sanctum'
 ], function () {
 
-    Route::get('/{id}', [LikeController::class, 'show'])->withoutMiddleware('auth:sanctum');
+    Route::get('/{id}', [LikeController::class, 'show'])
+        ->withoutMiddleware('auth:sanctum');
+
     Route::post('/{id}', [LikeController::class, 'store']);
     Route::delete('/{id}', [LikeController::class, 'destroy']);
 });

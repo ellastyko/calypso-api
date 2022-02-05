@@ -3,19 +3,10 @@
 namespace App\Http\Requests\User;
 
 use App\Http\Requests\Auth\RegisterRequest;
+use Illuminate\Validation\Rules\Password;
 
 class UserStoreRequest extends RegisterRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return false;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -23,8 +14,18 @@ class UserStoreRequest extends RegisterRequest
      */
     public function rules()
     {
-        return array_merge(parent::rules(), [
-            //
-        ]);
+        return [
+            'name' => ['string', 'max:50'],
+            'surname' => ['string','max:50'],
+            'email' => ['string','email', 'max:64'],
+            'password' => ['string', 'confirmed',
+                Password::min(8)
+                    ->mixedCase()
+                    ->letters()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised(),
+            ]
+        ];
     }
 }

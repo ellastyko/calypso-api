@@ -18,13 +18,16 @@ class RegisterRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:50'],
             'surname' => ['string','max:50'],
-            'email' => ['required','email', 'max:64'],
+            'email' => ['required','email', 'max:64', 'unique:users,email'],
             'password' => [
                 'required',
-                'min:8',
-                'max:60',
                 'confirmed',
-                'regex:/^(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/'
+                Password::min(8)
+                    ->mixedCase()
+                    ->letters()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised(),
             ]
         ];
     }

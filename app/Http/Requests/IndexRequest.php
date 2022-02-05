@@ -14,7 +14,7 @@ class IndexRequest extends FormRequest
     public function rules()
     {
         return [
-            'length' => ['int', 'in:5,10,20,50'],
+            'length' => ['int', 'in:5,10,20,50,100'],
             'order' => ['string', 'in:created,votes'],
             'direction' => ['string', 'in:asc,desc']
         ];

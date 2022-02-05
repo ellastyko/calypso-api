@@ -22,10 +22,12 @@ class CreateLikesTable extends Migration
                 ->cascadeOnDelete();;
 
             $table->foreignId('post_id')
+                ->nullable()
                 ->constrained('posts')
                 ->cascadeOnDelete();;
 
             $table->foreignId('comment_id')
+                ->nullable()
                 ->constrained('comments')
                 ->cascadeOnDelete();;
 

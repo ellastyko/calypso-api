@@ -11,17 +11,17 @@ class PostPolicy
 {
     use HandlesAuthorization;
 
-    /**
-     * @param $user
-     * @param $ability
-     * @return Response
-     */
-    public function before($user, $ability): Response
-    {
-        if (!$user->isAdmin())
-            return Response::deny(trans('You are not admin!'));
-        return Response::allow();
-    }
+//    /**
+//     * @param $user
+//     * @param $ability
+//     * @return bool
+//     */
+//    public function before($user, $ability): bool
+//    {
+//        if ($user->isAdmin())
+//            return true;
+//        return false;
+//    }
 
     /**
      * Determine whether the user can update the model.
@@ -32,7 +32,7 @@ class PostPolicy
      */
     public function update(User $user, Post $post): bool
     {
-        return $user->isAdmin() || $user->is($post);
+        return $post->user_id == $user->id or $user->isAdmin();
     }
 
     /**

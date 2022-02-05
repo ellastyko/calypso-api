@@ -15,69 +15,54 @@ class CategoryService
 
     /**
      * @param array $data
-     * @return JsonResponse
+     * @return Category[]
      */
-    public function index(array $data): JsonResponse
+    public function index(array $data): array
     {
-        return response()->json([
-            'message' => trans('messages.category.index'),
-            'data'   => Category::all()
-        ], Response::HTTP_OK);
+        return Category::all(); // Add filters
     }
 
     /**
      * @param array $data
-     * @return JsonResponse
+     * @return mixed
      */
-    public function store(array $data): JsonResponse
+    public function store(array $data)
     {
-        $category = Category::create([
+        return Category::create([
             'title' => $data['title'],
             'description' => $data['description'],
             'user_id' => Auth::id(),
         ]);
-
-        return response()->json([
-            'message' => trans('created'),
-            'data' => $category
-        ], Response::HTTP_CREATED);
     }
 
     /**
      * @param int $id
-     * @return JsonResponse
+     * @return mixed
      */
-    public function show(int $id): JsonResponse
+    public function show(int $id)
     {
-        return response()->json([
-            'message' => trans('show'),
-            'data' => Category::findOrFail($id)
-        ], Response::HTTP_OK);
+        return Category::findOrFail($id);
     }
 
     /**
      * @param array $data
-     * @param $category
-     * @return JsonResponse
+     * @param int $id
+     * @return Category
      */
-    public function update(array $data, $category): JsonResponse
+    public function update(array $data, int $id): Category
     {
+        $category = Category::findOrFail($id);
         $category->update($data);
-        return response()->json([
-            'message' => trans('messages.category.updated'),
-            'data' => $category
-        ], Response::HTTP_OK);
+
+        return $category;
     }
 
     /**
-     * @param $category
-     * @return JsonResponse
+     * @param int $id
+     * @return void
      */
-    public function destroy($category): JsonResponse
+    public function destroy(int $id)
     {
-        $category->delete();
-        return response()->json([
-            'message' => trans('messages.category.deleted')
-        ], Response::HTTP_NO_CONTENT);
+        Category::findOrFail($id)->delete();
     }
 }
