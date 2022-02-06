@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Category\CategoryStoreRequest;
 use App\Http\Requests\Category\CategoryUpdateRequest;
 use App\Http\Requests\IndexRequest;
-use App\Http\Resources\CategoryCollection;
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Services\CategoryService;
 use Illuminate\Http\JsonResponse;
@@ -20,11 +20,11 @@ class CategoryController extends Controller
     /**
      * @param IndexRequest $request
      * @param CategoryService $service
-     * @return CategoryCollection
+     * @return CategoryResource
      */
-    public function index(IndexRequest $request, CategoryService $service): CategoryCollection
+    public function index(IndexRequest $request, CategoryService $service): CategoryResource
     {
-        return new CategoryCollection( $service->index($request->validated()) );
+        return new CategoryResource( $service->index($request->validated()) );
     }
 
 

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Filters\QueryFilter;
+use App\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -36,10 +36,10 @@ class Post extends Model
 
     /**
      * @param Builder $builder
-     * @param QueryFilter $filter
+     * @param Filter $filter
      * @return Builder
      */
-    public function scopeFilter(Builder $builder, QueryFilter $filter): Builder
+    public function scopeFilter(Builder $builder, Filter $filter): Builder
     {
         return $filter->apply($builder);
     }
