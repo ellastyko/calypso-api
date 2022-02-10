@@ -1,5 +1,7 @@
 OS := $(shell uname)
 ARTISAN := php artisan
+DC := docker-compose exec
+FPM := $(DC) php-fpm
 
 setup: env deps up migrate seeds watch
 start: up watch
@@ -54,3 +56,6 @@ route:
 
 test:
 	$(ARTISAN) test
+	
+phpcs:
+	@$(FPM) vendor/bin/phpcs --standard=./phpcs.xml ./
