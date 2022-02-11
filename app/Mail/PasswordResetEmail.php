@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
@@ -12,7 +11,9 @@ class PasswordResetEmail extends Mailable
     use Queueable, SerializesModels;
 
     private $user;
+
     private $link;
+
     /**
      * Create a new message instance.
      *

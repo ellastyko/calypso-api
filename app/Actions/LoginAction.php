@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -29,6 +30,6 @@ class LoginAction
             'message' => trans('auth.login'),
             'user' => $user,
             'token' => $token
-        ])->withCookie('token', $token);
+        ]);
     }
 }

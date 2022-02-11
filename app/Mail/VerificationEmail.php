@@ -12,7 +12,9 @@ class VerificationEmail extends Mailable
     use Queueable, SerializesModels;
 
     private object $user;
+
     private string $link;
+    
     /**
      * Create a new message instance.
      *

@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+
+use App\Filters\UserFilter;
 use App\Http\Requests\IndexRequest;
-use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Requests\User\UserAvatarRequest;
 use App\Models\User;
 use App\Services\UserService;
@@ -30,8 +31,10 @@ class UserController extends Controller
     /**
      * @return Collection|User[]
      */
-    public function index(IndexRequest $request, UserService $service)
+    public function index(IndexRequest $request, UserService $service, UserFilter $filters)
     {
+        dd(User::filter($filters)->get())->get();
+
         return $service->index($request->validated());
     }
 
@@ -58,12 +61,12 @@ class UserController extends Controller
     }
 
     /**
-     * @param UpdateUserRequest $request
+     * @param UserUpdateRequest $request
      * @param UserService $service
      * @param int $id
      * @return Response
      */
-    public function update(UpdateUserRequest $request, UserService $service, int $id)
+    public function update(UserUpdateRequest $request, UserService $service, int $id)
     {
         return $service->update($request->validated());
     }
@@ -76,7 +79,7 @@ class UserController extends Controller
     public function destroy(int $id)
     {
 
-        User::findOrFail()->destroy();
+        User::findOrFail($id)->destroy();
 
         return response([
             'message' => 'User deleted successfully'
