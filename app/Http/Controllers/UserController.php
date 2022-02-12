@@ -40,10 +40,8 @@ class UserController extends Controller
     /**
      * @return Collection|User[]
      */
-    public function index(IndexRequest $request, UserService $service, UserFilter $filters)
+    public function index(IndexRequest $request, UserService $service)
     {
-        dd(User::filter($filters)->get())->get();
-
         return $service->index($request->validated());
     }
 

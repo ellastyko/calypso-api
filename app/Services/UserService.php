@@ -16,7 +16,7 @@ class UserService
      */
     public function index(array $data = []): mixed
     {
-        return User::all();
+        return dd(User::filter());
     }
 
     /**

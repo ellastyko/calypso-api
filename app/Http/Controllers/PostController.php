@@ -6,13 +6,17 @@ use App\Http\Requests\Comment\CommentRequest;
 use App\Http\Requests\IndexRequest;
 use App\Http\Requests\Post\PostStoreRequest;
 use App\Http\Requests\Post\PostUpdateRequest;
+use App\Http\Resources\PostResource;
 use App\Models\Post;
 use App\Services\CommentService;
 use App\Services\PostService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 
+/**
+ * Class PostController
+ * @package Controller
+ */
 class PostController extends Controller
 {
 
@@ -29,7 +33,7 @@ class PostController extends Controller
     }
 
     /**
-     * Store a new post.
+     * Store a new post
      *
      * @param PostStoreRequest $request
      * @param PostService $service
@@ -42,13 +46,12 @@ class PostController extends Controller
 
     /**
      * Show post
-     * @param PostService $service
      * @param int $id
-     * @return JsonResponse
+     * @return PostResource
      */
-    public function show(PostService $service, int $id): JsonResponse
+    public function show(int $id): PostResource
     {
-        return $service->show($id);
+        return new PostResource(Post::findOrFail($id));
     }
 
     /**
@@ -75,16 +78,6 @@ class PostController extends Controller
     {
         return $service->destroy($post);
     }
-
-
-    /**
-     * @param int $id
-     * @return Response
-     */
-    public function showCategories(int $id) : Response {
-        return Post::findOrFail($id)->categories;
-    }
-
 
     /**
      * @param CommentRequest $request

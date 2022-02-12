@@ -46,18 +46,6 @@ class PostService
     }
 
     /**
-     * @param int $id
-     * @return JsonResponse
-     */
-    public function show(int $id): JsonResponse
-    {
-        return response()->json([
-            'message' => trans('messages.post.shows'),
-            'data'    => Post::findOrFail($id)
-        ]);
-    }
-
-    /**
      * @param Post $post
      * @param array $data
      * @return JsonResponse

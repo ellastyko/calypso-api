@@ -2,23 +2,19 @@
 
 namespace App\Models;
 
-use App\Filters\Filter;
 use App\Filters\UserFilter;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use App\Models\traits\{
-    HasPosts,
-    HasRoles
-};
+use App\Models\traits\{HasComments, HasPosts, HasRoles};
 
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, HasPosts;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, HasPosts, HasComments;
 
     const ROLE_ADMIN = 'admin';
 
@@ -57,17 +53,6 @@ class User extends Authenticatable
     ];
 
 
-
-    /**
-     * Relations
-     * @return HasMany
-     */
-    public function comments(): HasMany
-    {
-        return $this->hasMany(Comment::class);
-    }
-
-
     /*  User Methods  */
 
     /**
@@ -78,9 +63,12 @@ class User extends Authenticatable
         return "{$this->name} {$this->surname}";
     }
 
-    public function scopeFilter($query, UserFilter $filters, array $extraFilters = null)
+    /**
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeFilter(Builder $query): Builder
     {
-        dd($extraFilters);
-        return $filters->apply($query, $extraFilters);
+        return UserFilter::apply($query);
     }
 }

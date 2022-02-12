@@ -30,6 +30,9 @@ migrate:
 refresh:
 	$(ARTISAN) migrate:refresh
 
+fresh:
+	$(ARTISAN) migrate:fresh
+
 seeds:
 	$(ARTISAN) db:seed
 
@@ -56,6 +59,6 @@ route:
 
 test:
 	$(ARTISAN) test
-	
+
 phpcs:
 	@$(FPM) vendor/bin/phpcs --standard=./phpcs.xml ./
