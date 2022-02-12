@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Comment\CommentRequest;
-use App\Http\Requests\Comment\CommentUpdateRequest;
 use App\Models\Comment;
 use App\Services\CommentService;
 use Illuminate\Http\JsonResponse;
@@ -42,12 +41,12 @@ class CommentController extends Controller
     /**
      * Update comment
      *
-     * @param CommentUpdateRequest $request
+     * @param CommentRequest $request
      * @param CommentService $service
      * @param Comment $comment
      * @return JsonResponse
      */
-    public function update(CommentUpdateRequest $request, CommentService $service, Comment $comment): JsonResponse
+    public function update(CommentRequest $request, CommentService $service, Comment $comment): JsonResponse
     {
         return $service->update($comment, $request->validated());
     }

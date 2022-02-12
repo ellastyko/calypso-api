@@ -8,6 +8,9 @@ use Illuminate\Http\Response;
 use DragonCode\Support\Facades\Helpers\Str;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class ForgotPasswordAction
+ */
 class ForgotPasswordAction
 {
     /**

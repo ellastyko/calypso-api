@@ -6,13 +6,13 @@ namespace App\Http\Controllers;
 use App\Filters\UserFilter;
 use App\Http\Requests\IndexRequest;
 use App\Http\Requests\User\UserAvatarRequest;
+use App\Http\Requests\User\UserUpdateRequest;
+use App\Http\Resources\FavoritesResource;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
-use LaravelLang\Publisher\Console\Update;
 
 
 class UserController extends Controller
@@ -25,6 +25,15 @@ class UserController extends Controller
     public function avatar(UserAvatarRequest $request, UserService $service)
     {
         return $service->avatar($request->file('avatar'));
+    }
+
+    /**
+     * @param UserService $service
+     * @return FavoritesResource
+     */
+    public function favorites(UserService $service): FavoritesResource
+    {
+        return new FavoritesResource($service->favorites());
     }
 
 
@@ -57,29 +66,28 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return User::find($id);
+        return User::findOrFail($id);
     }
 
     /**
      * @param UserUpdateRequest $request
      * @param UserService $service
      * @param int $id
-     * @return Response
+     * @return bool
      */
     public function update(UserUpdateRequest $request, UserService $service, int $id)
     {
-        return $service->update($request->validated());
+        return $service->update($request->validated(), $id);
     }
 
     /**
      * @param  int  $id
      * @return Response
-     * ONLY ADMINS
      */
     public function destroy(int $id)
     {
 
-        User::findOrFail($id)->destroy();
+        User::findOrFail($id)->delete();
 
         return response([
             'message' => 'User deleted successfully'

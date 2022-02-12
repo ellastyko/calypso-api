@@ -2,18 +2,23 @@
 
 namespace App\Models;
 
-use App\Filters\QueryFilter;
-use App\Models\traits\HasRoles;
+use App\Filters\Filter;
+use App\Filters\UserFilter;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\traits\{
+    HasPosts,
+    HasRoles
+};
+
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, HasPosts;
 
     const ROLE_ADMIN = 'admin';
 
@@ -51,14 +56,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    /**
-     * Relations
-     * @return HasMany
-     */
-    public function posts(): HasMany
-    {
-        return $this->hasMany(Post::class);
-    }
+
 
     /**
      * Relations
@@ -80,9 +78,9 @@ class User extends Authenticatable
         return "{$this->name} {$this->surname}";
     }
 
-    public function scopeFilter($query, QueryFilter $filters)
+    public function scopeFilter($query, UserFilter $filters, array $extraFilters = null)
     {
-        dd($filters);
-        return $query->apply($filters);
+        dd($extraFilters);
+        return $filters->apply($query, $extraFilters);
     }
 }

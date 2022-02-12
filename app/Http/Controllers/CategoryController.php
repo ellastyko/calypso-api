@@ -39,7 +39,7 @@ class CategoryController extends Controller
     {
         return response()->json([
             'message' => trans('created'),
-            'data' => $service->store( $request->validated() )
+            'data' => $service->store($request->validated())
         ], Response::HTTP_CREATED);
     }
 

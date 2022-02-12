@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Models\UserFavorite;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -25,7 +27,7 @@ class UserService
     {
         return User::create([
             'name' => $data['name'],
-            'surname' => $data['surname'],
+            'surname' => $data['surname'] ?? '',
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'role' => $data['role']
@@ -39,7 +41,6 @@ class UserService
      */
     public function update(array $data, int $id): bool
     {
-        // Add policy TODO
         return User::find($id)->fill($data);
     }
 
@@ -49,16 +50,14 @@ class UserService
      */
     public function destroy(User $user): bool
     {
-        // Add policy TODO
         return $user->delete();
     }
 
     /**
      * @param $avatar
-     * @param $user
      * @return false|string
      */
-    public function avatar($avatar, $user)
+    public function avatar($avatar)
     {
         /*
          *  *** Store file with random name ***
@@ -71,8 +70,13 @@ class UserService
          *  ** disk - namespace folder in storage
          */
         $path = Storage::disk('public')->putFileAs(
-            'avatars', $avatar, $user->id.'.'.$avatar->extension()
+            'avatars', $avatar, Auth::id().'.'.$avatar->extension()
         );
         return $path;
+    }
+
+    public function favorites()
+    {
+        return UserFavorite::where('user_id', '=', Auth::id())->get();
     }
 }
