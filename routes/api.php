@@ -38,7 +38,7 @@ Route::group([
     Route::get('', [UserController::class, 'index']);
     Route::get('/{user_id}', [UserController::class, 'show']);
 
-    Route::middleware(['auth:sanctum'])->group(function () {
+    Route::middleware(['auth:sanctum', 'can:user'])->group(function () {
 
         Route::post('', [UserController::class, 'store']);
         Route::patch('{user_id}', [UserController::class, 'update']);

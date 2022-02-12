@@ -6,22 +6,11 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
+use JetBrains\PhpStorm\Pure;
 
 class PostPolicy
 {
     use HandlesAuthorization;
-
-//    /**
-//     * @param $user
-//     * @param $ability
-//     * @return bool
-//     */
-//    public function before($user, $ability): bool
-//    {
-//        if ($user->isAdmin())
-//            return true;
-//        return false;
-//    }
 
     /**
      * Determine whether the user can update the model.
@@ -30,7 +19,7 @@ class PostPolicy
      * @param Post $post
      * @return bool
      */
-    public function update(User $user, Post $post): bool
+    #[Pure] public function update(User $user, Post $post): bool
     {
         return $post->user_id == $user->id or $user->isAdmin();
     }
@@ -42,7 +31,7 @@ class PostPolicy
      * @param Post $post
      * @return bool
      */
-    public function delete(User $user, Post $post): bool
+    #[Pure] public function delete(User $user, Post $post): bool
     {
         return $post->user_id == $user->id or $user->isAdmin();
     }
@@ -54,9 +43,9 @@ class PostPolicy
      * @param Post $post
      * @return bool
      */
-    public function restore(User $user, Post $post): bool
+    #[Pure] public function restore(User $user, Post $post): bool
     {
-        // TODO
+        return $post->user_id == $user->id or $user->isAdmin();
     }
 
     /**
@@ -66,8 +55,8 @@ class PostPolicy
      * @param Post $post
      * @return bool
      */
-    public function forceDelete(User $user, Post $post): bool
+    #[Pure] public function forceDelete(User $user, Post $post): bool
     {
-        // TODO
+        return $user->isAdmin();
     }
 }
