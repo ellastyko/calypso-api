@@ -2,7 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Comment;
+use App\Models\Like;
+use App\Models\Post;
 use App\Models\PostCategory;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,11 +18,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(UserSeeder::class);
         $this->call(CategorySeeder::class);
-        $this->call(PostSeeder::class);
-        $this->call(CommentSeeder::class);
-        $this->call(LikeSeeder::class);
-        $this->call(PostCategorySeeder::class);
+
+
+        $posts = Post::factory(10);
+        $comments = Comment::factory(10);
+
+        User::factory(10)
+            ->has($posts)
+            ->create();
+
+        $posts->has(Like::factory(20))
+            ->has($comments)
+            ->create();
     }
 }

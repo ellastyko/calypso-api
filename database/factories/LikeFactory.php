@@ -15,7 +15,7 @@ class LikeFactory extends Factory
     {
         return [
             'reaction' => $this->faker->boolean,
-            'post_id' => rand(1, 50),
+            'post_id' => null,
             'comment_id' => null,
             'user_id' => rand(1, 10)
         ];

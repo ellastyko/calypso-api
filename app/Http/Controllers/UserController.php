@@ -6,12 +6,13 @@ namespace App\Http\Controllers;
 use App\Filters\UserFilter;
 use App\Http\Requests\IndexRequest;
 use App\Http\Requests\User\UserAvatarRequest;
+use App\Http\Requests\User\UserStoreRequest;
 use App\Http\Requests\User\UserUpdateRequest;
 use App\Http\Resources\FavoritesResource;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 
@@ -46,25 +47,25 @@ class UserController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param UserStoreRequest $request
+     * @param UserService $service
      * @return Response
      */
-    public function store(Request $request, UserService $service): Response
+    public function store(UserStoreRequest $request, UserService $service): Response
     {
-        $user = $service->store($request->validated());
         return response([
             'message' => trans('auth.registered'),
-            'user' => $user
+            'user' => $service->store($request->validated())
         ]);
     }
 
     /**
-     * @param  int  $id
-     * @return Response
+     * @param int $id
+     * @return UserResource
      */
-    public function show($id)
+    public function show($id): UserResource
     {
-        return User::findOrFail($id);
+        return new UserResource(User::findOrFail($id));
     }
 
     /**

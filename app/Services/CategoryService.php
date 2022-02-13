@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -33,15 +34,6 @@ class CategoryService
             'description' => $data['description'],
             'user_id' => Auth::id(),
         ]);
-    }
-
-    /**
-     * @param int $id
-     * @return mixed
-     */
-    public function show(int $id)
-    {
-        return Category::findOrFail($id);
     }
 
     /**

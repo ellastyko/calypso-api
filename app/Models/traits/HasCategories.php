@@ -3,7 +3,6 @@
 namespace App\Models\traits;
 
 use App\Models\Category;
-use App\Models\PostCategory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 trait HasCategories

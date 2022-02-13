@@ -9,12 +9,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use App\Models\traits\{HasComments, HasPosts, HasRoles};
+use App\Models\traits\{HasAvatars, HasComments, HasPosts, HasRoles};
 
-
+/**
+ * Class User
+ * @package Authenticatable
+ */
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, HasPosts, HasComments;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, HasAvatars, HasPosts, HasComments;
 
     const ROLE_ADMIN = 'admin';
 
@@ -30,7 +33,8 @@ class User extends Authenticatable
         'surname',
         'email',
         'password',
-        'role'
+        'role',
+        'status'
     ];
 
     /**

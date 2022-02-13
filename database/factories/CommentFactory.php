@@ -15,7 +15,7 @@ class CommentFactory extends Factory
     {
         return [
             'content' => $this->faker->realText,
-            'post_id' => rand(1, 50),
+            'post_id' => null,
             'comment_id' => null,
             'user_id' => rand(1, 10)
         ];

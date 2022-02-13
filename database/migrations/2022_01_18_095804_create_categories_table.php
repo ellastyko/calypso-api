@@ -17,7 +17,6 @@ class CreateCategoriesTable extends Migration
             $table->id();
             $table->string('title')->unique();
             $table->string('description');
-            $table->integer('votes')->default(0);
             $table->timestamps();
         });
     }

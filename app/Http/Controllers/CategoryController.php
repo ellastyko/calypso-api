@@ -24,7 +24,7 @@ class CategoryController extends Controller
      */
     public function index(IndexRequest $request, CategoryService $service): CategoryResource
     {
-        return new CategoryResource( $service->index($request->validated()) );
+        return new CategoryResource($service->index($request->validated()));
     }
 
 
@@ -47,16 +47,12 @@ class CategoryController extends Controller
     /**
      * Show category
      *
-     * @param CategoryService $service
      * @param int $id
-     * @return JsonResponse
+     * @return CategoryResource
      */
-    public function show(CategoryService $service, int $id): JsonResponse
+    public function show(int $id): CategoryResource
     {
-        return response()->json([
-            'message' => trans('show'),
-            'data' => $service->show($id)
-        ], Response::HTTP_OK);
+        return new CategoryResource(Category::findOrFail($id));
     }
 
 
