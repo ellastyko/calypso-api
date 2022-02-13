@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class LikeFactory extends Factory
@@ -13,11 +14,13 @@ class LikeFactory extends Factory
      */
     public function definition()
     {
+        $userIds = User::pluck('id')->toArray();
+
         return [
             'reaction' => $this->faker->boolean,
             'post_id' => null,
             'comment_id' => null,
-            'user_id' => rand(1, 10)
+            'user_id' => $userIds[array_rand($userIds)]
         ];
     }
 }

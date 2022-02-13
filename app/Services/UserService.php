@@ -16,7 +16,7 @@ class UserService
      */
     public function index(array $data = []): mixed
     {
-        return dd(User::filter());
+        return User::paginate($data['per_page']);
     }
 
     /**

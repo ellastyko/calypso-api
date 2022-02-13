@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Filters\Filter;
 use App\Models\traits\BelongsToUser;
 use App\Models\traits\HasCategories;
 use App\Models\traits\HasComments;
@@ -11,11 +10,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo};
 
 /**
- * Post
- * @mixin Builder
+ * @class Post
+ * @package Model
  */
 class Post extends Model
 {

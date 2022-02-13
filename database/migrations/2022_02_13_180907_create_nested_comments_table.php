@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCommentsTable extends Migration
+class CreateNestedCommentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('comments', function (Blueprint $table) {
+        Schema::create('nested_comments', function (Blueprint $table) {
             $table->id();
             $table->text('content');
 
@@ -22,9 +22,9 @@ class CreateCommentsTable extends Migration
                 ->constrained('users')
                 ->nullOnDelete();
 
-            $table->foreignId('post_id')
+            $table->foreignId('comment_id')
                 ->nullable()
-                ->constrained('posts')
+                ->constrained('comments')
                 ->cascadeOnDelete();
 
             $table->timestamps();
@@ -38,6 +38,6 @@ class CreateCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists('nested_comments');
     }
 }

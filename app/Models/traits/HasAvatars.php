@@ -10,7 +10,7 @@ trait HasAvatars
     /**
      * @return HasMany
      */
-    public function avatars(): HasMany
+    public function userAvatar(): HasMany
     {
         return $this->hasMany(UserAvatar::class);
     }

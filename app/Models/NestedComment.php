@@ -2,16 +2,19 @@
 
 namespace App\Models;
 
+use App\Models\traits\BelongsToComment;
 use App\Models\traits\BelongsToUser;
+use App\Models\traits\HasLikes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class UserAvatar
+ * @class NestedComment
+ * @package model
  */
-class UserAvatar extends Model
+class NestedComment extends Model
 {
-    use HasFactory, BelongsToUser;
+    use HasFactory, BelongsToUser, BelongsToComment, HasLikes;
 
     /**
      * The attributes that are mass assignable.
@@ -20,6 +23,7 @@ class UserAvatar extends Model
      */
     protected $fillable = [
         'user_id',
-        'path'
+        'content',
+        'comment_id'
     ];
 }

@@ -7,6 +7,7 @@ use App\Models\Like;
 use App\Models\Post;
 use App\Models\PostCategory;
 use App\Models\User;
+use App\Models\UserAvatar;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,18 +19,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(CategorySeeder::class);
-
-
-        $posts = Post::factory(10);
-        $comments = Comment::factory(10);
-
-        User::factory(10)
-            ->has($posts)
-            ->create();
-
-        $posts->has(Like::factory(20))
-            ->has($comments)
-            ->create();
+        $this->call([
+            CategorySeeder::class,
+            UserSeeder::class,
+            PostSeeder::class,
+            CommentSeeder::class
+        ]);
     }
 }
