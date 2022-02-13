@@ -2,12 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Comment;
-use App\Models\Like;
-use App\Models\Post;
+use App\Models\NestedComment;
 use App\Models\PostCategory;
-use App\Models\User;
-use App\Models\UserAvatar;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -23,7 +19,9 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             UserSeeder::class,
             PostSeeder::class,
-            CommentSeeder::class
+//            PostCategory::class,
+            CommentSeeder::class,
+            NestedComment::class
         ]);
     }
 }

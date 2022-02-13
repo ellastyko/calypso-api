@@ -24,12 +24,17 @@ class CreateLikesTable extends Migration
             $table->foreignId('post_id')
                 ->nullable()
                 ->constrained('posts')
-                ->cascadeOnDelete();;
+                ->cascadeOnDelete();
 
             $table->foreignId('comment_id')
                 ->nullable()
                 ->constrained('comments')
-                ->cascadeOnDelete();;
+                ->cascadeOnDelete();
+
+            $table->foreignId('nested_comment_id')
+                ->nullable()
+                ->constrained('nested_comments')
+                ->cascadeOnDelete();
 
             $table->timestamps();
         });

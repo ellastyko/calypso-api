@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Comment;
-use App\Models\NestedComment;
+use App\Models\Like;
 use Illuminate\Database\Seeder;
 
 class CommentSeeder extends Seeder
@@ -16,7 +16,7 @@ class CommentSeeder extends Seeder
     public function run()
     {
         Comment::factory(100)
-            ->has(NestedComment::factory(10))
+            ->has(Like::factory(20))
             ->create();
     }
 }

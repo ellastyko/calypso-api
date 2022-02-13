@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::factory(10)
-            ->has(UserAvatar::factory(20))
+            ->has(UserAvatar::factory(5))
             ->create();
     }
 }

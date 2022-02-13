@@ -20,6 +20,7 @@ class LikeFactory extends Factory
             'reaction' => $this->faker->boolean,
             'post_id' => null,
             'comment_id' => null,
+            'nested_comment_id' => null,
             'user_id' => $userIds[array_rand($userIds)]
         ];
     }

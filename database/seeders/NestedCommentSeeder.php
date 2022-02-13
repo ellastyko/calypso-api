@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Like;
+use App\Models\NestedComment;
 use Illuminate\Database\Seeder;
 
 class NestedCommentSeeder extends Seeder
@@ -13,6 +15,8 @@ class NestedCommentSeeder extends Seeder
      */
     public function run()
     {
-        //
+        NestedComment::factory(100)
+            ->has(Like::factory(20))
+            ->create();
     }
 }
