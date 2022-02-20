@@ -23,7 +23,7 @@ class PostResource extends JsonResource
             'title' => $this->title,
             'content' => $this->content,
             'categories' => CategoryResource::collection($this->categories),
-            'likes' => 999,
+            'likes' => $this->likesTotal(),
             'author' => $this->user_id,
             'created_at' => $this->created_at
         ];

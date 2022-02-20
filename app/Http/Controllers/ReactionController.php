@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Like;
+use App\Models\Reaction;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
-class LikeController extends Controller
+class ReactionController extends Controller
 {
     ###############  Post's likes ##################
 

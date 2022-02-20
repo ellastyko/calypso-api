@@ -5,7 +5,7 @@ namespace Database\Factories;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class LikeFactory extends Factory
+class ReactionFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,7 @@ class LikeFactory extends Factory
         $userIds = User::pluck('id')->toArray();
 
         return [
-            'reaction' => $this->faker->boolean,
+            'type' => $this->faker->boolean,
             'post_id' => null,
             'comment_id' => null,
             'nested_comment_id' => null,

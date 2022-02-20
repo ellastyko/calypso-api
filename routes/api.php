@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
     AuthController,
-    LikeController,
+    ReactionController,
     UserController,
     PostController,
     CategoryController,
@@ -101,13 +101,13 @@ Route::group([
 });
 
 Route::group([
-    'prefix' => 'likes',
+    'prefix' => 'reactions',
     'middleware' => 'auth:sanctum'
 ], function () {
 
-    Route::get('/{id}', [LikeController::class, 'show'])
+    Route::get('/{id}', [ReactionController::class, 'show'])
         ->withoutMiddleware('auth:sanctum');
 
-    Route::post('/{id}', [LikeController::class, 'store']);
-    Route::delete('/{id}', [LikeController::class, 'destroy']);
+    Route::post('/{id}', [ReactionController::class, 'store']);
+    Route::delete('/{id}', [ReactionController::class, 'destroy']);
 });

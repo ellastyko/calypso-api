@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\traits\BelongsToComment;
 use App\Models\traits\BelongsToPost;
 use App\Models\traits\BelongsToUser;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * Class Like
  * @package Model
  */
-class Like extends Model
+class Reaction extends Model
 {
     use HasFactory;
     use BelongsToUser;
@@ -25,9 +26,19 @@ class Like extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'reaction',
+        'type',
         'post_id',
         'comment_id',
         'user_id',
     ];
+
+    /**
+     * @param Builder $builder
+     * @param Reaction $reaction
+     * @return Builder
+     */
+    public function likes(Builder $builder, Reaction $reaction): Builder
+    {
+        return $builder->where($reaction->type, '=', 1);
+    }
 }

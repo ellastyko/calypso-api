@@ -2,8 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Comment;
-use App\Models\Like;
+use App\Models\Reaction;
 use App\Models\Post;
 use Illuminate\Database\Seeder;
 
@@ -17,7 +16,7 @@ class PostSeeder extends Seeder
     public function run()
     {
         Post::factory(10)
-            ->has(Like::factory(20))
+            ->has(Reaction::factory(20))
             ->create();
     }
 }

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Models\traits\BelongsToPost;
 use App\Models\traits\BelongsToUser;
-use App\Models\traits\HasLikes;
+use App\Models\traits\HasReactions;
 use App\Models\traits\HasNestedComments;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -19,7 +19,7 @@ class Comment extends Model
     use BelongsToUser;
     use BelongsToPost;
     use HasNestedComments;
-    use HasLikes;
+    use HasReactions;
 
     /**
      * The attributes that are mass assignable.

@@ -70,7 +70,7 @@ class User extends Authenticatable
      */
     public function getFullName(): string
     {
-        return "{$this->name} {$this->surname}";
+        return ucfirst($this->name) . ' ' . ucfirst($this->surname);
     }
 
     /**

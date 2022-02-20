@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Models\traits\BelongsToComment;
 use App\Models\traits\BelongsToUser;
-use App\Models\traits\HasLikes;
+use App\Models\traits\HasReactions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,7 +17,7 @@ class NestedComment extends Model
     use HasFactory;
     use BelongsToUser;
     use BelongsToComment;
-    use HasLikes;
+    use HasReactions;
 
     /**
      * The attributes that are mass assignable.
