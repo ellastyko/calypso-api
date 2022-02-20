@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CategoryService
 {
-
     /**
      * @param array $data
      * @return Category[]

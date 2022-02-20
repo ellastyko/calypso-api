@@ -61,4 +61,7 @@ test:
 	$(ARTISAN) test
 
 phpcs:
-	@$(FPM) vendor/bin/phpcs --standard=./phpcs.xml ./
+	./vendor/bin/phpcs --standard=./phpcs.xml
+
+phpcbf:
+	./vendor/bin/phpcbf --standard=./phpcs.xml

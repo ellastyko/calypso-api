@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 trait HasPosts
 {
-
     /**
      * Relations
      * @return HasMany

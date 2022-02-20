@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 trait HasLikes
 {
-
     /**
      * @return HasMany
      */

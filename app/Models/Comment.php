@@ -15,7 +15,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Comment extends Model
 {
-    use HasFactory, BelongsToUser, BelongsToPost, HasNestedComments, HasLikes;
+    use HasFactory;
+    use BelongsToUser;
+    use BelongsToPost;
+    use HasNestedComments;
+    use HasLikes;
 
     /**
      * The attributes that are mass assignable.

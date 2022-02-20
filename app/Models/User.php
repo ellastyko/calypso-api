@@ -17,7 +17,13 @@ use App\Models\traits\{HasAvatars, HasComments, HasPosts, HasRoles};
  */
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, HasAvatars, HasPosts, HasComments;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
+    use HasRoles;
+    use HasAvatars;
+    use HasPosts;
+    use HasComments;
 
     const ROLE_ADMIN = 'admin';
 

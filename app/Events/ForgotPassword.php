@@ -12,7 +12,9 @@ use Illuminate\Queue\SerializesModels;
 
 class ForgotPassword
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     public object $user;
     public string $link;

@@ -14,7 +14,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Like extends Model
 {
-    use HasFactory, BelongsToUser, BelongsToPost, BelongsToComment;
+    use HasFactory;
+    use BelongsToUser;
+    use BelongsToPost;
+    use BelongsToComment;
 
     /**
      * The attributes that are mass assignable.

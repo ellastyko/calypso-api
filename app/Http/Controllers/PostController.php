@@ -19,7 +19,6 @@ use Illuminate\Http\Response;
  */
 class PostController extends Controller
 {
-
     /**
      * Get posts
      *

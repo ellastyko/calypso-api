@@ -7,7 +7,6 @@ use Illuminate\Validation\Rules\Password;
 
 class RegisterRequest extends FormRequest
 {
-
     /**
      * Register validation rules
      *

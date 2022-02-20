@@ -15,6 +15,6 @@ class SendSuccessfulPasswordResetNotification implements ShouldQueue
      */
     public function handle($event)
     {
-        //
+        // TODO Mail::to($event->user)->send(new PasswordResetEmail($event->user, $event->link));
     }
 }

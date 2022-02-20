@@ -26,7 +26,7 @@ class ForgotPasswordAction
             'link' => $token = Str::random(60)
         ]);
 
-        $link = config('app.url').'/password-reset?token='.$token;
+        $link = config('app.url') . '/password-reset?token=' . $token;
 
         event(new ForgotPassword($user, $link));
 

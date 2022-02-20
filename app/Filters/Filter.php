@@ -77,7 +77,7 @@ class Filter
      *
      * @return array
      */
-    public function filters():array
+    public function filters(): array
     {
         return array_merge($this->request->all(), $this->globals);
     }

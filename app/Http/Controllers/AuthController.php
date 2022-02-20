@@ -25,7 +25,7 @@ class AuthController extends Controller
     /**
      * @return Response
      */
-    public function logout() : Response
+    public function logout(): Response
     {
         Auth::logout();
         return response([
@@ -38,7 +38,7 @@ class AuthController extends Controller
      * @param RegisterAction $action
      * @return Response
      */
-    public function register(RegisterRequest $request, RegisterAction $action) : Response
+    public function register(RegisterRequest $request, RegisterAction $action): Response
     {
         return  $action->handle($request->validated());
     }

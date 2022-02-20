@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Filters\UserFilter;
 use App\Http\Requests\IndexRequest;
 use App\Http\Requests\User\UserAvatarRequest;
@@ -15,7 +14,9 @@ use App\Services\UserService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
 
-
+/**
+ * @class UserController
+ */
 class UserController extends Controller
 {
     /**

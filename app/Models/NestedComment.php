@@ -14,7 +14,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class NestedComment extends Model
 {
-    use HasFactory, BelongsToUser, BelongsToComment, HasLikes;
+    use HasFactory;
+    use BelongsToUser;
+    use BelongsToComment;
+    use HasLikes;
 
     /**
      * The attributes that are mass assignable.

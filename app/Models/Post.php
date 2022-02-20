@@ -17,7 +17,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Post extends Model
 {
-    use HasFactory, HasCategories, HasComments, HasLikes, BelongsToUser; // SoftDeletes
+    use HasFactory;
+    use HasCategories;
+    use HasComments;
+    use HasLikes;
+    use BelongsToUser; // SoftDeletes
 
     /**
      * The attributes that are mass assignable.

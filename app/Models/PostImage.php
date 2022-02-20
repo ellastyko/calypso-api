@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class PostImage extends Model
 {
-    use HasFactory, BelongsToPost;
+    use HasFactory;
+    use BelongsToPost;
 
     /**
      * The attributes that are mass assignable.

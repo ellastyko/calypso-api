@@ -10,11 +10,13 @@ class LikeController extends Controller
 {
     ###############  Post's likes ##################
 
-    public function showPostLikes($id) {
+    public function showPostLikes($id)
+    {
         // TODO
     }
 
-    public function storePostLike(Request $request, $id) {
+    public function storePostLike(Request $request, $id)
+    {
 
         // TODO
     }
@@ -29,19 +31,22 @@ class LikeController extends Controller
 
     ###############  Comment's likes ##################
 
-    public function showCommentLikes($id) {
+    public function showCommentLikes($id)
+    {
 
         // TODO
     }
 
 
-    public function storeCommentLike(Request $request, $id) {
+    public function storeCommentLike(Request $request, $id)
+    {
 
         // TODO
     }
 
 
-    public function destroyCommentLike($id) {
+    public function destroyCommentLike($id)
+    {
 
         // TODO
     }

@@ -11,7 +11,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Category extends Model
 {
-    use HasFactory, HasPosts;
+    use HasFactory;
+    use HasPosts;
 
     /**
      * The attributes that are mass assignable.

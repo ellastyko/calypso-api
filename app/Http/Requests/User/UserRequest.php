@@ -12,7 +12,7 @@ class UserRequest extends FormRequest
      *
      * @return array
      */
-    public function rules() : array
+    public function rules(): array
     {
         return [
             'name' => ['string', 'max:50'],

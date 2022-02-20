@@ -11,7 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class UserAvatar extends Model
 {
-    use HasFactory, BelongsToUser;
+    use HasFactory;
+    use BelongsToUser;
 
     /**
      * The attributes that are mass assignable.

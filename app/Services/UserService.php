@@ -70,7 +70,9 @@ class UserService
          *  ** disk - namespace folder in storage
          */
         $path = Storage::disk('public')->putFileAs(
-            'avatars', $avatar, Auth::id().'.'.$avatar->extension()
+            'avatars',
+            $avatar,
+            Auth::id() . '.' . $avatar->extension()
         );
         return $path;
     }
