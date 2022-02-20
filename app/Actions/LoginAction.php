@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\UnauthorizedException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -14,12 +15,11 @@ class LoginAction
     /**
      * @param array $credentials
      * @return Response
-     * @throws HttpException
      */
     public function handle(array $credentials): Response
     {
         if (!Auth::attempt($credentials)) {
-            throw new HttpException(401, trans('auth.failed'));
+            throw new UnauthorizedException(trans('auth.failed'), 401);
         }
 
         $user = User::find(Auth::id());
