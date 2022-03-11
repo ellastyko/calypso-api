@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Filters\UserFilter;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\IndexRequest;
 use App\Http\Requests\User\UserAvatarRequest;
 use App\Http\Requests\User\UserStoreRequest;
@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
+use function response;
 
 /**
  * @class UserController

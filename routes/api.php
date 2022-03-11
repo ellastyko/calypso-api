@@ -1,13 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{
+use App\Http\Controllers\Api\{
     AuthController,
-    ReactionController,
-    UserController,
-    PostController,
     CategoryController,
-    CommentController
+    CommentController,
+    PostController,
+    ReactionController,
+    UserController
 };
 
 /*

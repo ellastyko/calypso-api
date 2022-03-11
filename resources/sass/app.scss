@@ -3,6 +3,7 @@
 
 
 // Custom bootstrap components
+@import "variables";
 
 // Required
 @import "node_modules/bootstrap/scss/functions";
@@ -10,12 +11,12 @@
 @import "node_modules/bootstrap/scss/mixins";
 
 // Optional
-//@import "node_modules/bootstrap/scss/grid";     // row, col, etc.
-//@import "node_modules/bootstrap/scss/containers";   // containers, etc.
-//@import "node_modules/bootstrap/scss/utilities"; // necessary module for /utilities/api.scss
-//@import "node_modules/bootstrap/scss/utilities/api"; // d-flex, flex-wrap, margins, paddings, etc.
+@import "node_modules/bootstrap/scss/grid";     // row, col, etc.
+@import "node_modules/bootstrap/scss/containers";   // containers, etc.
+@import "node_modules/bootstrap/scss/utilities"; // necessary module for /utilities/api.scss
+@import "node_modules/bootstrap/scss/utilities/api"; // d-flex, flex-wrap, margins, paddings, etc.
 
 
 
 // Bootstrap and its all modules
-@import "node_modules/bootstrap/scss/bootstrap";
+//@import "node_modules/bootstrap/scss/bootstrap";

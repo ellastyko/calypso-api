@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Category\CategoryStoreRequest;
 use App\Http\Requests\Category\CategoryUpdateRequest;
 use App\Http\Requests\IndexRequest;
@@ -9,7 +10,7 @@ use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Services\CategoryService;
 use Illuminate\Http\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
+
 
 /**
  * Category controller

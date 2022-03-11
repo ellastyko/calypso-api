@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Actions\{ForgotPasswordAction, LoginAction, PasswordResetAction, RegisterAction};
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\{ForgotPasswordRequest, LoginRequest, PasswordResetRequest, RegisterRequest};
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
-use App\Http\Requests\Auth\{ForgotPasswordRequest, LoginRequest, PasswordResetRequest, RegisterRequest};
-use App\Actions\{ForgotPasswordAction, LoginAction, PasswordResetAction, RegisterAction};
+use function response;
 
 /**
  * Authentication controller

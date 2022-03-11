@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Comment\CommentRequest;
 use App\Http\Requests\IndexRequest;
 use App\Http\Requests\Post\PostStoreRequest;
@@ -12,6 +13,7 @@ use App\Services\CommentService;
 use App\Services\PostService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use function response;
 
 /**
  * Class PostController

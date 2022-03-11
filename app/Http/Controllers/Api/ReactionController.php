@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Models\Reaction;
-use App\Models\Post;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class ReactionController extends Controller
