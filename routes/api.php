@@ -21,7 +21,7 @@ use App\Http\Controllers\{
 |
 */
 
-Route::prefix('auth')->group(function() {
+Route::prefix('auth')->group(function () {
 
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register', [AuthController::class, 'register']);
@@ -48,7 +48,7 @@ Route::group([
 });
 
 
-Route::prefix('categories')->group( function () {
+Route::prefix('categories')->group(function () {
 
     Route::get('', [CategoryController::class, 'index']);
     Route::get('/{category_id}', [CategoryController::class, 'show']);
