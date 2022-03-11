@@ -25,7 +25,7 @@ class CommentService
                 'content' => $data['content'],
                 'post_id' => $data['post_id']
             ])
-        ], 200);
+        ]);
     }
 
     /**

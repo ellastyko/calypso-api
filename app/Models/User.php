@@ -15,7 +15,7 @@ use App\Models\traits\{HasAvatars, HasComments, HasPosts, HasRoles};
  * Class User
  * @package Authenticatable
  */
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens;
     use HasFactory;
@@ -25,9 +25,9 @@ class User extends Authenticatable
     use HasPosts;
     use HasComments;
 
-    const ROLE_ADMIN = 'admin';
+    public const ROLE_ADMIN = 'admin';
 
-    const ROLE_USER = 'user';
+    public const ROLE_USER = 'user';
 
     /**
      * The attributes that are mass assignable.

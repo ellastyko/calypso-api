@@ -15,9 +15,8 @@ class ForgotPasswordAction
 {
     /**
      * @param array $data
-     * @return Response
      */
-    public function handle(array $data): Response
+    public function handle(array $data)
     {
         $user = User::where('email', $data['email'])->first();
 
@@ -29,9 +28,5 @@ class ForgotPasswordAction
         $link = config('app.url') . '/password-reset?token=' . $token;
 
         event(new ForgotPassword($user, $link));
-
-        return response([
-            'message' => trans('passwords.sent')
-        ]);
     }
 }

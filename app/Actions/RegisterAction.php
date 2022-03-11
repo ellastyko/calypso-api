@@ -19,9 +19,9 @@ class RegisterAction
     public function handle(array $data): JsonResponse
     {
         $user = User::create([
-            'name' => $data['name'],
-            'surname' => $data['surname'] ?? '',
-            'email' => $data['email'],
+            'name'     => $data['name'],
+            'surname'  => $data['surname'] ?? '',
+            'email'    => $data['email'],
             'password' => Hash::make($data['password'])
         ]);
 

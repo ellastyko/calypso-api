@@ -22,7 +22,7 @@ class CreatePostsTable extends Migration
             $table->foreignId('user_id')
                 ->nullable()
                 ->constrained('users')
-                ->nullOnDelete();;
+                ->nullOnDelete();
 
             $table->timestamps();
         });

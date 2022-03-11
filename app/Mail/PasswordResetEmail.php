@@ -6,14 +6,17 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
+/**
+ * Class PasswordResetEmail
+ */
 class PasswordResetEmail extends Mailable
 {
     use Queueable;
     use SerializesModels;
 
-    private $user;
+    private object $user;
 
-    private $link;
+    private string $link;
 
     /**
      * Create a new message instance.
