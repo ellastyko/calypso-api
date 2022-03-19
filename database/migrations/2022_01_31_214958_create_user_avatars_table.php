@@ -20,8 +20,6 @@ class CreateUserAvatarsTable extends Migration
             $table->foreignId('user_id')
                 ->constrained()
                 ->cascadeOnDelete();
-
-            $table->timestamps();
         });
     }
 

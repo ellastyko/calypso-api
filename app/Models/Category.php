@@ -25,13 +25,4 @@ class Category extends Model
         'title',
         'description'
     ];
-
-//    /**
-//     * @param Builder $query
-//     * @return Builder
-//     */
-//    public function scopeFilter(Builder $query): Builder
-//    {
-//        return CategoryFilter::apply($query);
-//    }
 }

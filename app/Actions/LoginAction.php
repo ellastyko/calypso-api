@@ -22,14 +22,12 @@ class LoginAction
             throw new UnauthorizedException(trans('auth.failed'), 401);
         }
 
-        $user = User::find(Auth::id());
-
-        $token = $user->createToken('token')->plainTextToken;
+        $user = User::current();
 
         return response([
             'message' => trans('auth.login'),
             'user' => $user,
-            'token' => $token
+            'token' => $user->createToken('token')->plainTextToken
         ]);
     }
 }

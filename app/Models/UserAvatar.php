@@ -14,6 +14,8 @@ class UserAvatar extends Model
     use HasFactory;
     use BelongsToUser;
 
+    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *

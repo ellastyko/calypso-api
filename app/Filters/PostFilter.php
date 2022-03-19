@@ -2,17 +2,16 @@
 
 namespace App\Filters;
 
+use Illuminate\Database\Eloquent\Builder;
+
 class PostFilter extends Filter
 {
-    public function search(string $text)
+    /**
+     * @param bool $status
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function status(bool $status = true): Builder
     {
-        return $this->query
-            ->where('title', 'LIKE', '%' . $text . '%')
-            ->orWhere('description', 'LIKE', '%' . $text . '%');
-    }
-
-    public function orderBy(string $column, string $dir)
-    {
-        return $this->query->orderBy($column, $dir);
+        return $this->query->where('status', '=', $status);
     }
 }

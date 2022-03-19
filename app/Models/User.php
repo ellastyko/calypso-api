@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Filters\UserFilter;
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,6 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\traits\{HasAvatars, HasComments, HasPosts, HasRoles};
+use Laravel\Scout\Searchable;
 
 /**
  * Class User
@@ -24,10 +26,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasAvatars;
     use HasPosts;
     use HasComments;
-
-    public const ROLE_ADMIN = 'admin';
-
-    public const ROLE_USER = 'user';
+    use Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -62,6 +61,25 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * @return array
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'surname' => $this->surname,
+            'email' => $this->email,
+        ];
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function current(): mixed
+    {
+        return app(Guard::class)->user();
+    }
 
     /**
      * @return string

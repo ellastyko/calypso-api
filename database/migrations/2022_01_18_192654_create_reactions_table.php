@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateReactionsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -19,7 +19,7 @@ class CreateReactionsTable extends Migration
 
             $table->foreignId('user_id')
                 ->constrained('users')
-                ->cascadeOnDelete();;
+                ->cascadeOnDelete();
 
             $table->foreignId('post_id')
                 ->nullable()
@@ -49,4 +49,4 @@ class CreateReactionsTable extends Migration
     {
         Schema::dropIfExists('reactions');
     }
-}
+};

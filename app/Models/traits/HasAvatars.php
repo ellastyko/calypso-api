@@ -14,4 +14,12 @@ trait HasAvatars
     {
         return $this->hasMany(UserAvatar::class);
     }
+
+    /**
+     * @return HasMany
+     */
+    public function majorAvatar(): HasMany
+    {
+        return $this->userAvatar()->latest()->limit(1);
+    }
 }

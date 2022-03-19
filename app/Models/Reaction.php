@@ -31,14 +31,4 @@ class Reaction extends Model
         'comment_id',
         'user_id',
     ];
-
-    /**
-     * @param Builder $builder
-     * @param Reaction $reaction
-     * @return Builder
-     */
-    public function likes(Builder $builder, Reaction $reaction): Builder
-    {
-        return $builder->where($reaction->type, '=', 1);
-    }
 }

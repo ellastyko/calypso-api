@@ -7,6 +7,18 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class UserAvatarFactory extends Factory
 {
     /**
+     * @var array|string[]
+     */
+    private array $avatars = [
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+    ];
+
+    /**
      * Define the model's default state.
      *
      * @return array
@@ -15,7 +27,7 @@ class UserAvatarFactory extends Factory
     {
         return [
             'user_id' => null,
-            'path' => 'https://images.unsplash.com/photo-1471879832106-c7ab9e0cee23?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max'
+            'path' => $this->avatars[rand(0, 5)],
         ];
     }
 }

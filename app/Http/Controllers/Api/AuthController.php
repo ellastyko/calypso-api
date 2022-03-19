@@ -48,11 +48,11 @@ class AuthController extends Controller
     /**
      * @param ForgotPasswordRequest $request
      * @param ForgotPasswordAction $action
-     * @return Response
+     * @return void
      */
-    public function forgotPassword(ForgotPasswordRequest $request, ForgotPasswordAction $action): Response
+    public function forgotPassword(ForgotPasswordRequest $request, ForgotPasswordAction $action): void
     {
-        return $action->handle($request->only('email'));
+        $action->handle($request->only('email'));
     }
 
 
