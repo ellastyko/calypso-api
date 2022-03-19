@@ -16,7 +16,9 @@ class IndexRequest extends FormRequest
         return [
             'per_page' => ['int', 'in:5,10,20,50,100'],
             'order' => ['string', 'in:created,votes'],
-            'direction' => ['string', 'in:asc,desc']
+            'direction' => ['string', 'in:asc,desc'],
+            'filters' => ['array', ],
+            'search' => ['string'],
         ];
     }
 }

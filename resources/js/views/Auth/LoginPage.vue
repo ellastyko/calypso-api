@@ -1,5 +1,5 @@
 <template>
-    <section class="container ">
+    <section class="container">
         <div class="row justify-content-center">
             <p-autocomplete v-model="name" @complete="searchCountry($event)" field="name"/>
         </div>

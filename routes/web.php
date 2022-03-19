@@ -8,7 +8,8 @@ use App\Http\Controllers\Web\Auth\{
     PasswordResetController
 };
 use App\Http\Controllers\Web\{
-    PostsController,
+    HomeController,
+    PostController,
     ProfileController,
     UsersController
 };
@@ -24,14 +25,15 @@ use App\Http\Controllers\Web\{
 |
 */
 
+Route::get('/', HomeController::class)->name('Home');
+
 Route::get('/login', LoginController::class)->name('login');
 Route::get('/register', RegisterController::class)->name('register');
 Route::get('/forgot-password', ForgotPasswordController::class)->name('forgot-password');
-Route::get('/password-reset/{link}', PasswordResetController::class)->name('password-reset');
+Route::get('/password-reset/{token}', PasswordResetController::class)->name('password-reset');
 
 Route::get('/users', UsersController::class);
 
-Route::get('/posts', PostsController::class);
-
+Route::get('/posts', PostController::class);
 
 Route::get('/profile', ProfileController::class);

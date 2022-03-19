@@ -5,12 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Category\CategoryStoreRequest;
 use App\Http\Requests\Category\CategoryUpdateRequest;
-use App\Http\Requests\IndexRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Services\CategoryService;
 use Illuminate\Http\JsonResponse;
-
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Category controller
@@ -18,13 +18,12 @@ use Illuminate\Http\JsonResponse;
 class CategoryController extends Controller
 {
     /**
-     * @param IndexRequest $request
      * @param CategoryService $service
-     * @return CategoryResource
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index(IndexRequest $request, CategoryService $service): CategoryResource
+    public function index(CategoryService $service): AnonymousResourceCollection
     {
-        return new CategoryResource($service->index($request->validated()));
+        return CategoryResource::collection($service->index());
     }
 
 

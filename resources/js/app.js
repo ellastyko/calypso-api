@@ -1,3 +1,5 @@
+import router from "./router";
+
 require('./bootstrap');
 
 import  { createApp } from 'vue';
@@ -19,7 +21,8 @@ const app = createApp({
 app.use(
     Store,
     VueCookies,
-    PrimeVue
+    PrimeVue,
+    router
 );
 
 app.mount("#app");

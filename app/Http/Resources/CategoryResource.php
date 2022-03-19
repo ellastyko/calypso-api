@@ -7,6 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class CategoryResource
+ * @package Illuminate\Http\Resources\Json\JsonResource
  */
 class CategoryResource extends JsonResource
 {

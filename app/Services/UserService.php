@@ -8,15 +8,17 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * Class UserService
+ */
 class UserService
 {
     /**
-     * @param array $data
      * @return mixed
      */
-    public function index(array $data = []): mixed
+    public function index($request): mixed
     {
-        return User::paginate($data['per_page']);
+        return User::filter($request)->get();
     }
 
     /**

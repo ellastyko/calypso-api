@@ -2,24 +2,26 @@
 
 namespace App\Services;
 
-use App\Http\Resources\CategoryResource;
 use App\Models\Category;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Category service
  */
-class CategoryService
+class CategoryService extends Service
 {
     /**
-     * @param array $data
-     * @return Category[]
+     * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function index(array $data): array
+    public function index(): Collection
     {
-        return Category::all(); // Add filters
+//        if (!$data = Cache::get('categories')) {
+            $data = Category::all();
+//            Cache::put('categories', $data);
+//        }
+        return $data;
     }
 
     /**

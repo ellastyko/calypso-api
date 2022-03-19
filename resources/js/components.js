@@ -3,25 +3,25 @@
 /**
  * Pages
  */
-import Main from './views/Home'
+import HomePage from './views/Home/HomePage'
 
 import LoginPage from './views/Auth/LoginPage'
-import RegisterPage from './views/Auth/Register'
-import ResetPasswordPage from "./views/Auth/PasswordReset";
-import ForgotPasswordPage from "./views/Auth/ForgotPassword";
+import RegisterPage from './views/Auth/RegisterPage'
+import ResetPasswordPage from "./views/Auth/PasswordResetPage";
+import ForgotPasswordPage from "./views/Auth/ForgotPasswordPage";
 
-import ProfilePage from './views/User/Profile'
-import Checkout from './views/Checkout/Checkout'
+import ProfilePage from './views/User/ProfilePage'
+import Checkout from './views/Checkout/CheckoutPage'
 import Page404 from './views/Errors/Page404'
-import UsersPage from "./views/User/UsersPage";
+import UsersPage from "./views/User/UsersListPage";
+import PostsListPage from "./views/Post/PostsListPage";
 
 /**
  * Components
  */
-
 export default {
 
-    'home': Main,
+        'home-page': HomePage,
 
         // Auth
         'login-page': LoginPage,
@@ -30,9 +30,11 @@ export default {
         'forgot-password-page': ForgotPasswordPage,
 
         'profile-page': ProfilePage,
-        'users-page': UsersPage,
+        'users-list-page': UsersPage,
 
-        'checkout': Checkout,
+        'posts-list-page': PostsListPage,
+
+        'checkout-page': Checkout,
 
         'page404': Page404,
     }

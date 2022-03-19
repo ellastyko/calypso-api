@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 export default {
 
@@ -16,7 +15,7 @@ export default {
     },
     filters: {  },
     computed: {
-        ...mapGetters(['profile/getProfile']),
+
     },
     data() {
         return {

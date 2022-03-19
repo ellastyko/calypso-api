@@ -14,6 +14,8 @@ class Category extends Model
     use HasFactory;
     use HasPosts;
 
+    protected $dateFormat = 'Y-m-d';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -23,4 +25,13 @@ class Category extends Model
         'title',
         'description'
     ];
+
+//    /**
+//     * @param Builder $query
+//     * @return Builder
+//     */
+//    public function scopeFilter(Builder $query): Builder
+//    {
+//        return CategoryFilter::apply($query);
+//    }
 }

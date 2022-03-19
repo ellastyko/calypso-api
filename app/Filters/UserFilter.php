@@ -4,8 +4,10 @@ namespace App\Filters;
 
 class UserFilter extends Filter
 {
-    public function length(int $limit)
+    public function search(string $text)
     {
-        return $this->builder->limit($limit);
+        return $this->query
+            ->where('name', 'LIKE', "%$text%")
+            ->orWhere('surname', 'LIKE', "%$text%");
     }
 }

@@ -1,9 +1,10 @@
 <template>
-
+    <div>
+        POST PAGE
+    </div>
 </template>
 
 <script>
-import {mapActions} from "vuex";
 
 export default {
     name: "Post",
@@ -11,7 +12,6 @@ export default {
 
     },
     methods: {
-        ...mapActions('post', 'getPost'),
 
     }
 }

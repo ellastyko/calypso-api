@@ -63,8 +63,6 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
 
-    /*  User Methods  */
-
     /**
      * @return string
      */
@@ -75,10 +73,11 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * @param Builder $query
+     * @param array $request
      * @return Builder
      */
-    public function scopeFilter(Builder $query): Builder
+    public function scopeFilter(Builder $query, array $request): Builder
     {
-        return UserFilter::apply($query);
+        return (new UserFilter($request))->apply($query);
     }
 }

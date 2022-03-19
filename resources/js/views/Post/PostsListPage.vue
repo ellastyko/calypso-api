@@ -1,10 +1,13 @@
 <template>
-
+   Post List
 </template>
 
 <script>
 export default {
-    name: "PostsList"
+    name: "PostsList",
+    props: {
+
+    }
 }
 </script>
 

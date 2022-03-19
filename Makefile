@@ -3,7 +3,7 @@ ARTISAN := php artisan
 DC := docker-compose exec
 FPM := $(DC) php-fpm
 
-setup: env deps up migrate seeds watch
+setup: env deps up migrate seeds chmod
 start: up watch
 build: env deps up npm-build
 
