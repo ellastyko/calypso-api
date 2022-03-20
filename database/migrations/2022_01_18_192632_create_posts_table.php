@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\PostStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('content');
-            $table->boolean('status')->default(true);    /*  Active/inactive status of post  */
+            $table->tinyInteger('status');
 
             $table->foreignId('user_id')
                 ->nullable()

@@ -17,10 +17,11 @@ class CategoryService extends Service
      */
     public function index(): Collection
     {
-//        if (!$data = Cache::get('categories')) {
+        if (!$data = Cache::get('categories')) {
             $data = Category::all();
-//            Cache::put('categories', $data);
-//        }
+            Cache::put('categories', $data);
+        }
+
         return $data;
     }
 

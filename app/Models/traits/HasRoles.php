@@ -2,7 +2,7 @@
 
 namespace App\Models\traits;
 
-use App\Models\User;
+use App\Enum\Role;
 
 trait HasRoles
 {
@@ -11,7 +11,7 @@ trait HasRoles
      */
     public function isAdmin(): bool
     {
-        return $this->role === User::ROLE_ADMIN;
+        return $this->role === Role::ADMIN;
     }
 
     /**
@@ -19,6 +19,6 @@ trait HasRoles
      */
     public function isUser(): bool
     {
-        return $this->role === User::ROLE_USER;
+        return $this->role === Role::USER;
     }
 }

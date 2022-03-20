@@ -13,7 +13,6 @@ use App\Services\CommentService;
 use App\Services\PostService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use function response;
 
 /**
  * Class PostController

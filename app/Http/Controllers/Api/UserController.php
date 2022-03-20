@@ -12,8 +12,8 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
-use function response;
 
 /**
  * @class UserController
@@ -41,11 +41,13 @@ class UserController extends Controller
 
 
     /**
-     * @return Collection|User[]
+     * @param IndexRequest $request
+     * @param UserService $service
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index(IndexRequest $request, UserService $service)
+    public function index(IndexRequest $request, UserService $service): AnonymousResourceCollection
     {
-        return $service->index($request->validated());
+        return UserResource::collection($service->index($request->validated()));
     }
 
     /**
