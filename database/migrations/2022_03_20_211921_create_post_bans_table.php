@@ -13,13 +13,20 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_avatars', function (Blueprint $table) {
+        Schema::create('post_bans', function (Blueprint $table) {
             $table->id();
-            $table->string('path');
+            $table->string('message');
+
+            $table->foreignId('post_id')
+                ->constrained('posts')
+                ->cascadeOnDelete();
 
             $table->foreignId('user_id')
-                ->constrained()
+                ->nullable()
+                ->constrained('users')
                 ->cascadeOnDelete();
+
+            $table->timestamps();
         });
     }
 
@@ -30,6 +37,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_images');
+        Schema::dropIfExists('post_bans');
     }
 };

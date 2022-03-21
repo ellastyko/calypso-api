@@ -10,7 +10,7 @@ trait BelongsToUser
     /**
      * @return BelongsTo
      */
-    public function user(): BelongsTo
+    public function author(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

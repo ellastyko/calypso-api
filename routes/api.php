@@ -71,8 +71,11 @@ Route::prefix('posts')->group(function () {
 
         Route::post('', [PostController::class, 'store']);
 
-        Route::patch('/{post_id}', [PostController::class, 'update'])
+        Route::patch('/{post_id}/edit', [PostController::class, 'update'])
                 ->middleware('can:update,post');
+
+        Route::patch('/{post_id}/ban', [PostController::class, 'ban'])
+            ->middleware('can:ban,post');
 
         Route::delete('/{post_id}', [PostController::class, 'destroy'])
                 ->middleware('can:delete,post');

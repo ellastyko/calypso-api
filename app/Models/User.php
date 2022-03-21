@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use App\Models\traits\{HasAvatars, HasComments, HasPosts, HasRoles};
+use App\Models\traits\{Filterable, HasAvatars, HasComments, HasPosts, HasRoles};
 use Laravel\Scout\Searchable;
 
 /**
@@ -27,6 +27,10 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasPosts;
     use HasComments;
     use Searchable;
+    use Filterable;
+
+    private string $filter = UserFilter::class;
+
 
     /**
      * The attributes that are mass assignable.
@@ -87,15 +91,5 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getFullName(): string
     {
         return ucfirst($this->name) . ' ' . ucfirst($this->surname);
-    }
-
-    /**
-     * @param Builder $query
-     * @param array $request
-     * @return Builder
-     */
-    public function scopeFilter(Builder $query, array $request): Builder
-    {
-        return (new UserFilter($request))->apply($query);
     }
 }

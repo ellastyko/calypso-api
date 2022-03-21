@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enum\PostStatus;
 use App\Models\Post;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -11,14 +12,15 @@ use Symfony\Component\HttpFoundation\Response;
 class PostService
 {
     /**
-     * @param array $data
+     * @param array $request
      * @return JsonResponse
      */
-    public function index(array $data): JsonResponse
+    public function index(array $request): JsonResponse
     {
+        $data = Post::filter($request)->get();
         return response()->json([
             'message' => trans('messages.post.index'),
-            'data'    => Post::all()
+            'data'    => $data
         ]);
     }
 
@@ -33,7 +35,7 @@ class PostService
             'content' => $data['content'],
             'user_id' => Auth::id(),
         ]);
-        foreach ($data['categoriesId'] as $categoryId) {
+        foreach ($data['categories_id'] as $categoryId) {
             DB::table('posts_categories')->insert([
                 'post_id' => $post->id,
                 'category_id' => $categoryId
@@ -61,13 +63,19 @@ class PostService
 
     /**
      * @param Post $post
-     * @return JsonResponse
+     * @param array $data
+     * @return Post
      */
-    public function destroy(Post $post): JsonResponse
+    public function ban(Post $post, array $data): Post
     {
-        $post->delete();
-        return response()->json([
-            'message' => trans('messages.category.deleted')
-        ], Response::HTTP_NO_CONTENT);
+        $post->update([
+            'status' => PostStatus::BANNED
+        ]);
+        $post->ban()->create([
+            'message' => $data['message'],
+            'user_id' => Auth::id(),
+        ]);
+
+        return $post;
     }
 }

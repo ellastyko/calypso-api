@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use App\Filters\PostFilter;
 use App\Models\traits\BelongsToUser;
+use App\Models\traits\Filterable;
+use App\Models\traits\HasBan;
 use App\Models\traits\HasCategories;
 use App\Models\traits\HasComments;
 use App\Models\traits\HasReactions;
@@ -12,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 
 /**
- * @class Post
+ * Class Post
  * @package Model
  */
 class Post extends Model
@@ -23,6 +26,10 @@ class Post extends Model
     use HasReactions;
     use BelongsToUser; // SoftDeletes
     use Searchable;
+    use HasBan;
+    use Filterable;
+
+    private string $filter = PostFilter::class;
 
     /**
      * The attributes that are mass assignable.
@@ -32,6 +39,7 @@ class Post extends Model
     protected $fillable = [
         'title',
         'content',
+        'status',
         'user_id'
     ];
 
@@ -50,15 +58,5 @@ class Post extends Model
         return [
             'title' => $this->title,
         ];
-    }
-
-
-    /**
-     * @param Post $post
-     * @return mixed
-     */
-    public function isActive(Post $post): mixed
-    {
-        return $post->status;
     }
 }

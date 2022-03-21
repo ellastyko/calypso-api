@@ -3,16 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Comment\CommentRequest;
 use App\Http\Requests\IndexRequest;
 use App\Http\Requests\Post\PostStoreRequest;
 use App\Http\Requests\Post\PostUpdateRequest;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
-use App\Services\CommentService;
 use App\Services\PostService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class PostController
@@ -68,28 +66,29 @@ class PostController extends Controller
     }
 
     /**
-     * Destroy post
+     * Ban post
      *
+     * @param PostUpdateRequest $request
      * @param PostService $service
      * @param Post $post
      * @return JsonResponse
      */
-    public function destroy(PostService $service, Post $post): JsonResponse
+    public function ban(PostUpdateRequest $request, PostService $service, Post $post): JsonResponse
     {
-        return $service->destroy($post);
+        return new JsonResponse($service->ban($post, $request->validated()));
     }
 
     /**
-     * @param CommentRequest $request
-     * @param CommentService $service
-     * @param int $id
-     * @return Response
+     * Destroy post
+     *
+     * @param Post $post
+     * @return JsonResponse
      */
-    public function storeComment(CommentRequest $request, CommentService $service, int $id): Response
+    public function destroy(Post $post): JsonResponse
     {
-        return response([
-            'message' => trans('messages.comment.created'),
-            'comment' =>  $service->store($request->validated(), $id)
-        ]);
+        $post->delete();
+        return response()->json([
+            'message' => trans('messages.category.deleted')
+        ], Response::HTTP_NO_CONTENT);
     }
 }
