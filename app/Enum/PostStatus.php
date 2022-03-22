@@ -12,4 +12,5 @@ enum PostStatus: int
 
     case BANNED    = 4;
 
+    case REVIEW    = 5;
 }
