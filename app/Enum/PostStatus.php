@@ -2,15 +2,29 @@
 
 namespace App\Enum;
 
-enum PostStatus: int
+abstract class PostStatus
 {
-    case DRAFT     = 1;
+    public const DRAFT     = 1;
 
-    case PUBLISHED = 2;
+    public const PUBLISHED = 2;
 
-    case DELETED   = 3;
+    public const DELETED   = 3;
 
-    case BANNED    = 4;
+    public const BANNED    = 4;
 
-    case REVIEW    = 5;
+    public const IN_REVIEW = 5;
+
+    /**
+     * @return int[]
+     */
+    public static function all(): array
+    {
+        return [
+            PostStatus::DRAFT,
+            PostStatus::PUBLISHED,
+            PostStatus::DELETED,
+            PostStatus::BANNED,
+            PostStatus::IN_REVIEW,
+        ];
+    }
 }

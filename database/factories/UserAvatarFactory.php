@@ -10,12 +10,11 @@ class UserAvatarFactory extends Factory
      * @var array|string[]
      */
     private array $avatars = [
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
+        'storage/app/public/avatars/default/1.png',
+        'storage/app/public/avatars/default/2.png',
+        'storage/app/public/avatars/default/3.png',
+        'storage/app/public/avatars/default/4.png',
+        'storage/app/public/avatars/default/5.png',
     ];
 
     /**
@@ -26,8 +25,7 @@ class UserAvatarFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => null,
-            'path' => $this->avatars[rand(0, 5)],
+            'path' => $this->avatars[rand(0, 4)],
         ];
     }
 }

@@ -21,64 +21,73 @@ use App\Http\Controllers\Api\{
 |
 */
 
-Route::prefix('auth')->group(function () {
+Route::group([
+    'prefix' => 'auth',
+    'controller' => AuthController::class
+], function () {
 
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
-    Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
-    Route::post('/password-reset', [AuthController::class, 'passwordReset']);
+    Route::post('/login', 'login');
+    Route::post('/register', 'register');
+    Route::post('/logout', 'logout')->middleware('auth:sanctum');
+    Route::post('/forgot-password', 'forgotPassword');
+    Route::post('/password-reset', 'passwordReset');
 });
 
 
 Route::group([
     'prefix' => 'users',
+    'controller' => UserController::class
 ], function () {
 
-    Route::get('', [UserController::class, 'index']);
-    Route::get('/{user_id}', [UserController::class, 'show']);
+    Route::get('/', 'index');
+    Route::get('/{user_id}', 'show');
 
     Route::middleware(['auth:sanctum', 'can:user'])->group(function () {
 
-        Route::post('', [UserController::class, 'store']);
-        Route::patch('{user_id}', [UserController::class, 'update']);
-        Route::delete('/{user_id}', [UserController::class, 'destroy']);
-        Route::post('/avatar', [UserController::class, 'avatar']);
+        Route::post('/', 'store');
+        Route::patch('{user_id}', 'update');
+        Route::delete('/{user_id}', 'destroy');
+        Route::post('/avatar', 'avatar');
+
+        Route::post('', 'status');
     });
 });
 
 
-Route::prefix('categories')->group(function () {
+Route::group([
+    'prefix'     => 'categories',
+    'controller' => CategoryController::class,
+], function () {
 
-    Route::get('', [CategoryController::class, 'index']);
-    Route::get('/{category_id}', [CategoryController::class, 'show']);
+    Route::get('/', 'index');
+    Route::get('/{category_id}', 'show');
 
     Route::middleware(['auth:sanctum', 'can:admin'])->group(function () {
 
-        Route::post('', [CategoryController::class, 'store']);
-        Route::patch('/{category_id}', [CategoryController::class, 'update']);
-        Route::delete('/{category_id}', [CategoryController::class, 'destroy']);
+        Route::post('/', 'store');
+        Route::patch('/{category_id}', 'update');
+        Route::delete('/{category_id}', 'destroy');
     });
 });
 
 
-Route::prefix('posts')->group(function () {
+Route::group([
+    'prefix'     => 'posts',
+    'controller' => PostController::class,
+], function () {
 
-    Route::get('', [PostController::class, 'index']);
-    Route::get('/{post_id}', [PostController::class, 'show']);
+    Route::get('/', 'index');
+    Route::get('/{post_id}', 'show');
 
     Route::middleware('auth:sanctum')->group(function () {
 
-        Route::post('', [PostController::class, 'store']);
+        Route::post('/', 'store');
 
-        Route::patch('/{post_id}/edit', [PostController::class, 'update'])
-                ->middleware('can:update,post');
+        Route::patch('/{post_id}/edit', 'update')->middleware('can:update,post');
 
-        Route::patch('/{post_id}/ban', [PostController::class, 'ban'])
-            ->middleware('can:ban,post');
+        Route::patch('/{post_id}/ban', 'ban')->middleware('can:ban,post');
 
-        Route::delete('/{post_id}', [PostController::class, 'destroy'])
-                ->middleware('can:delete,post');
+        Route::delete('/{post_id}', 'destroy')->middleware('can:delete,post');
 
 
         // Post Comments
@@ -93,24 +102,26 @@ Route::prefix('posts')->group(function () {
 
 Route::group([
     'prefix' => 'comments',
+    'controller' => CommentController::class,
     'middleware' => 'auth:sanctum'
 ], function () {
 
-    Route::get('/{comment_id}', [CommentController::class, 'show'])
+    Route::get('/{comment_id}', 'show')
         ->withoutMiddleware('auth:sanctum');
 
-    Route::patch('/{comment_id}', [CommentController::class, 'update']);
-    Route::delete('/{comment_id}', [CommentController::class, 'destroy']);
+    Route::patch('/{comment_id}', 'update');
+    Route::delete('/{comment_id}', 'destroy');
 });
 
 Route::group([
     'prefix' => 'reactions',
+    'controller' => ReactionController::class,
     'middleware' => 'auth:sanctum'
 ], function () {
 
-    Route::get('/{id}', [ReactionController::class, 'show'])
+    Route::get('/{id}', 'show')
         ->withoutMiddleware('auth:sanctum');
 
-    Route::post('/{id}', [ReactionController::class, 'store']);
-    Route::delete('/{id}', [ReactionController::class, 'destroy']);
+    Route::post('/{id}', 'store');
+    Route::delete('/{id}', 'destroy');
 });

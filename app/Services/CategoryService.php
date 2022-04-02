@@ -32,9 +32,9 @@ class CategoryService extends Service
     public function store(array $data)
     {
         return Category::create([
-            'title' => $data['title'],
+            'title'       => $data['title'],
             'description' => $data['description'],
-            'user_id' => Auth::id(),
+            'user_id'     => Auth::id(),
         ]);
     }
 

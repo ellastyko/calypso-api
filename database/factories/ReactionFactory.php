@@ -17,11 +17,11 @@ class ReactionFactory extends Factory
         $userIds = User::pluck('id')->toArray();
 
         return [
-            'type' => $this->faker->boolean,
-            'post_id' => null,
-            'comment_id' => null,
+            'type'              => $this->faker->boolean,
+            'post_id'           => null,
+            'comment_id'        => null,
             'nested_comment_id' => null,
-            'user_id' => $userIds[array_rand($userIds)]
+            'user_id'           => $userIds[array_rand($userIds)]
         ];
     }
 }
