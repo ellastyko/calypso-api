@@ -2,19 +2,19 @@
 
 namespace App\Listeners;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use App\Mail\SuccessfulPasswordResetEmail;
+use Illuminate\Support\Facades\Mail;
 
-class SendSuccessfulPasswordResetNotification implements ShouldQueue
+class SendSuccessfulPasswordResetNotification
 {
     /**
      * Handle the event.
      *
-     * @param  object  $event
+     * @param object $event
      * @return void
      */
-    public function handle($event)
+    public function handle(object $event)
     {
-        // TODO Mail::to($event->user)->send(new PasswordResetEmail($event->user, $event->link));
+         Mail::to($event->user)->send(new SuccessfulPasswordResetEmail($event->user));
     }
 }

@@ -2,10 +2,9 @@
 
 namespace App\Actions;
 
-use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 
 /**
@@ -15,22 +14,21 @@ class PasswordResetAction
 {
     /**
      * @param $data
-     * @return void
+     * @return mixed
      */
-    public function handle($data)
+    public function handle($data): mixed
     {
+        return Password::reset(
+            $data,
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password)
+                ])->setRememberToken(Str::random(60));
 
-        $reset = DB::table('password_resets')->where('email', $data['token'])->first();
+                $user->save();
 
-        $user = User::where('email', $reset->email)->first();
-
-        $user->forceFill([
-            'password' => Hash::make($data['password'])
-        ])->setRememberToken(Str::random(60));
-
-        $user->save();
-        $reset->delete();
-
-        event(new PasswordReset($user));
+                event(new PasswordReset($user));
+            }
+        );
     }
 }

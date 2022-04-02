@@ -4,7 +4,6 @@ namespace App\Actions;
 
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 
 /**
@@ -14,9 +13,9 @@ class RegisterAction
 {
     /**
      * @param array $data
-     * @return JsonResponse
+     * @return mixed
      */
-    public function handle(array $data): JsonResponse
+    public function handle(array $data): mixed
     {
         $user = User::create([
             'name'     => $data['name'],
@@ -27,9 +26,6 @@ class RegisterAction
 
         event(new Registered($user));
 
-        return response()->json([
-            'message' => trans('auth.registered'),
-            'user' => $user
-        ]);
+        return $user;
     }
 }

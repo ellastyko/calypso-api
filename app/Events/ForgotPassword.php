@@ -2,11 +2,7 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -16,17 +12,12 @@ class ForgotPassword
     use InteractsWithSockets;
     use SerializesModels;
 
-    public object $user;
-    public string $link;
-
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(object $user, string $link)
+    public function __construct(public object $user, public string $token)
     {
-        $this->user = $user;
-        $this->link = $link;
     }
 }

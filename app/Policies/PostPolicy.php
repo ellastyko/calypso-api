@@ -19,9 +19,21 @@ class PostPolicy
      * @param Post $post
      * @return bool
      */
-    #[Pure] public function update(User $user, Post $post): bool
+    public function update(User $user, Post $post): bool
     {
         return $post->user_id == $user->id or $user->isAdmin();
+    }
+
+    /**
+     * Determine whether the user can update the model.
+     *
+     * @param User $user
+     * @param Post $post
+     * @return bool
+     */
+    public function ban(User $user, Post $post): bool
+    {
+        return $user->isAdmin();
     }
 
     /**
@@ -31,9 +43,9 @@ class PostPolicy
      * @param Post $post
      * @return bool
      */
-    #[Pure] public function delete(User $user, Post $post): bool
+    public function delete(User $user, Post $post): bool
     {
-        return $post->user_id == $user->id or $user->isAdmin();
+        return $post->author()->is($user) or $user->isAdmin();
     }
 
     /**
@@ -43,19 +55,19 @@ class PostPolicy
      * @param Post $post
      * @return bool
      */
-    #[Pure] public function restore(User $user, Post $post): bool
+    public function restore(User $user, Post $post): bool
     {
-        return $post->user_id == $user->id or $user->isAdmin();
+        return $post->author()->is($user) or $user->isAdmin();
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
+     * Permanently delete the post
      *
      * @param User $user
      * @param Post $post
      * @return bool
      */
-    #[Pure] public function forceDelete(User $user, Post $post): bool
+    public function forceDelete(User $user, Post $post): bool
     {
         return $user->isAdmin();
     }

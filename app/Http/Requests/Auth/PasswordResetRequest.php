@@ -15,6 +15,8 @@ class PasswordResetRequest extends FormRequest
     public function rules()
     {
         return [
+            'email' => ['required', 'email'],
+            'token' => ['required', 'string'],
             'password' => [
                 'required',
                 'confirmed',
@@ -22,8 +24,7 @@ class PasswordResetRequest extends FormRequest
                     ->mixedCase()
                     ->letters()
                     ->numbers()
-                    ->symbols()
-                    ->uncompromised(),
+                    ->symbols(),
             ]
         ];
     }

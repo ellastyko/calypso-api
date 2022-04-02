@@ -3,30 +3,25 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
 /**
  * Class PasswordResetEmail
  */
-class PasswordResetEmail extends Mailable
+class PasswordResetEmail extends Mailable // implements ShouldQueue
 {
     use Queueable;
     use SerializesModels;
-
-    private object $user;
-
-    private string $link;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(object $user, string $link)
+    public function __construct(private object $user, private string $link)
     {
-        $this->user = $user;
-        $this->link = $link;
     }
 
     /**

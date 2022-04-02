@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Actions\{ForgotPasswordAction, LoginAction, PasswordResetAction, RegisterAction};
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\{ForgotPasswordRequest, LoginRequest, PasswordResetRequest, RegisterRequest};
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -29,29 +30,37 @@ class AuthController extends Controller
     public function logout(): Response
     {
         Auth::logout();
-        return response([
+
+        return response()->json([
             'message' => trans('auth.logout')
-        ]);
+        ], Response::HTTP_NO_CONTENT);
     }
 
     /**
      * @param RegisterRequest $request
      * @param RegisterAction $action
-     * @return Response
+     * @return JsonResponse
      */
-    public function register(RegisterRequest $request, RegisterAction $action): Response
+    public function register(RegisterRequest $request, RegisterAction $action): JsonResponse
     {
-        return  $action->handle($request->validated());
+        return response()->json([
+            'message' => trans('auth.registered'),
+            'user'    => $action->handle($request->validated())
+        ]);
     }
 
     /**
      * @param ForgotPasswordRequest $request
      * @param ForgotPasswordAction $action
-     * @return void
+     * @return JsonResponse
      */
-    public function forgotPassword(ForgotPasswordRequest $request, ForgotPasswordAction $action): void
+    public function forgotPassword(ForgotPasswordRequest $request, ForgotPasswordAction $action): JsonResponse
     {
-        $action->handle($request->only('email'));
+        $status = $action->handle($request->only('email'));
+
+        return response()->json([
+            'message' => trans($status)
+        ]);
     }
 
 
@@ -62,10 +71,10 @@ class AuthController extends Controller
      */
     public function passwordReset(PasswordResetRequest $request, PasswordResetAction $action): Response
     {
-        $action->handle($request->validated());
+        $status = $action->handle($request->validated());
 
-        return response([
-            'message' => trans('passwords.reset')
+        return response()->json([
+            'message' => trans($status)
         ]);
     }
 }

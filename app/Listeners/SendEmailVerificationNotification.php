@@ -3,12 +3,16 @@
 namespace App\Listeners;
 
 use App\Mail\VerificationEmail;
+use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
 
 class SendEmailVerificationNotification implements ShouldQueue
 {
+    use Queueable;
+    use SerializesModels;
+
     /**
      * Handle the event.
      *
