@@ -2,7 +2,7 @@
 
 namespace App\Enum;
 
-abstract class PostStatus
+class PostStatus
 {
     public const DRAFT     = 1;
 

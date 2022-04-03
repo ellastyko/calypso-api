@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class UserAvatarFactory extends Factory
@@ -26,6 +27,7 @@ class UserAvatarFactory extends Factory
     {
         return [
             'path' => $this->avatars[rand(0, 4)],
+            'created_at' => Carbon::now()
         ];
     }
 }

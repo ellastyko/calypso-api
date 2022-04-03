@@ -2,9 +2,20 @@
 
 namespace App\Enum;
 
-enum Role: int
+class Role
 {
-    case ADMIN = 1;
+    public const USER = 1;
 
-    case USER = 2;
+    public const  ADMIN = 2;
+
+    /**
+     * @return int[]
+     */
+    public static function all(): array
+    {
+        return [
+            Role::USER,
+            Role::ADMIN,
+        ];
+    }
 }

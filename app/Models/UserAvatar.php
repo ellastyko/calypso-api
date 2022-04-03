@@ -23,6 +23,7 @@ class UserAvatar extends Model
      */
     protected $fillable = [
         'user_id',
-        'path'
+        'path',
+        'created_at'
     ];
 }
