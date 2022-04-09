@@ -2,14 +2,18 @@
 
 namespace App\Services;
 
+use App\Criteria\AddPostStatusCriteria;
+use App\Criteria\AddUserPostsCriteria;
 use App\Enum\PostStatus;
-use App\Http\Resources\PostResource;
 use App\Models\Post;
 use App\Repositories\PostRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class PostService
+ */
 class PostService
 {
     /**
@@ -19,16 +23,25 @@ class PostService
     {
     }
 
+    /**
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
+     */
+    public function index()
+    {
+        return $this->repository
+            ->pushCriteria(new AddPostStatusCriteria([PostStatus::PUBLISHED]))
+            ->all();
+    }
 
     /**
-     * @return JsonResponse
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
      */
-    public function index(): JsonResponse
+    public function myPosts()
     {
-        return response()->json([
-            'message' => trans('messages.post.index'),
-            'data'    => $this->repository->all()
-        ]);
+        return $this->repository
+            ->pushCriteria(new AddPostStatusCriteria(PostStatus::all()))
+            ->pushCriteria(new AddUserPostsCriteria())
+            ->get();
     }
 
     /**
@@ -48,10 +61,7 @@ class PostService
             $post->categories()->attach($categoryId);
         }
 
-        return response()->json([
-            'message' => trans('messages.post.store'),
-            'data'    => new PostResource($post)
-        ]);
+        return $post;
     }
 
     /**
@@ -62,6 +72,8 @@ class PostService
     public function update(Post $post, array $data): JsonResponse
     {
         $post->update($data);
+        $post->categories()->sync($data['categories_id']);
+
         return response()->json([
             'message' => trans('messages.post.updated'),
             'data'    => $post

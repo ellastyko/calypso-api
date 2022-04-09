@@ -2,10 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Criteria\ActivePostCriteriaCriteria;
 use App\Models\Post;
 use App\Repositories\contracts\PostRepositoryInterface;
 use Prettus\Repository\Contracts\CacheableInterface;
+use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Traits\CacheableRepository;
 
@@ -16,15 +16,17 @@ use Prettus\Repository\Traits\CacheableRepository;
  */
 class PostRepository extends BaseRepository implements PostRepositoryInterface, CacheableInterface
 {
+    use CacheableRepository;
+
     /**
-     *
      * @var int
      */
     protected int $cacheMinutes = 90;
 
+    /**
+     * @var array|string[]
+     */
     protected array $cacheOnly = ['all'];
-
-    use CacheableRepository;
 
     /**
      * Specify Model class name
@@ -41,6 +43,6 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface, 
      */
     public function boot()
     {
-        $this->pushCriteria(app(ActivePostCriteriaCriteria::class));
+        $this->pushCriteria(app(RequestCriteria::class));
     }
 }

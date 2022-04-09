@@ -22,10 +22,29 @@ class PostController extends Controller
      *
      * @param PostService $service
      * @return JsonResponse
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
      */
     public function index(PostService $service): JsonResponse
     {
-        return $service->index();
+        return response()->json([
+            'message' => trans('messages.post.index'),
+            'data'    => $service->index()
+        ]);
+    }
+
+    /**
+     * Get my posts
+     *
+     * @param PostService $service
+     * @return JsonResponse
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
+     */
+    public function myPosts(PostService $service): JsonResponse
+    {
+        return response()->json([
+            'message' => trans('messages.post.index'),
+            'data'    => PostResource::collection($service->myPosts())
+        ]);
     }
 
     /**
@@ -37,7 +56,10 @@ class PostController extends Controller
      */
     public function store(PostStoreRequest $request, PostService $service): JsonResponse
     {
-        return $service->store($request->validated());
+        return response()->json([
+            'message' => trans('messages.post.store'),
+            'data'    => new PostResource($service->store($request->validated()))
+        ]);
     }
 
     /**

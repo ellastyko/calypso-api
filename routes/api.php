@@ -73,30 +73,23 @@ Route::group([
 
 Route::group([
     'prefix'     => 'posts',
+    'middleware' => 'auth:sanctum',
     'controller' => PostController::class,
-], function () {
+], routes: function () {
 
-    Route::get('/', 'index');
-    Route::get('/{post_id}', 'show');
+    Route::get('/', 'index')->withoutMiddleware('auth:sanctum');
 
-    Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/my', 'myPosts');
 
-        Route::post('/', 'store');
+    Route::post('/', 'store');
 
-        Route::patch('/{post_id}/update', 'update')->can('update', \App\Models\Post::class);
+    Route::patch('/{post_id}/update', 'update')->can('update', \App\Models\Post::class);
 
-        Route::patch('/{post_id}/ban', 'ban')->middleware('can:ban,post');
+    Route::patch('/{post_id}/ban', 'ban')->middleware('can:ban,post');
 
-        Route::delete('/{post_id}', 'destroy')->middleware('can:delete,post');
+    Route::delete('/{post_id}', 'destroy')->middleware('can:delete,post');
 
-
-        // Post Comments
-        Route::post('/{post_id}/comments', [PostController::class, 'storeComment']);
-
-        // Post Likes
-        Route::post('/{post_id}/like', [PostController::class, 'storeLike']);
-        Route::delete('/{post_id}/like', [PostController::class, 'destroyLike']);
-    });
+    Route::get('/{post_id}', 'show')->withoutMiddleware('auth:sanctum');
 });
 
 

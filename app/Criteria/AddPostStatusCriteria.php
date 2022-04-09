@@ -2,7 +2,6 @@
 
 namespace App\Criteria;
 
-use App\Enum\PostStatus;
 use Prettus\Repository\Contracts\CriteriaInterface;
 use Prettus\Repository\Contracts\RepositoryInterface;
 
@@ -11,8 +10,15 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  *
  * @package namespace App\Criteria;
  */
-class ActivePostCriteriaCriteria implements CriteriaInterface
+class AddPostStatusCriteria implements CriteriaInterface
 {
+    /**
+     * @param array $statuses
+     */
+    public function __construct(private array $statuses)
+    {
+    }
+
     /**
      * Apply criteria in query repository
      *
@@ -23,6 +29,6 @@ class ActivePostCriteriaCriteria implements CriteriaInterface
      */
     public function apply($model, RepositoryInterface $repository)
     {
-        return $model->where('status', PostStatus::PUBLISHED);
+        return $model->whereIn('status', $this->statuses);
     }
 }

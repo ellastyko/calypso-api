@@ -19,12 +19,13 @@ class PostResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'title' => $this->title,
-            'content' => $this->content,
+            'id'         => $this->id,
+            'title'      => $this->title,
+            'content'    => $this->content,
+            'status'     => $this->status,
             'categories' => CategoryResource::collection($this->categories),
-            'likes' => $this->likesTotal(),
-            'author' => $this->user_id,
+            'likes'      => $this->likesTotal(),
+            'author'     => $this->user_id,
             'created_at' => $this->created_at
         ];
     }
