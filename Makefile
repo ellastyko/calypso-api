@@ -23,6 +23,8 @@ up:
 down:
 	./vendor/bin/sail down
 
+keygen:
+	$(ARTISAN) key:generate
 
 migrate:
 	$(ARTISAN) migrate

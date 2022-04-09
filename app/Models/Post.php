@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use App\Filters\PostFilter;
 use App\Models\traits\BelongsToUser;
-use App\Models\traits\Filterable;
 use App\Models\traits\HasBan;
 use App\Models\traits\HasCategories;
 use App\Models\traits\HasComments;
@@ -13,23 +11,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
+use Prettus\Repository\Contracts\Transformable;
+use Prettus\Repository\Traits\TransformableTrait;
 
 /**
  * Class Post
  * @package Model
  */
-class Post extends Model
+class Post extends Model implements Transformable
 {
     use HasFactory;
     use HasCategories;
     use HasComments;
     use HasReactions;
-    use BelongsToUser; // SoftDeletes
+    use BelongsToUser;
     use Searchable;
     use HasBan;
-    use Filterable;
-
-    private string $filter = PostFilter::class;
+    use SoftDeletes;
+    use TransformableTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -40,7 +39,8 @@ class Post extends Model
         'title',
         'content',
         'status',
-        'user_id'
+        'user_id',
+        'deleted_at'
     ];
 
     /**
@@ -49,14 +49,4 @@ class Post extends Model
      * @var array<string, string>
      */
     protected $casts = [];
-
-    /**
-     * @return array
-     */
-    public function toSearchableArray(): array
-    {
-        return [
-            'title' => $this->title,
-        ];
-    }
 }

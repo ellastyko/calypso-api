@@ -2,26 +2,46 @@
 
 namespace App\Services;
 
+use App\Criteria\AddPostStatusCriteria;
+use App\Criteria\AddUserPostsCriteria;
 use App\Enum\PostStatus;
 use App\Models\Post;
+use App\Repositories\PostRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class PostService
+ */
 class PostService
 {
     /**
-     * @param array $request
-     * @return JsonResponse
+     * @param PostRepository $repository
      */
-    public function index(array $request): JsonResponse
+    public function __construct(protected PostRepository $repository)
     {
-        $data = Post::filter($request)->get();
-        return response()->json([
-            'message' => trans('messages.post.index'),
-            'data'    => $data
-        ]);
+    }
+
+    /**
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
+     */
+    public function index()
+    {
+        return $this->repository
+            ->pushCriteria(new AddPostStatusCriteria([PostStatus::PUBLISHED]))
+            ->all();
+    }
+
+    /**
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
+     */
+    public function myPosts()
+    {
+        return $this->repository
+            ->pushCriteria(new AddPostStatusCriteria(PostStatus::all()))
+            ->pushCriteria(new AddUserPostsCriteria())
+            ->get();
     }
 
     /**
@@ -33,18 +53,15 @@ class PostService
         $post = Post::create([
             'title'   => $data['title'],
             'content' => $data['content'],
+            'status'  => $data['status'],
             'user_id' => Auth::id(),
         ]);
+
         foreach ($data['categories_id'] as $categoryId) {
-            DB::table('posts_categories')->insert([
-                'post_id' => $post->id,
-                'category_id' => $categoryId
-            ]);
+            $post->categories()->attach($categoryId);
         }
-        return response()->json([
-            'message' => trans('messages.post.store'),
-            'data'    => $post
-        ]);
+
+        return $post;
     }
 
     /**
@@ -55,6 +72,8 @@ class PostService
     public function update(Post $post, array $data): JsonResponse
     {
         $post->update($data);
+        $post->categories()->sync($data['categories_id']);
+
         return response()->json([
             'message' => trans('messages.post.updated'),
             'data'    => $post

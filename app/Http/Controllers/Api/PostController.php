@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\IndexRequest;
 use App\Http\Requests\Post\PostStoreRequest;
 use App\Http\Requests\Post\PostUpdateRequest;
 use App\Http\Resources\PostResource;
@@ -21,13 +20,31 @@ class PostController extends Controller
     /**
      * Get posts
      *
-     * @param IndexRequest $request
      * @param PostService $service
      * @return JsonResponse
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
      */
-    public function index(IndexRequest $request, PostService $service): JsonResponse
+    public function index(PostService $service): JsonResponse
     {
-        return $service->index($request->validated());
+        return response()->json([
+            'message' => trans('messages.post.index'),
+            'data'    => $service->index()
+        ]);
+    }
+
+    /**
+     * Get my posts
+     *
+     * @param PostService $service
+     * @return JsonResponse
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
+     */
+    public function myPosts(PostService $service): JsonResponse
+    {
+        return response()->json([
+            'message' => trans('messages.post.index'),
+            'data'    => PostResource::collection($service->myPosts())
+        ]);
     }
 
     /**
@@ -39,7 +56,10 @@ class PostController extends Controller
      */
     public function store(PostStoreRequest $request, PostService $service): JsonResponse
     {
-        return $service->store($request->validated());
+        return response()->json([
+            'message' => trans('messages.post.store'),
+            'data'    => new PostResource($service->store($request->validated()))
+        ]);
     }
 
     /**
