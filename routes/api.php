@@ -83,7 +83,7 @@ Route::group([
 
         Route::post('/', 'store');
 
-        Route::patch('/{post_id}/edit', 'update')->middleware('can:update,post');
+        Route::patch('/{post_id}/update', 'update')->can('update', \App\Models\Post::class);
 
         Route::patch('/{post_id}/ban', 'ban')->middleware('can:ban,post');
 

@@ -18,7 +18,9 @@ class UserStoreRequest extends RegisterRequest
             'name' => ['string', 'max:50'],
             'surname' => ['string','max:50'],
             'email' => ['string','email', 'max:64'],
-            'password' => ['string', 'confirmed',
+            'password' => [
+                'string',
+                'confirmed',
                 Password::min(8)
                     ->mixedCase()
                     ->letters()

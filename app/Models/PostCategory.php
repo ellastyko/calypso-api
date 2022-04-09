@@ -12,6 +12,8 @@ class PostCategory extends Model
 
     public $table = 'post_category';
 
+    public $timestamps = false;
+
     /**
      * @var array<int, string>
      */

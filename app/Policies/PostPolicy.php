@@ -21,7 +21,7 @@ class PostPolicy
      */
     public function update(User $user, Post $post): bool
     {
-        return $post->user_id == $user->id or $user->isAdmin();
+        return $post->belongsTo($user) or $user->isAdmin();
     }
 
     /**

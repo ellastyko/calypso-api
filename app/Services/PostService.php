@@ -3,11 +3,11 @@
 namespace App\Services;
 
 use App\Enum\PostStatus;
+use App\Http\Resources\PostResource;
 use App\Models\Post;
 use App\Repositories\PostRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class PostService
@@ -21,15 +21,13 @@ class PostService
 
 
     /**
-     * @param array $request
      * @return JsonResponse
      */
-    public function index(array $request): JsonResponse
+    public function index(): JsonResponse
     {
-        $data = $this->repository->all();
         return response()->json([
             'message' => trans('messages.post.index'),
-            'data'    => $data
+            'data'    => $this->repository->all()
         ]);
     }
 
@@ -42,17 +40,17 @@ class PostService
         $post = Post::create([
             'title'   => $data['title'],
             'content' => $data['content'],
+            'status'  => $data['status'],
             'user_id' => Auth::id(),
         ]);
+
         foreach ($data['categories_id'] as $categoryId) {
-            DB::table('posts_categories')->insert([
-                'post_id' => $post->id,
-                'category_id' => $categoryId
-            ]);
+            $post->categories()->attach($categoryId);
         }
+
         return response()->json([
             'message' => trans('messages.post.store'),
-            'data'    => $post
+            'data'    => new PostResource($post)
         ]);
     }
 

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\IndexRequest;
 use App\Http\Requests\Post\PostStoreRequest;
 use App\Http\Requests\Post\PostUpdateRequest;
 use App\Http\Resources\PostResource;
@@ -21,13 +20,12 @@ class PostController extends Controller
     /**
      * Get posts
      *
-     * @param IndexRequest $request
      * @param PostService $service
      * @return JsonResponse
      */
-    public function index(IndexRequest $request, PostService $service): JsonResponse
+    public function index(PostService $service): JsonResponse
     {
-        return $service->index($request->validated());
+        return $service->index();
     }
 
     /**
