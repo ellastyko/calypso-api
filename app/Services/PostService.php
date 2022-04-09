@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enum\PostStatus;
 use App\Models\Post;
+use App\Repositories\PostRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -12,12 +13,20 @@ use Symfony\Component\HttpFoundation\Response;
 class PostService
 {
     /**
+     * @param PostRepository $repository
+     */
+    public function __construct(protected PostRepository $repository)
+    {
+    }
+
+
+    /**
      * @param array $request
      * @return JsonResponse
      */
     public function index(array $request): JsonResponse
     {
-        $data = Post::filter($request)->get();
+        $data = $this->repository->all();
         return response()->json([
             'message' => trans('messages.post.index'),
             'data'    => $data

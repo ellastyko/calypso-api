@@ -2,22 +2,23 @@
 
 namespace App\Models;
 
-use App\Filters\UserFilter;
+use App\Events\UserDeleted;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use App\Models\traits\{Filterable, HasAvatars, HasComments, HasPosts, HasRoles};
+use App\Models\traits\{HasAvatars, HasComments, HasPosts, HasRoles};
 use Laravel\Scout\Searchable;
+use Prettus\Repository\Contracts\Transformable;
+use Prettus\Repository\Traits\TransformableTrait;
 
 /**
  * Class User
  * @package Authenticatable
  */
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail, Transformable
 {
     use HasApiTokens;
     use HasFactory;
@@ -27,9 +28,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasPosts;
     use HasComments;
     use Searchable;
-    use Filterable;
-
-    private string $filter = UserFilter::class;
+    use TransformableTrait;
 
 
     /**
@@ -84,6 +83,15 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return app(Guard::class)->user();
     }
+
+    /**
+     * The event map for the model.
+     *
+     * @var array
+     */
+    protected $dispatchesEvents = [
+        'deleted' => UserDeleted::class,
+    ];
 
     /**
      * @return string

@@ -18,7 +18,7 @@ class UserService
      */
     public function index($request): mixed
     {
-        return User::filter($request)->get();
+        return User::filter($request)->verified()->get();
     }
 
     /**
