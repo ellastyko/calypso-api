@@ -33,5 +33,4 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
-
 }
