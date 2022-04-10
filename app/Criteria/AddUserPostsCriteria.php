@@ -6,12 +6,18 @@ use Prettus\Repository\Contracts\CriteriaInterface;
 use Prettus\Repository\Contracts\RepositoryInterface;
 
 /**
- * Class AddUserPostsCriteria.
- *
+ * Class AddUserPostsCriteria
  * @package namespace App\Criteria;
  */
 class AddUserPostsCriteria implements CriteriaInterface
 {
+    /**
+     * @param int $id
+     */
+    public function __construct(private int $id)
+    {
+    }
+
     /**
      * Apply criteria in query repository
      *
@@ -22,6 +28,6 @@ class AddUserPostsCriteria implements CriteriaInterface
      */
     public function apply($model, RepositoryInterface $repository)
     {
-        return $model->where('user_id', \Auth::id());
+        return $model->where('user_id', $this->id);
     }
 }

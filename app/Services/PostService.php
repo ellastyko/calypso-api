@@ -40,15 +40,15 @@ class PostService
     {
         return $this->repository
             ->pushCriteria(new AddPostStatusCriteria(PostStatus::all()))
-            ->pushCriteria(new AddUserPostsCriteria())
-            ->get();
+            ->pushCriteria(new AddUserPostsCriteria(Auth::id()))
+            ->all();
     }
 
     /**
      * @param array $data
-     * @return JsonResponse
+     * @return mixed
      */
-    public function store(array $data): JsonResponse
+    public function store(array $data): mixed
     {
         $post = Post::create([
             'title'   => $data['title'],
@@ -67,17 +67,14 @@ class PostService
     /**
      * @param Post $post
      * @param array $data
-     * @return JsonResponse
+     * @return Post
      */
-    public function update(Post $post, array $data): JsonResponse
+    public function update(Post $post, array $data): Post
     {
         $post->update($data);
         $post->categories()->sync($data['categories_id']);
 
-        return response()->json([
-            'message' => trans('messages.post.updated'),
-            'data'    => $post
-        ], Response::HTTP_OK);
+        return $post;
     }
 
     /**

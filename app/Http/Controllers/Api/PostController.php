@@ -82,7 +82,10 @@ class PostController extends Controller
      */
     public function update(PostUpdateRequest $request, PostService $service, Post $post): JsonResponse
     {
-        return $service->update($post, $request->validated());
+        return response()->json([
+            'message' => trans('messages.post.updated'),
+            'data'    => $service->update($post, $request->validated())
+        ], Response::HTTP_OK);
     }
 
     /**

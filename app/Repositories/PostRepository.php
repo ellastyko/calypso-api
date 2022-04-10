@@ -26,7 +26,14 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface, 
     /**
      * @var array|string[]
      */
-    protected array $cacheOnly = ['all'];
+//    protected array $cacheOnly = ['all'];
+
+    /**
+     * @var array
+     */
+    protected $fieldSearchable = [
+        'title',
+    ];
 
     /**
      * Specify Model class name
