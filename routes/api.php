@@ -75,7 +75,7 @@ Route::group([
     'prefix'     => 'posts',
     'middleware' => 'auth:sanctum',
     'controller' => PostController::class,
-], routes: function () {
+], function () {
 
     Route::get('/', 'index')->withoutMiddleware('auth:sanctum');
 

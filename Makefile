@@ -67,3 +67,6 @@ phpcs:
 
 phpcbf:
 	./vendor/bin/phpcbf --standard=./phpcs.xml
+
+phpmd:
+	sudo ./vendor/bin/phpmd app xml phpmd.xml  --reportfile phpmd-report.xml
