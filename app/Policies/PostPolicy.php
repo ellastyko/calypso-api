@@ -5,9 +5,10 @@ namespace App\Policies;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Auth\Access\Response;
-use JetBrains\PhpStorm\Pure;
 
+/**
+ * Class PostPolicy
+ */
 class PostPolicy
 {
     use HandlesAuthorization;
@@ -21,7 +22,7 @@ class PostPolicy
      */
     public function update(User $user, Post $post): bool
     {
-        return $post->user_id == $user->id or $user->isAdmin();
+        return $post->belongsTo($user) or $user->isAdmin();
     }
 
     /**
@@ -45,6 +46,7 @@ class PostPolicy
      */
     public function delete(User $user, Post $post): bool
     {
+        dd('here');
         return $post->author()->is($user) or $user->isAdmin();
     }
 

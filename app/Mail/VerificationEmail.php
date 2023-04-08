@@ -11,19 +11,13 @@ class VerificationEmail extends Mailable
     use Queueable;
     use SerializesModels;
 
-    private object $user;
-
-    private string $link;
-
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(object $user, string $link)
+    public function __construct(private readonly object $user, private readonly string $link)
     {
-        $this->user = $user;
-        $this->link = $link;
     }
 
     /**
